@@ -6,7 +6,6 @@ import { mainConfig } from "./webpack/webpack.main.config";
 import { rendererConfig } from "./webpack/webpack.renderer.config";
 
 const config: ForgeConfig = {
-  packagerConfig: {},
   rebuildConfig: {},
   makers: [
     new MakerDMG({
