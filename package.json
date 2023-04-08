@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "postinstall": "patch-package"
   },
   "keywords": [],
   "author": {
@@ -71,6 +72,7 @@
     "node-fetch": "^3.3.1",
     "notistack": "^2.0.3",
     "p-queue": "^7.3.4",
+    "patch-package": "^6.5.1",
     "plyr-react": "^5.1.0",
     "query-string": "^7.0.1",
     "react": "^18.2.0",
