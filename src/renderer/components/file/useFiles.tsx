@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
-import { GET_FILE_LIST, getFileList } from "../../services/file";
-import { IPageParams } from "../../services/IService";
+import { getFileList } from "../../services/file";
+import { IPageParams } from "../../../common/IService";
 
 export const useFiles = ({ pageNo, pageSize }: IPageParams) => {
   return useQuery(
-    [GET_FILE_LIST, pageNo, pageSize],
+    ["GET_FILE_LIST", pageNo, pageSize],
     () => {
       return getFileList({
         pageNo,

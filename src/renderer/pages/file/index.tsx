@@ -8,12 +8,11 @@ import {
   addFile,
   deleteFile,
   getFileList,
-  GET_FILE_LIST,
-  IFile,
   updateFile
 } from "@src/renderer/services/file";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
+import { File } from "@src/common/interfaces/file.interface";
 
 export function FileList() {
   const [page, setPage] = React.useState(0);
@@ -23,7 +22,7 @@ export function FileList() {
     data: { data },
     isLoading
   } = useQuery(
-    [GET_FILE_LIST, page, pageSize],
+    ["GET_FILE_LIST", page, pageSize],
     () => {
       return getFileList({
         pageNo: page + 1,
@@ -61,7 +60,7 @@ export function FileList() {
     }
   });
 
-  const columns: GridColDef<IFile>[] = [
+  const columns: GridColDef<File>[] = [
     { field: "name", headerName: "文件名", editable: true, width: 400 },
     { field: "mimetype", headerName: "文件类型", width: 200 },
     {
@@ -121,7 +120,7 @@ export function FileList() {
   ];
 
   const processRowUpdate = React.useCallback(
-    async (newRow: IFile, oldRow: IFile) => {
+    async (newRow: File, oldRow: File) => {
       if (oldRow.name === newRow.name) {
         return oldRow;
       }

@@ -1,9 +1,9 @@
+import { File } from "@src/common/interfaces/file.interface";
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
 import React from "react";
-import { IFile } from "../../services/file";
 
-export const Video: React.FC<{ file: IFile }> = ({ file }) => {
+export const Video: React.FC<{ file: File }> = ({ file }) => {
   console.log(file.mimetype);
   return file && file.url ? (
     <Plyr

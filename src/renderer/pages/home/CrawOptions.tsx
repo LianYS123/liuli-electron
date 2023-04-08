@@ -3,7 +3,6 @@ import { LoadingButton } from "@mui/lab";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "../../providers/AlertDialogProvider";
-import { xFetch } from "../../utils/fetch";
 import React, { useState } from "react";
 
 export const CrawOptions: React.FC<{
@@ -14,9 +13,7 @@ export const CrawOptions: React.FC<{
   const [endPage, setEndPage] = useState(1);
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync: craw, isLoading: crawing } = useMutation(
-    (p: { startPage: number; endPage: number }) => {
-      return xFetch("/article/craw", { method: "POST", data: p });
-    },
+    window.myAPI.fetchArticles,
     {
       onSuccess() {
         enqueueSnackbar("同步成功");

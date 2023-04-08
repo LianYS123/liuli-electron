@@ -5,10 +5,10 @@ import progress from "xgplayer/dist/controls/progress";
 import volume from "xgplayer/dist/controls/volume";
 import pip from "xgplayer/dist/controls/pip";
 import flex from "xgplayer/dist/controls/flex";
-import { IFile } from "../../services/file";
 import React, { useEffect } from "react";
+import { File } from "@src/common/interfaces/file.interface";
 
-export const XGPlayer: React.FC<{ file: IFile }> = ({ file }) => {
+export const XGPlayer: React.FC<{ file: File }> = ({ file }) => {
   useEffect(() => {
     const player = new Player({
       id: "vs",

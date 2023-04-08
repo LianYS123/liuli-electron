@@ -1,4 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BaseAPI } from "@src/common/BaseAPI";
+import {
+  ArticleDto,
+  ConnectDto,
+  ConnectFilesDto
+} from "@src/common/params/article.dto";
+import { CrawDto } from "@src/common/params/craw.dto";
+import {
+  GetFilesDto,
+  RemoveFileDto,
+  UpdateFileDto,
+  AddFileByPathDto
+} from "@src/common/params/file.dto";
+import { FileService } from "../services/file.service";
+import ArticleService from "../services/article.service";
+import { CommonResult } from "../common";
+
+const fileService = new FileService();
+const articleService = new ArticleService();
 
 export type HandlerAPI = {
   [key in keyof BaseAPI]: BaseAPI[key] extends (...args: unknown[]) => unknown
@@ -10,12 +29,66 @@ export type HandlerAPI = {
 };
 
 export const handlers: HandlerAPI = {
-  getAppInfo: function () {
-    return {
-      appName: "My App"
-    };
+  getArticles: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: ArticleDto
+  ) {
+    return CommonResult.success(await articleService.getArticles(data));
   },
-  getArticle: function () {
-    throw new Error("Function not implemented.");
+  fetchArticles: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: CrawDto
+  ) {
+    return CommonResult.success(await articleService.fetchArticles(data));
+  },
+  createAndConnectFile: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: ConnectDto
+  ) {
+    return CommonResult.success(
+      await articleService.createAndConnectFile(data)
+    );
+  },
+  connectFile: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: ConnectDto
+  ) {
+    return CommonResult.success(await articleService.connectFile(data));
+  },
+  connectFiles: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: ConnectFilesDto
+  ) {
+    return CommonResult.success(await articleService.connectFiles(data));
+  },
+  removeFile: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: ConnectDto
+  ) {
+    return CommonResult.success(await articleService.removeFile(data));
+  },
+  getFileList: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: GetFilesDto
+  ) {
+    return CommonResult.success(await fileService.getFiles(data));
+  },
+  deleteFile: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: RemoveFileDto
+  ) {
+    return CommonResult.success(await fileService.removeFile(data));
+  },
+  updateFile: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: UpdateFileDto
+  ) {
+    return CommonResult.success(await fileService.updateFile(data));
+  },
+  addFile: async function (
+    event: Electron.IpcMainInvokeEvent,
+    data: AddFileByPathDto
+  ) {
+    return CommonResult.success(await fileService.addFileByPath(data));
   }
 };

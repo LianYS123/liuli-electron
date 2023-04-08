@@ -5,6 +5,14 @@ type Channels = {
 };
 
 export const channels: Channels = {
-  getAppInfo: "getAppInfo",
-  getArticle: "getArticle"
+  getArticles: "getArticles",
+  fetchArticles: "fetchArticles",
+  createAndConnectFile: "createAndConnectFile",
+  connectFile: "connectFile",
+  connectFiles: "connectFiles",
+  removeFile: "removeFile",
+  getFileList: "getFileList",
+  deleteFile: "deleteFile",
+  updateFile: "updateFile",
+  addFile: "addFile"
 };

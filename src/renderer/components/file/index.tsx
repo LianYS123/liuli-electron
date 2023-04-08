@@ -1,6 +1,5 @@
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { IFile } from "../../services/file";
 import { Button, Link, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import filesize from "filesize";
@@ -11,6 +10,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
+import { File } from "@src/common/interfaces/file.interface";
 
 export const FileList: React.FC<{
   ids: number[];
@@ -21,7 +21,7 @@ export const FileList: React.FC<{
   const {
     data: { data }
   } = useFiles({ pageNo: page, pageSize });
-  const columns: GridColDef<IFile>[] = [
+  const columns: GridColDef<File>[] = [
     // { field: "id", headerName: "ID" },
     { field: "name", headerName: "文件名", width: 280 },
     { field: "mimetype", headerName: "文件类型", width: 130 },

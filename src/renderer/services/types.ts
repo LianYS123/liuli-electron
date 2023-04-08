@@ -1,36 +1,7 @@
-import { IFile } from "./file";
+import { Article } from "@src/common/interfaces/article.interface";
+import { File } from "@src/common/interfaces/file.interface";
 
-export interface IArticle {
-  id: number;
-
-  raw_id: string;
-
-  title: string;
-
-  time: Date;
-
-  href: string;
-
-  img_src: string;
-
-  tags: string;
-
-  content: string;
-
-  cat: string;
-
-  entry_content: string;
-
-  rating_count: number;
-
-  rating_score: number;
-
-  uid: string;
-
-  imgs: string;
-
-  files?: IFile[];
-}
+export type IArticle = Article;
 
 export interface ArticleItemProps {
   article: IArticle;
@@ -38,7 +9,7 @@ export interface ArticleItemProps {
   openConnectFilesDialog: (article: IArticle) => void;
   handleTagClick: (tag: string) => void;
   refetch: () => void;
-  setFile: (file: IFile) => void;
+  setFile: (file: File) => void;
 }
 
 export interface QueryData {

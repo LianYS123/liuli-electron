@@ -9,8 +9,8 @@ import { useArticles } from "./useArticles";
 import { ConnectFilesDialog } from "./ConnectFilesDialog";
 import { ArticleList } from "./ArticleList";
 import { XGPlayer } from "@src/renderer/components/video/player";
-import { IFile } from "@src/renderer/services/file";
 import { Close } from "@mui/icons-material";
+import { File } from "@src/common/interfaces/file.interface";
 
 const Home = () => {
   const {
@@ -21,7 +21,7 @@ const Home = () => {
 
   const [connectVisible, setConnectVisible] = useState(false);
   const [connectFilesVisible, setFilesVisible] = useState(false);
-  const [file, setFile] = useState<IFile>(null);
+  const [file, setFile] = useState<File>(null);
   const [article, setArticle] = useState<IArticle>();
   const videoBoxRef = useRef<HTMLDivElement>(null);
 

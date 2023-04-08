@@ -4,12 +4,12 @@ import { Masonry } from "@mui/lab";
 import SingleArticleItem from "./SingleArticleItem";
 import ArticleItem from "./ArticleItem";
 import { MyPagination } from "./MyPagination";
-import { IPageResult } from "@src/renderer/services/IService";
+import { IPageData } from "@src/common/IService";
 import { ArticleItemProps, IArticle } from "@src/renderer/services/types";
 import { useHistoryState } from "./useHistoryState";
 
 export const ArticleList: React.FC<{
-  data: IPageResult<IArticle>;
+  data: IPageData<IArticle>;
   itemProps: Omit<ArticleItemProps, "article">;
   isLoading: boolean;
   pageSize: number;
