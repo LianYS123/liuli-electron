@@ -18,6 +18,8 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
     "@electron-forge/cli": "^6.1.0",
     "@electron-forge/maker-deb": "^6.1.0",
     "@electron-forge/maker-rpm": "^6.1.0",
@@ -44,6 +46,28 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "lodash": "^4.17.21",
-    "nanoid": "^4.0.2"
+    "nanoid": "^4.0.2",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/lab": "^5.0.0-alpha.93",
+    "@mui/material": "^5.9.3",
+    "@mui/x-data-grid": "^5.17.4",
+    "@reduxjs/toolkit": "^1.8.5",
+    "axios": "^0.27.2",
+    "copy-to-clipboard": "^3.3.1",
+    "date-fns": "^2.29.1",
+    "dayjs": "^1.11.5",
+    "filesize": "^9.0.11",
+    "notistack": "^2.0.3",
+    "plyr-react": "^5.1.0",
+    "query-string": "^7.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.2",
+    "react-redux": "^8.0.4",
+    "react-router-dom": "^6.3.0",
+    "react-use": "^17.3.1",
+    "redux": "^4.2.0",
+    "xgplayer": "^2.32.0"
   }
 }
