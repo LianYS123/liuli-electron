@@ -1,14 +1,7 @@
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "react-query";
-import {
-  Box,
-  FormControlLabel,
-  Link,
-  Stack,
-  Switch,
-  Typography
-} from "@mui/material";
+import { Box, FormControlLabel, Link, Stack, Switch } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import filesize from "filesize";
 import {

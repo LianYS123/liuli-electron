@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import qs from "query-string";
 
 const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: "http://localhost:9988",
   method: "POST",
   paramsSerializer(params) {
     return qs.stringify(params);

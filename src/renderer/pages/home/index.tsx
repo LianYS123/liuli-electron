@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, IconButton, Modal } from "@mui/material";
+import React, { useRef, useState } from "react";
+import { Box, IconButton } from "@mui/material";
 import { TagFilter } from "./TagFilter";
 import { useHistoryState } from "./useHistoryState";
 import { ArticleItemProps, IArticle } from "../../services/types";
@@ -73,7 +73,7 @@ const Home = () => {
 
       <CrawOptions refetch={refetch} isFetching={isFetching} />
 
-      {!!file ? (
+      {file ? (
         <Box
           ref={videoBoxRef}
           sx={{

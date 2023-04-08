@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
-import { GET_FILE_LIST } from "../../services/file";
-import { getFileList } from "../../services/file";
+import { GET_FILE_LIST, getFileList } from "../../services/file";
 import { IPageParams } from "../../services/IService";
 
 export const useFiles = ({ pageNo, pageSize }: IPageParams) => {

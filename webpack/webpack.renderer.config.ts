@@ -10,6 +10,7 @@ rules.push({
 });
 
 export const rendererConfig: Configuration = {
+  devtool: false,
   module: {
     rules,
   },

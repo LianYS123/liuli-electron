@@ -4,8 +4,7 @@ import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "../../providers/AlertDialogProvider";
 import { xFetch } from "../../utils/fetch";
-import { useState } from "react";
-import React from "react";
+import React, { useState } from "react";
 
 export const CrawOptions: React.FC<{
   refetch: () => void;

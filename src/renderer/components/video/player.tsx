@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 
 export const XGPlayer: React.FC<{ file: IFile }> = ({ file }) => {
   useEffect(() => {
-    let player = new Player({
+    const player = new Player({
       id: "vs",
       url: file.url,
       controlPlugins: [play, fullscreen, progress, volume, pip, flex],
