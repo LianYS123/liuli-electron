@@ -35,4 +35,10 @@ export interface BaseAPI {
   updateFile: IService<UpdateFileDto, void>;
 
   addFile: IService<AddFileByPathDto, File>;
+
+  getAppInfo(): Promise<{
+    DB_PATH: string;
+    // MAIN_WINDOW_WEBPACK_ENTRY: string;
+    // MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+  }>;
 }

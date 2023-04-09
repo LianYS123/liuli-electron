@@ -11,7 +11,9 @@ import {
 } from "typeorm";
 import { FileEntity } from "./file.entity";
 
-@Entity()
+@Entity({
+  name: "article",
+})
 @Unique(["raw_id"])
 export class ArticleEntity extends BaseEntity implements Article {
   @PrimaryGeneratedColumn()

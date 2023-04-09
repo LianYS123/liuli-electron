@@ -15,6 +15,7 @@ import {
 import { FileService } from "../services/file.service";
 import ArticleService from "../services/article.service";
 import { CommonResult } from "../common";
+import { DB_PATH } from "../config";
 
 const fileService = new FileService();
 const articleService = new ArticleService();
@@ -90,5 +91,12 @@ export const handlers: HandlerAPI = {
     data: AddFileByPathDto
   ) {
     return CommonResult.success(await fileService.addFileByPath(data));
+  },
+  getAppInfo: function () {
+    return {
+      DB_PATH,
+      // MAIN_WINDOW_WEBPACK_ENTRY,
+      // MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
+    };
   }
 };

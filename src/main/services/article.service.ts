@@ -24,10 +24,10 @@ class ArticleService {
       onlyPlayable
     } = params;
 
-    let query = ArticleEntity.createQueryBuilder()
+    let query = ArticleEntity.createQueryBuilder('article')
       .skip(pageSize * (pageNo - 1))
       .take(pageSize)
-      .leftJoinAndSelect("ArticleEntity.files", "files");
+      .leftJoinAndSelect("article.files", "files");
 
     if (onlyPlayable) {
       query = query.andWhere((qb) => {
@@ -39,9 +39,9 @@ class ArticleService {
       query = query.andWhere(
         new Brackets((qb) => {
           const value = Like(`%${searchValue}%`).value;
-          qb.where("ArticleEntity.title like :searchValue", {
+          qb.where("article.title like :searchValue", {
             searchValue: value
-          }).orWhere("ArticleEntity.content like :searchValue", {
+          }).orWhere("article.content like :searchValue", {
             searchValue: value
           });
         })
@@ -49,7 +49,7 @@ class ArticleService {
     }
 
     if (cat && cat !== "全部") {
-      query = query.andWhere("ArticleEntity.cat like :cat", {
+      query = query.andWhere("article.cat like :cat", {
         cat: Like(`%${cat}%`).value
       });
     }
@@ -68,10 +68,10 @@ class ArticleService {
 
     if (order) {
       query = query
-        .orderBy(`ArticleEntity.${order}`, "DESC")
-        .addOrderBy("ArticleEntity.time", "DESC");
+        .orderBy(`article.${order}`, "DESC")
+        .addOrderBy("article.time", "DESC");
     } else {
-      query = query.orderBy("ArticleEntity.time", "DESC");
+      query = query.orderBy("article.time", "DESC");
     }
 
     const [articles, total] = await query.getManyAndCount();

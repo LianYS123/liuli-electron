@@ -14,5 +14,6 @@ export const channels: Channels = {
   getFileList: "getFileList",
   deleteFile: "deleteFile",
   updateFile: "updateFile",
-  addFile: "addFile"
+  addFile: "addFile",
+  getAppInfo: "getAppInfo"
 };

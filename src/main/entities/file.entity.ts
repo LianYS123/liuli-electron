@@ -1,7 +1,7 @@
-import { File } from '@src/common/interfaces/file.interface';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { File } from "@src/common/interfaces/file.interface";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
-@Entity()
+@Entity({ name: "file" })
 export class FileEntity extends BaseEntity implements File {
   @PrimaryGeneratedColumn()
   id: number;

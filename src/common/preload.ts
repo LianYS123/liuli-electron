@@ -5,5 +5,6 @@ import { contextBridge } from "electron";
 import { myAPI } from "./myAPI";
 
 console.log(myAPI);
+myAPI.getAppInfo().then(console.log)
 
 contextBridge.exposeInMainWorld("myAPI", myAPI);

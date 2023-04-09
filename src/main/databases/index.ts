@@ -1,11 +1,11 @@
 import { DataSourceOptions } from "typeorm";
-import { DB_DATABASE } from "@src/main/config";
 import { ArticleEntity } from "../entities/article.entity";
 import { FileEntity } from "../entities/file.entity";
+import { DB_PATH } from "../config";
 
 export const dbConnection: DataSourceOptions = {
   type: "sqlite",
-  database: DB_DATABASE,
+  database: DB_PATH,
   synchronize: true,
   logging: true,
   entities: [ArticleEntity, FileEntity]
