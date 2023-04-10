@@ -14,6 +14,9 @@ export const rendererConfig: Configuration = {
   module: {
     rules,
   },
+  output: {
+    publicPath: '../',
+  },
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
