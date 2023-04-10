@@ -6,7 +6,7 @@ import {
 } from "@src/common/params/article.dto";
 import { CrawDto } from "@src/common/params/craw.dto";
 import { ArticleEntity } from "@src/main/entities/article.entity";
-import { HttpException } from "@src/main/exceptions/HttpException";
+import { IpcException } from "@src/common/exceptions/IpcException";
 import { Brackets, Like } from "typeorm";
 import { FileService } from "./file.service";
 
@@ -99,7 +99,7 @@ class ArticleService {
       }
     });
     if (!article) {
-      throw new HttpException(400, "文章不存在");
+      throw new IpcException(400, "文章不存在");
     }
     return article;
   };

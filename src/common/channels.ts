@@ -15,5 +15,7 @@ export const channels: Channels = {
   deleteFile: "deleteFile",
   updateFile: "updateFile",
   addFile: "addFile",
-  getAppInfo: "getAppInfo"
+  getAppInfo: "getAppInfo",
+  showOpenDialog: "showOpenDialog",
+  openPath: "openPath"
 };

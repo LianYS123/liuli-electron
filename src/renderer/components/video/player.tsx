@@ -12,7 +12,7 @@ export const XGPlayer: React.FC<{ file: File }> = ({ file }) => {
   useEffect(() => {
     const player = new Player({
       id: "vs",
-      url: file.url,
+      url: file.filePath,
       controlPlugins: [play, fullscreen, progress, volume, pip, flex],
       pip: true, //打开画中画功能
       autoplay: true

@@ -10,11 +10,14 @@ export class FileEntity extends BaseEntity implements File {
   name: string;
 
   @Column()
+  directory: string;
+
+  @Column()
   mimetype: string;
 
   @Column()
   size: number;
 
   @Column()
-  url: string;
+  filePath: string;
 }

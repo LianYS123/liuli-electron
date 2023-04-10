@@ -7,6 +7,9 @@ import {
   CardHeader,
   CardMedia,
   Chip,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Link,
   Rating,
@@ -14,7 +17,7 @@ import {
   Typography
 } from "@mui/material";
 import { red } from "@mui/material/colors";
-import React from "react";
+import React, { useState } from "react";
 import { ActionMenuButton } from "../../components/action/ActionMenuButton";
 import { Text } from "../../components/text";
 // import { useSnackbar } from 'notistack';
@@ -24,6 +27,8 @@ import { ArticleItemProps } from "../../services/types";
 import { useMutation } from "react-query";
 import { removeFile } from "../../services/article";
 import { useAlertDialog } from "../../providers/AlertDialogProvider";
+import { chooseImages, chooseVideos } from "@src/renderer/utils";
+import { useSnackbar } from "notistack";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -50,6 +55,8 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     files
   } = article;
   const { open: openAlertDialog } = useAlertDialog();
+
+  const { enqueueSnackbar } = useSnackbar();
   return (
     <Card>
       <CardHeader
@@ -68,15 +75,23 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           <ActionMenuButton
             actions={[
               {
-                text: "关联新资源",
+                text: "关联",
                 onClick: async () => {
-                  openConnectDialog(article);
-                }
-              },
-              {
-                text: "选择资源",
-                onClick: async () => {
-                  openConnectFilesDialog(article);
+                  const videos = await chooseVideos();
+                  if (!videos.length) {
+                    return;
+                  }
+                  videos.forEach(async (video) => {
+                    try {
+                      await window.myAPI.createAndConnectFile({
+                        articleId: id,
+                        fromPath: video
+                      });
+                    } catch (e) {
+                      enqueueSnackbar(e?.message);
+                    }
+                  });
+                  refetch()
                 }
               }
             ].filter(Boolean)}
@@ -121,7 +136,8 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
             ? files.map((file) => (
                 <Chip
                   onClick={() => {
-                    setFile(file);
+                    // setFile(file);
+                    window.myAPI.openPath(file.filePath);
                   }}
                   onDelete={() => {
                     //

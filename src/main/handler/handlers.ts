@@ -16,6 +16,7 @@ import { FileService } from "../services/file.service";
 import ArticleService from "../services/article.service";
 import { CommonResult } from "../common";
 import { DB_PATH } from "../config";
+import { dialog, shell } from "electron";
 
 const fileService = new FileService();
 const articleService = new ArticleService();
@@ -94,9 +95,15 @@ export const handlers: HandlerAPI = {
   },
   getAppInfo: function () {
     return {
-      DB_PATH,
+      DB_PATH
       // MAIN_WINDOW_WEBPACK_ENTRY,
       // MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     };
+  },
+  showOpenDialog: function (event, params) {
+    return dialog.showOpenDialog(params);
+  },
+  openPath(ev, path) {
+    return shell.openPath(path);
   }
 };

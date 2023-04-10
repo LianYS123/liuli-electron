@@ -9,6 +9,7 @@ import {
   UpdateFileDto
 } from "./params/file.dto";
 import { File } from "./interfaces/file.interface";
+import { Dialog, Shell } from "electron";
 
 export interface BaseAPI {
   // 分页查找
@@ -41,4 +42,8 @@ export interface BaseAPI {
     // MAIN_WINDOW_WEBPACK_ENTRY: string;
     // MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
   }>;
+
+  showOpenDialog: Dialog["showOpenDialog"];
+
+  openPath: Shell["openPath"];
 }

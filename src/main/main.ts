@@ -1,8 +1,9 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, protocol } from "electron";
 import { initChannelHandlers } from "./handler/initChannelHandlers";
 import { DataSource } from "typeorm";
 import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
+import url from "url";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -11,7 +12,7 @@ if (require("electron-squirrel-startup")) {
 
 logger.info("APP Start...");
 logger.info(MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
-logger.info(MAIN_WINDOW_WEBPACK_ENTRY)
+logger.info(MAIN_WINDOW_WEBPACK_ENTRY);
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -35,7 +36,18 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  createWindow();
+
+  // 注册协议
+
+  protocol.registerFileProtocol("file", (request, callback) => {
+    const filePath = url.fileURLToPath(
+      "file://" + request.url.slice("file://".length)
+    );
+    callback(filePath);
+  });
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

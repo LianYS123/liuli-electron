@@ -1,4 +1,4 @@
-export class HttpException extends Error {
+export class IpcException extends Error {
   public status: number;
   public message: string;
 

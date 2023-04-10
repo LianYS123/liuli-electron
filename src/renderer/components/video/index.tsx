@@ -5,13 +5,13 @@ import React from "react";
 
 export const Video: React.FC<{ file: File }> = ({ file }) => {
   console.log(file.mimetype);
-  return file && file.url ? (
+  return file && file.filePath ? (
     <Plyr
       source={{
         type: "video",
         sources: [
           {
-            src: file.url,
+            src: file.filePath,
             type: "video/mp4",
             // type: file.mimetype,
             size: file.size
