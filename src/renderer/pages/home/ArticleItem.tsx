@@ -7,9 +7,6 @@ import {
   CardHeader,
   CardMedia,
   Chip,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   IconButton,
   Link,
   Rating,
@@ -20,27 +17,18 @@ import { red } from "@mui/material/colors";
 import React, { useState } from "react";
 import { ActionMenuButton } from "../../components/action/ActionMenuButton";
 import { Text } from "../../components/text";
-// import { useSnackbar } from 'notistack';
-// import { useMutation } from 'react-query';
 import { formatTimeDetail } from "../../utils/time";
 import { ArticleItemProps } from "../../services/types";
-import { useMutation } from "react-query";
-import { removeFile } from "../../services/article";
-import { useAlertDialog } from "../../providers/AlertDialogProvider";
-import { chooseImages, chooseVideos } from "@src/renderer/utils";
 import { useSnackbar } from "notistack";
+import { File } from "@src/common/interfaces/file.interface";
+import { UnConnectDialog } from "./UnConnectDialog";
+import { chooseMedia } from "@src/renderer/utils";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
   handleTagClick,
-  refetch,
-  openConnectDialog,
-  openConnectFilesDialog,
-  setFile
+  refetch
 }) => {
-  // const url = `/craw/${id}`;
-  // const { enqueueSnackbar } = useSnackbar();
-  const { mutateAsync: deleteConnect } = useMutation(removeFile);
   const {
     id,
     title,
@@ -54,9 +42,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     rating_score,
     files
   } = article;
-  const { open: openAlertDialog } = useAlertDialog();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const [fileToRemove, setFileToRemove] = useState<File>(null);
+
   return (
     <Card>
       <CardHeader
@@ -77,21 +67,22 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
               {
                 text: "关联",
                 onClick: async () => {
-                  const videos = await chooseVideos();
-                  if (!videos.length) {
+                  const files = await chooseMedia();
+                  if (!files.length) {
                     return;
                   }
-                  videos.forEach(async (video) => {
+                  const pros = files.map(async (media) => {
                     try {
                       await window.myAPI.createAndConnectFile({
                         articleId: id,
-                        fromPath: video
+                        fromPath: media
                       });
                     } catch (e) {
                       enqueueSnackbar(e?.message);
                     }
                   });
-                  refetch()
+                  await Promise.allSettled(pros);
+                  refetch();
                 }
               }
             ].filter(Boolean)}
@@ -132,30 +123,26 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         </div>
 
         <div style={{ marginBottom: 8 }}>
-          {files && files.length
-            ? files.map((file) => (
-                <Chip
-                  onClick={() => {
-                    // setFile(file);
-                    window.myAPI.openPath(file.filePath);
-                  }}
-                  onDelete={() => {
-                    //
-                    openAlertDialog({
-                      content: "你确定要确认该关联吗？",
-                      async onOk() {
-                        await deleteConnect({ fileId: file.id, articleId: id });
-                        refetch();
-                      }
-                    });
-                  }}
-                  style={{ margin: 4 }}
-                  variant="outlined"
-                  key={file.id}
-                  label={file.name}
-                />
-              ))
-            : null}
+          {files?.map((file) => (
+            <Chip
+              onClick={async () => {
+                // setFile(file);
+                const error = await window.myAPI.openPath(file.filePath);
+                if (error) {
+                  enqueueSnackbar(error, {
+                    variant: "error"
+                  });
+                }
+              }}
+              onDelete={() => {
+                setFileToRemove(file);
+              }}
+              style={{ margin: 4 }}
+              variant="outlined"
+              key={file.id}
+              label={file.name}
+            />
+          ))}
         </div>
 
         {uid &&
@@ -170,6 +157,17 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
             );
           })}
       </CardContent>
+      {fileToRemove && (
+        <UnConnectDialog
+          file={fileToRemove}
+          article={article}
+          refetch={refetch}
+          open={!!fileToRemove}
+          onClose={() => {
+            setFileToRemove(null);
+          }}
+        />
+      )}
     </Card>
   );
 };

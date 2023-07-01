@@ -4,6 +4,8 @@ import { DataSource } from "typeorm";
 import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
 import url from "url";
+import { windowManager } from "./window";
+import { initApplicationMenu } from "./menu";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -14,31 +16,11 @@ logger.info("APP Start...");
 logger.info(MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
 logger.info(MAIN_WINDOW_WEBPACK_ENTRY);
 
-const createWindow = (): void => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    height: 750,
-    width: 1200,
-    webPreferences: {
-      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-      webSecurity: false,
-      sandbox: false
-    }
-  });
-
-  // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-};
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
-  createWindow();
-
+  windowManager.createMainWindow();
   // 注册协议
 
   protocol.registerFileProtocol("file", (request, callback) => {
@@ -62,7 +44,7 @@ app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    windowManager.createMainWindow();
   }
 });
 
@@ -71,3 +53,4 @@ app.on("activate", () => {
 
 new DataSource(dbConnection).initialize();
 initChannelHandlers();
+initApplicationMenu()

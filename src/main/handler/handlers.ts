@@ -103,7 +103,7 @@ export const handlers: HandlerAPI = {
   showOpenDialog: function (event, params) {
     return dialog.showOpenDialog(params);
   },
-  openPath(ev, path) {
+  async openPath(ev, path) {
     return shell.openPath(path);
   }
 };

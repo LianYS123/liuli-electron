@@ -7,11 +7,7 @@ export const STATIC_PATH = join(app.getAppPath(), "static");
 
 export const STATIC_FILE_PATH = join(STATIC_PATH, "files");
 
-export const CREDENTIALS = process.env.CREDENTIALS === "true";
-
 const { NODE_ENV, DB_DATABASE, LOG_FORMAT, ORIGIN } = process.env;
-
-export const PORT = "0000";
 
 export { NODE_ENV, DB_DATABASE, LOG_FORMAT, ORIGIN };
 

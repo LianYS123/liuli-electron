@@ -21,8 +21,9 @@ export const initChannelHandlers = () => {
     if (typeof fn !== "function") {
       return;
     }
-    handle(key as keyof BaseAPI, (event, ...args) =>
-      (fn as HandlerMethod)(event, ...args)
-    );
+    handle(key as keyof BaseAPI, async (event, ...args) => {
+      const result = await (fn as HandlerMethod)(event, ...args);
+      return result;
+    });
   });
 };

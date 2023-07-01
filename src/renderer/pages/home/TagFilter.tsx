@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useHistoryState } from "./useHistoryState";
+import { QueryData } from "@src/renderer/services/types";
 
 export const TagFilter = () => {
   const { state, setState } = useHistoryState();
@@ -16,11 +17,8 @@ export const TagFilter = () => {
     keyword,
     order = "time",
     cat = "动画",
-    layout = "grid",
     onlyPlayable
   } = state;
-
-  const upSM = true;
 
   const orders = [
     ["time", "时间"],
@@ -29,37 +27,17 @@ export const TagFilter = () => {
   ];
   const cats = ["全部", "动画", "文章", "漫画", "小说", "音乐"];
 
-  const layouts = [
-    ["grid", "网格"],
-    ["single", "单列"],
-    ["masonry", "瀑布流"]
-  ];
-
   return (
     <Box sx={{ my: 2 }}>
-      {/* 布局 */}
-      <Box mb={1}>
-        {layouts.map(([cur, name]) => {
-          return (
-            <Chip
-              color={layout === cur ? "primary" : "default"}
-              onClick={() => setState({ layout: cur as any })}
-              size="medium"
-              sx={{ mr: 1, mb: 1 }}
-              key={cur}
-              label={name}
-            />
-          );
-        })}
-      </Box>
-
       {/* 排序 */}
       <Box mb={1}>
         {orders.map(([cur, name]) => {
           return (
             <Chip
               color={order === cur ? "primary" : "default"}
-              onClick={() => setState({ order: cur as any, pageNo: 1 })}
+              onClick={() =>
+                setState({ order: cur as QueryData["order"], pageNo: 1 })
+              }
               size="medium"
               sx={{ mr: 1, mb: 1 }}
               key={cur}
