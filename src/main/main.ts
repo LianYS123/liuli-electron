@@ -15,6 +15,7 @@ if (require("electron-squirrel-startup")) {
 logger.info("APP Start...");
 logger.info(MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
 logger.info(MAIN_WINDOW_WEBPACK_ENTRY);
+logger.info(app.getPath("appData"));
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -53,4 +54,4 @@ app.on("activate", () => {
 
 new DataSource(dbConnection).initialize();
 initChannelHandlers();
-initApplicationMenu()
+initApplicationMenu();
