@@ -12,6 +12,7 @@ import { FileList } from "./pages/file";
 import { VideoPage } from "./pages/video";
 import { AppLayout } from "./layout";
 import { routers } from "./config";
+// import 'react-virtualized/styles.css'; // only needs to be imported once
 
 // Create a client
 const queryClient = new QueryClient({

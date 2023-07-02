@@ -1,11 +1,12 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { TagFilter } from "./TagFilter";
 import { useHistoryState } from "./useHistoryState";
 import { ArticleItemProps } from "../../services/types";
 import { CrawOptions } from "./CrawOptions";
 import { useArticles } from "./useArticles";
-import { ArticleList } from "./ArticleList";
+import ArticleItem from "./ArticleItem";
+import { MyPagination } from "./MyPagination";
 
 const Home = () => {
   const {
@@ -14,13 +15,13 @@ const Home = () => {
   } = useHistoryState();
   const pageSize = 18;
 
+  const { data, refetch } = useArticles({
+    pageSize
+  });
 
-  const {
-    data: { data },
-    refetch,
-    isFetching,
-    isLoading
-  } = useArticles({ pageSize });
+  // const list = useMemo(() => {
+  //   return data?.pages.map((it) => it.data.list || []).flat() || [];
+  // }, [data]);
 
   // 点击标签
   const handleTagClick = (tag: string) => {
@@ -36,18 +37,44 @@ const Home = () => {
     refetch
   };
 
+  // useEventListener("scroll", () => {
+  //   if (isScrolledToBottom(100) && !isFetching) {
+  //     fetchNextPage();
+  //   }
+  // });
+
+  const renderPagination = () => {
+    return (
+      <MyPagination
+        total={data?.data?.total}
+        page={data?.data?.pageNo}
+        onChange={(pageNo) => {
+          setState({ pageNo });
+        }}
+        pageSize={pageSize}
+      />
+    );
+  };
+
   return (
     <Box>
       <TagFilter />
 
-      <CrawOptions refetch={refetch} isFetching={isFetching} />
+      <CrawOptions refetch={refetch} />
 
-      <ArticleList
-        data={data}
-        itemProps={itemProps}
-        isLoading={isLoading}
-        pageSize={pageSize}
-      />
+      {renderPagination()}
+
+      <Grid container spacing={2}>
+        {data?.data?.list?.map((it) => {
+          return (
+            <Grid item key={it.id} xs={12} sm={6} md={4}>
+              <ArticleItem article={it} {...itemProps} />
+            </Grid>
+          );
+        })}
+      </Grid>
+
+      {renderPagination()}
     </Box>
   );
 };

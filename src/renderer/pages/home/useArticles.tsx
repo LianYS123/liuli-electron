@@ -9,12 +9,12 @@ export const useArticles = ({ pageSize }: { pageSize: number }) => {
       keyword,
       order = "time",
       cat = "动画",
-      pageNo = 1,
-      onlyPlayable
+      onlyPlayable,
+      pageNo = 1
     }
   } = useHistoryState();
   return useQuery(
-    ["/article/list", selectedTags, keyword, order, cat, pageNo, onlyPlayable],
+    ["/article/list", selectedTags, keyword, order, cat, onlyPlayable, pageNo],
     () => {
       return getArticles({
         tags: selectedTags,
@@ -27,16 +27,15 @@ export const useArticles = ({ pageSize }: { pageSize: number }) => {
       });
     },
     {
-      placeholderData: {
-        ok: true,
-        data: {
-          list: [],
-          total: 0,
-          pageNo: 1,
-          pageSize
-        }
-      },
       keepPreviousData: true
     }
+    // {
+    //   getNextPageParam(lastPage) {
+    //     const { pageNo, pageSize, total } = lastPage.data;
+    //     if (pageNo * pageSize < total) {
+    //       return pageNo + 1;
+    //     }
+    //   }
+    // }
   );
 };

@@ -16,6 +16,10 @@ class WindowManager {
 
     // and load the index.html of the app.
     this.mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+    if (process.env.NODE_ENV === "development") {
+      this.mainWindow.webContents.openDevTools();
+    }
   };
 }
 

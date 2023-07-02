@@ -1,21 +1,22 @@
 import { Pagination } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
-import { useHistoryState } from "./useHistoryState";
+import React, { useMemo } from "react";
 
-export const MyPagination: React.FC<{
-  total: number;
+interface IProps {
+  total?: number;
+  page?: number;
   pageSize: number;
-}> = ({ total, pageSize }) => {
-  const [pages, setPages] = useState(0);
-  const {
-    state: { pageNo: page = 1 },
-    setState
-  } = useHistoryState();
-  useEffect(() => {
-    if (total) {
-      setPages(Math.ceil(total / pageSize));
-    }
+  onChange: (page: number) => void;
+}
+
+export const MyPagination: React.FC<IProps> = ({
+  total = 0,
+  pageSize,
+  page = 1,
+  onChange
+}) => {
+  const pages = useMemo(() => {
+    return Math.ceil(total / pageSize);
   }, [total]);
   return (
     <Box sx={{ my: 2, display: "flex", justifyContent: "flex-start" }}>
@@ -27,7 +28,7 @@ export const MyPagination: React.FC<{
         count={pages}
         page={page}
         onChange={(_, value) => {
-          setState({ pageNo: value });
+          onChange(value);
           window.scrollTo({
             top: 0,
             behavior: "smooth"

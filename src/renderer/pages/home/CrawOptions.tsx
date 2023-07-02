@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
@@ -7,8 +7,7 @@ import React, { useState } from "react";
 
 export const CrawOptions: React.FC<{
   refetch: () => void;
-  isFetching: boolean;
-}> = ({ refetch, isFetching }) => {
+}> = ({ refetch }) => {
   const [startPage, setStartPage] = useState(1);
   const [endPage, setEndPage] = useState(1);
   const { enqueueSnackbar } = useSnackbar();
@@ -66,16 +65,15 @@ export const CrawOptions: React.FC<{
         同步
       </LoadingButton>
 
-      <LoadingButton
+      <Button
         variant="outlined"
         sx={{ mr: 1 }}
         onClick={() => {
           refetch();
         }}
-        loading={isFetching}
       >
         刷新
-      </LoadingButton>
+      </Button>
     </Box>
   );
 };
