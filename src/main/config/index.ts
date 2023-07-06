@@ -11,4 +11,5 @@ const { NODE_ENV, DB_DATABASE, LOG_FORMAT, ORIGIN } = process.env;
 
 export { NODE_ENV, DB_DATABASE, LOG_FORMAT, ORIGIN };
 
-export const DB_PATH = join(app.getPath("appData"), "sqlite/database.sqlite");
+export const DB_PATH = join(app.getPath("userData"), "sqlite/database.sqlite");
+// export const DB_PATH = "sqlite/database.sqlite";

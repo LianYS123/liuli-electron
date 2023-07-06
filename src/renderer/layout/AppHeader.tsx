@@ -22,7 +22,7 @@ export default function AppHeader() {
         <AppBar
           ref={ref}
           color="inherit"
-          sx={{ boxShadow: y > 10 ? 1 : 0 }}
+          sx={{ boxShadow: y > 10 ? 1 : 0, zIndex: 100 }}
           position="fixed"
         >
           <Toolbar>

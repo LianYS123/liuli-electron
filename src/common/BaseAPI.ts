@@ -46,4 +46,5 @@ export interface BaseAPI {
   showOpenDialog: Dialog["showOpenDialog"];
 
   openPath: Shell["openPath"];
+  getAllFilesFromDir: (dir: string, type?: string) => Promise<string[]>;
 }

@@ -105,5 +105,6 @@ export const handlers: HandlerAPI = {
   },
   async openPath(ev, path) {
     return shell.openPath(path);
-  }
+  },
+  getAllFilesFromDir: (event, dir, type) => fileService.getAllFilesFromDir(dir, type)
 };

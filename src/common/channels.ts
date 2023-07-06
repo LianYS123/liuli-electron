@@ -17,5 +17,6 @@ export const channels: Channels = {
   addFile: "addFile",
   getAppInfo: "getAppInfo",
   showOpenDialog: "showOpenDialog",
-  openPath: "openPath"
+  openPath: "openPath",
+  getAllFilesFromDir: "getAllFilesFromDir"
 };

@@ -103,4 +103,28 @@ export class FileService {
     }
     return file;
   };
+
+  public getAllFilesFromDir = (dir: string, type?: string) => {
+    const stat = fs.statSync(dir);
+    if (!stat.isDirectory()) {
+      throw new IpcException(400, "不是一个文件夹");
+    }
+    const files = fs
+      .readdirSync(dir)
+      .filter((name) => {
+        const filePath = join(dir, name);
+
+        const stat = fs.statSync(filePath);
+        if (!stat.isFile()) {
+          return false;
+        }
+        const mimetype = mime.lookup(name) || "unknow";
+        if (type && !mimetype.includes(type)) {
+          return false;
+        }
+        return true;
+      })
+      .map((name) => join(dir, name));
+    return files;
+  };
 }

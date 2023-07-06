@@ -23,6 +23,7 @@ import { useSnackbar } from "notistack";
 import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import { chooseMedia } from "@src/renderer/utils";
+import { ImageListPreview } from "./ImageListPreview";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -46,6 +47,8 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   const { enqueueSnackbar } = useSnackbar();
 
   const [fileToRemove, setFileToRemove] = useState<File>(null);
+
+  const [previewDir, setPreviewDir] = useState<string>();
 
   return (
     <Card>
@@ -126,6 +129,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           {files?.map((file) => (
             <Chip
               onClick={async () => {
+                console.log(file);
+                if (file.mimetype.includes("image")) {
+                  setPreviewDir(file.directory);
+                  return;
+                }
                 // setFile(file);
                 const error = await window.myAPI.openPath(file.filePath);
                 if (error) {
@@ -166,6 +174,13 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           onClose={() => {
             setFileToRemove(null);
           }}
+        />
+      )}
+      {previewDir && (
+        <ImageListPreview
+          dir={previewDir}
+          visible={!!previewDir}
+          setVisible={() => setPreviewDir("")}
         />
       )}
     </Card>
