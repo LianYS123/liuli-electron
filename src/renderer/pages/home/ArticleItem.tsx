@@ -23,7 +23,7 @@ import { useSnackbar } from "notistack";
 import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import { chooseMedia } from "@src/renderer/utils";
-import { ImageListPreview } from "./ImageListPreview";
+import { ImageListPreview, ImageListPreviewV2 } from "./ImageListPreview";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -177,7 +177,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         />
       )}
       {previewDir && (
-        <ImageListPreview
+        <ImageListPreviewV2
           dir={previewDir}
           visible={!!previewDir}
           setVisible={() => setPreviewDir("")}
