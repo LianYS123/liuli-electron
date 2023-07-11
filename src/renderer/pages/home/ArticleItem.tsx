@@ -24,6 +24,9 @@ import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import { chooseMedia } from "@src/renderer/utils";
 import { ImageListPreview, ImageListPreviewV2 } from "./ImageListPreview";
+import { useNavigate } from "react-router-dom";
+import { routers } from "@src/renderer/config";
+import qs from "query-string";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -49,6 +52,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   const [fileToRemove, setFileToRemove] = useState<File>(null);
 
   const [previewDir, setPreviewDir] = useState<string>();
+  const nav = useNavigate();
 
   return (
     <Card>
@@ -131,7 +135,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
               onClick={async () => {
                 console.log(file);
                 if (file.mimetype.includes("image")) {
-                  setPreviewDir(file.directory);
+                  // setPreviewDir(file.directory);
+                  nav({
+                    pathname: routers.IMAGES,
+                    search: qs.stringify({ dir: file.directory })
+                  });
                   return;
                 }
                 // setFile(file);

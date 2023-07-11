@@ -12,6 +12,7 @@ import { FileList } from "./pages/file";
 import { VideoPage } from "./pages/video";
 import { AppLayout } from "./layout";
 import { routers } from "./config";
+import { ImagePreview } from "./pages/ImagePreview";
 // import 'react-virtualized/styles.css'; // only needs to be imported once
 
 // Create a client
@@ -36,6 +37,7 @@ export default function App() {
                     <Route path={routers.FILES} element={<FileList />} />
                     <Route path={routers.VIDEO} element={<VideoPage />} />
                     <Route path={routers.HOME} element={<Home />} />
+                    <Route path={routers.IMAGES} element={<ImagePreview />} />
                     <Route path={"/"} element={<Home />} />
                   </Routes>
                 </AppLayout>

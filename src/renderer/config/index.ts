@@ -1,5 +1,6 @@
 export const routers = {
   HOME: "/home",
   FILES: "/files",
-  VIDEO: "/video"
+  VIDEO: "/video",
+  IMAGES: "/images"
 };
