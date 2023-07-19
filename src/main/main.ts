@@ -1,11 +1,13 @@
 import { app, BrowserWindow, protocol } from "electron";
-import { initChannelHandlers } from "./handler/initChannelHandlers";
 import { DataSource } from "typeorm";
 import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
 import url from "url";
 import { windowManager } from "./window";
 import { initApplicationMenu } from "./menu";
+import { handleService } from "./utils/handleService";
+import { articleService } from "./services/article.service";
+import { fileService } from "./services/file.service";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -53,5 +55,8 @@ app.on("activate", () => {
 // code. You can also put them in separate files and import them here.
 
 new DataSource(dbConnection).initialize();
-initChannelHandlers();
+// initChannelHandlers();
+
+handleService({ ...articleService });
+handleService({ ...fileService });
 initApplicationMenu();

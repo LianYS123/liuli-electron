@@ -19,7 +19,7 @@ export const FileList: React.FC<{
   const [page, setPage] = React.useState(1);
   const [pageSize] = React.useState(10);
   const {
-    data: { data }
+    data,
   } = useFiles({ pageNo: page, pageSize });
   const columns: GridColDef<File>[] = [
     // { field: "id", headerName: "ID" },

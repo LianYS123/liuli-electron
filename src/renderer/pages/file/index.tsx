@@ -18,27 +18,13 @@ export function FileList() {
   const [page, setPage] = React.useState(0);
   const [pageSize] = React.useState(10);
   const [selectionModel, setSelectedModel] = React.useState<number[]>([]);
-  const {
-    data: { data },
-    isLoading
-  } = useQuery(
+  const { data, isLoading } = useQuery(
     ["GET_FILE_LIST", page, pageSize],
     () => {
       return getFileList({
         pageNo: page + 1,
         pageSize
       });
-    },
-    {
-      placeholderData: {
-        ok: true,
-        data: {
-          list: [],
-          total: 0,
-          pageNo: 1,
-          pageSize
-        }
-      }
     }
   );
   const { open: openAlertDialog } = useAlertDialog();

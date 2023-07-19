@@ -46,8 +46,8 @@ const Home = () => {
   const renderPagination = () => {
     return (
       <MyPagination
-        total={data?.data?.total}
-        page={data?.data?.pageNo}
+        total={data?.total}
+        page={data?.pageNo}
         onChange={(pageNo) => {
           setState({ pageNo });
         }}
@@ -65,7 +65,7 @@ const Home = () => {
       {renderPagination()}
 
       <Grid container spacing={2}>
-        {data?.data?.list?.map((it) => {
+        {data?.list?.map((it) => {
           return (
             <Grid item key={it.id} xs={12} sm={6} md={4}>
               <ArticleItem article={it} {...itemProps} />

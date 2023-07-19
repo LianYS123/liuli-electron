@@ -46,7 +46,7 @@ export class FileService {
     return stat;
   };
 
-  public removeFile = async ({ fileId, removeSource }: RemoveFileDto) => {
+  public deleteFile = async ({ fileId, removeSource }: RemoveFileDto) => {
     const file = await this.findFileById(fileId);
     await FileEntity.delete(fileId);
     if (removeSource) {

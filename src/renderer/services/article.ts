@@ -1,10 +1,12 @@
-import { myAPI } from '@src/common/myAPI'
-export const getArticles = myAPI.getArticles
+import { myAPI } from "@src/common/channels";
 
-export const createAndConnectFile = myAPI.createAndConnectFile
+// import { articleAPI } from '@src/common/articleAPI'
+export const getArticles = myAPI.getArticles;
 
-export const connectFile = myAPI.connectFile
+// export const createAndConnectFile = articleAPI.createAndConnectFile;
 
-export const connectFiles = myAPI.connectFiles
+// export const connectFile = articleAPI.connectFile;
 
-export const removeFile = myAPI.removeFile
+// export const connectFiles = articleAPI.connectFiles
+
+export const removeFile = myAPI.removeFile;

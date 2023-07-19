@@ -8,10 +8,9 @@ import { CrawDto } from "@src/common/params/craw.dto";
 import { ArticleEntity } from "@src/main/entities/article.entity";
 import { IpcException } from "@src/common/exceptions/IpcException";
 import { Brackets, Like } from "typeorm";
-import { FileService } from "./file.service";
+import { fileService } from "./file.service";
 
-class ArticleService {
-  fileService = new FileService();
+export class ArticleService {
   // 分页查找
   public getArticles = async (params: ArticleDto) => {
     const {
@@ -24,7 +23,7 @@ class ArticleService {
       onlyPlayable
     } = params;
 
-    let query = ArticleEntity.createQueryBuilder('article')
+    let query = ArticleEntity.createQueryBuilder("article")
       .skip(pageSize * (pageNo - 1))
       .take(pageSize)
       .leftJoinAndSelect("article.files", "files");
@@ -85,11 +84,11 @@ class ArticleService {
   };
 
   // 爬虫;
-  public async fetchArticles(params: CrawDto): Promise<null> {
+  public fetchArticles = async (params: CrawDto): Promise<null> => {
     const craw = new ArticleCraw(params.startPage, params.endPage);
     await craw.start();
     return null;
-  }
+  };
 
   public findArticleById = async (articleId: number) => {
     const article = await ArticleEntity.findOne({
@@ -107,7 +106,7 @@ class ArticleService {
   // 关联文章
   public connectArticle = async (articleId: number, fileId: number) => {
     const article = await this.findArticleById(articleId);
-    const file = await this.fileService.findFileById(fileId);
+    const file = await fileService.findFileById(fileId);
 
     if (!article.files.some((it) => it.id === file.id)) {
       article.files.push(file);
@@ -117,7 +116,7 @@ class ArticleService {
 
   // 创建文件并关联
   public createAndConnectFile = async ({ articleId, fromPath }: ConnectDto) => {
-    const file = await this.fileService.createFileByPath(fromPath);
+    const file = await fileService.createFileByPath(fromPath);
     await this.connectArticle(articleId, file.id);
   };
 
@@ -137,14 +136,12 @@ class ArticleService {
   // 移除关联
   public removeFile = async ({ articleId, fileId }: ConnectDto) => {
     const article = await this.findArticleById(articleId);
-    const file = await this.fileService.findFileById(fileId);
+    const file = await fileService.findFileById(fileId);
     article.files = article.files.filter((it) => {
       return it.id !== file.id;
     });
     await article.save();
   };
 }
-
-export default ArticleService;
 
 export const articleService = new ArticleService();

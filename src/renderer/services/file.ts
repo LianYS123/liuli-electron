@@ -1,9 +1,9 @@
-import { myAPI } from "@src/common/myAPI";
+import { myAPI } from "@src/common/channels";
 
-export const getFileList = myAPI.getFileList;
+export const getFileList = myAPI.getFiles;
 
 export const updateFile = myAPI.updateFile;
 
 export const deleteFile = myAPI.deleteFile;
 
-export const addFile = myAPI.addFile;
+export const addFile = myAPI.addFileByPath;

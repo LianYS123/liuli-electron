@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "../../providers/AlertDialogProvider";
 import React, { useState } from "react";
-import { myAPI } from "@src/common/myAPI";
+import { myAPI } from "@src/common/channels";
 
 export const CrawOptions: React.FC<{
   refetch: () => void;
