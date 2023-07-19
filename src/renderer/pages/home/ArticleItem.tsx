@@ -27,6 +27,8 @@ import { ImageListPreview, ImageListPreviewV2 } from "./ImageListPreview";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
 import qs from "query-string";
+import { shell } from "electron";
+import { articleAPI } from "@src/common/api/article";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -80,7 +82,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                   }
                   const pros = files.map(async (media) => {
                     try {
-                      await window.myAPI.createAndConnectFile({
+                      await articleAPI.createAndConnectFile({
                         articleId: id,
                         fromPath: media
                       });
@@ -143,7 +145,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                   return;
                 }
                 // setFile(file);
-                const error = await window.myAPI.openPath(file.filePath);
+                const error = await shell.openPath(file.filePath);
                 if (error) {
                   enqueueSnackbar(error, {
                     variant: "error"

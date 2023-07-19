@@ -3,6 +3,7 @@ import { Image } from "antd";
 import { useQuery } from "react-query";
 import { ImageList, ImageListItem, Modal } from "@mui/material";
 import { useDebounceFn } from "ahooks";
+import { fileAPI } from "@src/common/api/file";
 
 export const ImageListPreview: React.FC<{
   dir: string;
@@ -13,7 +14,7 @@ export const ImageListPreview: React.FC<{
   const remainImagesRef = useRef<string[]>();
   const { data: allImages = [] } = useQuery(
     ["getAllFilesFromDir", dir],
-    () => window.myAPI.getAllFilesFromDir(dir, "image"),
+    () => fileAPI.getAllFilesFromDir(dir, "image"),
     {
       enabled: !!dir,
       onSuccess: (data) => {
@@ -65,7 +66,7 @@ export const ImageListPreviewV2: React.FC<{
   const remainImagesRef = useRef<string[]>();
   const { data: allImages = [] } = useQuery(
     ["getAllFilesFromDir", dir],
-    () => window.myAPI.getAllFilesFromDir(dir, "image"),
+    () => fileAPI.getAllFilesFromDir(dir, "image"),
     {
       enabled: !!dir,
       onSuccess: (data) => {

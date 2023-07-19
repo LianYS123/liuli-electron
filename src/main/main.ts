@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol } from "electron";
+import { app, BrowserWindow, dialog, protocol } from "electron";
 import { DataSource } from "typeorm";
 import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
@@ -57,6 +57,7 @@ app.on("activate", () => {
 new DataSource(dbConnection).initialize();
 // initChannelHandlers();
 
-handleService({ ...articleService });
-handleService({ ...fileService });
+handleService({ ...articleService }, { prefix: "ArticleService" });
+handleService({ ...fileService }, { prefix: "FileService" });
+handleService({ ...dialog }, { prefix: "Dialog" });
 initApplicationMenu();

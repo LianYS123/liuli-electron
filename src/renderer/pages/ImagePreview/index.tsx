@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { ImageList, ImageListItem } from "@mui/material";
 import { useDebounceFn, useEventListener } from "ahooks";
 import { useLocation } from "react-router-dom";
+import { fileAPI } from "@src/common/api/file";
 
 const ImageListPreview: React.FC<{
   visible: boolean;
@@ -59,7 +60,7 @@ export const ImagePreview: React.FC = () => {
 
   useQuery(
     ["getAllFilesFromDir", dir],
-    () => window.myAPI.getAllFilesFromDir(dir, "image"),
+    () => fileAPI.getAllFilesFromDir(dir, "image"),
     {
       enabled: !!dir,
       onSuccess: (data) => {

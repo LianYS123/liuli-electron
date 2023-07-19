@@ -9,10 +9,10 @@ import {
   DialogTitle,
   FormControlLabel
 } from "@mui/material";
+import { articleAPI } from "@src/common/api/article";
+import { fileAPI } from "@src/common/api/file";
 import { Article } from "@src/common/interfaces/article.interface";
 import { File } from "@src/common/interfaces/file.interface";
-import { removeFile } from "@src/renderer/services/article";
-import { deleteFile } from "@src/renderer/services/file";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 
@@ -60,9 +60,9 @@ export const UnConnectDialog: React.FC<IProps> = ({
         </Button>
         <Button
           onClick={async () => {
-            await removeFile({ fileId: file.id, articleId: article.id });
+            await articleAPI.removeFile({ fileId: file.id, articleId: article.id });
             if (removeSourceFlag) {
-              await deleteFile({
+              await fileAPI.deleteFile({
                 fileId: file.id,
                 removeSource: true
               });

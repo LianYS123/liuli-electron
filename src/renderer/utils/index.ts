@@ -1,7 +1,7 @@
-import { dialog } from "electron";
+import { dialogAPI } from "@src/common/api/dialog";
 
 export const chooseFiles = async (extensions: string[]) => {
-  const { filePaths } = await dialog.showOpenDialog({
+  const { filePaths } = await dialogAPI.showOpenDialog({
     properties: ["openFile", "dontAddToRecent", "multiSelections"],
     filters: [{ name: "File", extensions }]
   });

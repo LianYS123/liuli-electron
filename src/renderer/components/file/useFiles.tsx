@@ -1,5 +1,5 @@
+import { fileAPI } from "@src/common/api/file";
 import { useQuery } from "react-query";
-import { getFileList } from "../../services/file";
 
 interface IPageParams {
   pageNo: number;
@@ -8,7 +8,7 @@ interface IPageParams {
 
 export const useFiles = ({ pageNo, pageSize }: IPageParams) => {
   return useQuery(["GET_FILE_LIST", pageNo, pageSize], () => {
-    return getFileList({
+    return fileAPI.getFiles({
       pageNo,
       pageSize
     });

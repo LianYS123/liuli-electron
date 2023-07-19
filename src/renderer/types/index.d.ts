@@ -1,7 +1,5 @@
-import { BaseAPI } from "@src/common/BaseAPI";
-
+import {} from "@src/common/myAPI";
 declare global {
-  interface Window {
-    myAPI: BaseAPI;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Window {}
 }

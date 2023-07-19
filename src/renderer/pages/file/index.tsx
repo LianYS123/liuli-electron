@@ -4,15 +4,10 @@ import { useMutation, useQuery } from "react-query";
 import { Box, FormControlLabel, Link, Stack, Switch } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import filesize from "filesize";
-import {
-  addFile,
-  deleteFile,
-  getFileList,
-  updateFile
-} from "@src/renderer/services/file";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
 import { File } from "@src/common/interfaces/file.interface";
+import { fileAPI } from "@src/common/api/file";
 
 export function FileList() {
   const [page, setPage] = React.useState(0);
@@ -21,7 +16,7 @@ export function FileList() {
   const { data, isLoading } = useQuery(
     ["GET_FILE_LIST", page, pageSize],
     () => {
-      return getFileList({
+      return fileAPI.getFiles({
         pageNo: page + 1,
         pageSize
       });
@@ -30,17 +25,17 @@ export function FileList() {
   const { open: openAlertDialog } = useAlertDialog();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { mutateAsync: del } = useMutation(deleteFile, {
+  const { mutateAsync: del } = useMutation(fileAPI.deleteFile, {
     onSuccess: () => {
       enqueueSnackbar("删除成功");
     }
   });
-  const { mutateAsync: update } = useMutation(updateFile, {
+  const { mutateAsync: update } = useMutation(fileAPI.updateFile, {
     onSuccess: () => {
       enqueueSnackbar("修改成功");
     }
   });
-  const { mutateAsync: add } = useMutation(addFile, {
+  const { mutateAsync: add } = useMutation(fileAPI.addFileByPath, {
     onSuccess: () => {
       enqueueSnackbar("添加成功");
     }

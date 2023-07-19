@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { useHistoryState } from "./useHistoryState";
-import { getArticles } from "../../services/article";
+import { articleAPI } from "@src/common/api/article";
 
 export const useArticles = ({ pageSize }: { pageSize: number }) => {
   const {
@@ -16,7 +16,7 @@ export const useArticles = ({ pageSize }: { pageSize: number }) => {
   return useQuery(
     ["/article/list", selectedTags, keyword, order, cat, onlyPlayable, pageNo],
     () => {
-      return getArticles({
+      return articleAPI.getArticles({
         tags: selectedTags,
         searchValue: keyword,
         order,

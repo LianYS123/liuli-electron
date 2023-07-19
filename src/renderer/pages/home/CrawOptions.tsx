@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "../../providers/AlertDialogProvider";
 import React, { useState } from "react";
-import { myAPI } from "@src/common/channels";
+import { articleAPI } from "@src/common/api/article";
 
 export const CrawOptions: React.FC<{
   refetch: () => void;
@@ -13,7 +13,7 @@ export const CrawOptions: React.FC<{
   const [endPage, setEndPage] = useState(1);
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync: craw, isLoading: crawing } = useMutation(
-    myAPI.fetchArticles,
+    articleAPI.fetchArticles,
     {
       onSuccess() {
         enqueueSnackbar("同步成功");
