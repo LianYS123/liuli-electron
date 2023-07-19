@@ -1,9 +1,10 @@
-export const getArticles = window.myAPI.getArticles
+import { myAPI } from '@src/common/myAPI'
+export const getArticles = myAPI.getArticles
 
-export const createAndConnectFile = window.myAPI.createAndConnectFile
+export const createAndConnectFile = myAPI.createAndConnectFile
 
-export const connectFile = window.myAPI.connectFile
+export const connectFile = myAPI.connectFile
 
-export const connectFiles = window.myAPI.connectFiles
+export const connectFiles = myAPI.connectFiles
 
-export const removeFile = window.myAPI.removeFile
+export const removeFile = myAPI.removeFile

@@ -146,3 +146,5 @@ class ArticleService {
 }
 
 export default ArticleService;
+
+export const articleService = new ArticleService();

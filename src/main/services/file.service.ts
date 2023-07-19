@@ -128,3 +128,5 @@ export class FileService {
     return files;
   };
 }
+
+export const fileService = new FileService();

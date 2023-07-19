@@ -1,7 +1,9 @@
-export const getFileList = window.myAPI.getFileList;
+import { myAPI } from "@src/common/myAPI";
 
-export const updateFile = window.myAPI.updateFile;
+export const getFileList = myAPI.getFileList;
 
-export const deleteFile = window.myAPI.deleteFile;
+export const updateFile = myAPI.updateFile;
 
-export const addFile = window.myAPI.addFile;
+export const deleteFile = myAPI.deleteFile;
+
+export const addFile = myAPI.addFile;

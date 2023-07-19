@@ -8,9 +8,12 @@ class WindowManager {
       height: 750,
       width: 1200,
       webPreferences: {
-        preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+        // preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         webSecurity: false,
-        sandbox: false
+        sandbox: false,
+        contextIsolation: false,
+        nodeIntegration: true,
+        nodeIntegrationInWorker: true
       }
     });
 

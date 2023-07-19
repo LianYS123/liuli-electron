@@ -12,4 +12,4 @@ export const myAPI = mapValues(
   (value) =>
     (...args: Parameters<BaseAPI[keyof BaseAPI]>) =>
       invoke(value, ...args)
-);
+) as BaseAPI;

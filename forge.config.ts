@@ -19,6 +19,7 @@ const config: ForgeConfig = {
         "default-src 'self' 'unsafe-inline' data:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' data:; img-src * file: data: unsafe-inline",
       renderer: {
         config: rendererConfig,
+        nodeIntegration: true,
         entryPoints: [
           {
             html: "./src/renderer/index.html",
