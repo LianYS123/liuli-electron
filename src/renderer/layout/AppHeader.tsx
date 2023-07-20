@@ -38,7 +38,7 @@ export default function AppHeader() {
               </Box>
             </Box>
             <Box>
-              {APP_MENUS.map(({ to, text, icon }) => {
+              {APP_MENUS.map(({ to, text }) => {
                 return (
                   <ButtonBase
                     key={text}

@@ -8,7 +8,7 @@ export const useArticles = ({ pageSize }: { pageSize: number }) => {
       selectedTags = [],
       keyword,
       order = "time",
-      cat = "动画",
+      cat = "全部",
       onlyPlayable,
       pageNo = 1
     }

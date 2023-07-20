@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Grid, TextField } from "@mui/material";
 import { TagFilter } from "./TagFilter";
 import { useHistoryState } from "./useHistoryState";
 import { ArticleItemProps } from "../../services/types";
@@ -7,6 +7,8 @@ import { CrawOptions } from "./CrawOptions";
 import { useArticles } from "./useArticles";
 import ArticleItem from "./ArticleItem";
 import { MyPagination } from "./MyPagination";
+import { useNavigate } from "react-router-dom";
+import { routers } from "@src/renderer/config";
 
 const Home = () => {
   const {
@@ -56,11 +58,35 @@ const Home = () => {
     );
   };
 
+  const nav = useNavigate();
+
+  const [keyword, setKeyword] = useState("");
+
   return (
     <Box>
       <TagFilter />
-
-      <CrawOptions refetch={refetch} />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}
+      >
+        <CrawOptions refetch={refetch} />
+        <TextField
+          label="搜索"
+          value={keyword}
+          onChange={(ev) => setKeyword(ev.target.value)}
+          onKeyDown={(ev) => {
+            if (ev.key === "Enter") {
+              nav(routers.HOME, {
+                state: { keyword }
+              });
+            }
+          }}
+          variant="standard"
+        />
+      </Box>
 
       {renderPagination()}
 

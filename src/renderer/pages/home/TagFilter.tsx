@@ -16,7 +16,7 @@ export const TagFilter = () => {
     selectedTags = [],
     keyword,
     order = "time",
-    cat = "动画",
+    cat = "全部",
     onlyPlayable
   } = state;
 
