@@ -11,7 +11,8 @@ import {
   Link,
   Rating,
   Tooltip,
-  Typography
+  Typography,
+  useTheme
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import React, { useState } from "react";
@@ -24,11 +25,13 @@ import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import { chooseMedia } from "@src/renderer/utils";
 import { ImageListPreview, ImageListPreviewV2 } from "./ImageListPreview";
+import Icon from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
 import qs from "query-string";
 import { shell } from "electron";
 import { articleAPI } from "@src/common/api/article";
+import { Launch } from "@mui/icons-material";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -55,6 +58,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
   const [previewDir, setPreviewDir] = useState<string>();
   const nav = useNavigate();
+  const theme = useTheme();
 
   return (
     <Card>
@@ -165,13 +169,38 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
         {uid &&
           [...new Set(uid.split("|"))].map((u) => {
+            const link = `magnet:?xt=urn:btih:${u}`;
             return (
-              <div key={u}>
-                <Text copy wrap={false}>
-                  {`magnet:?xt=urn:btih:${u}`}
-                </Text>
-                {/* <Divider /> */}
-              </div>
+              <section
+                key={u}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                <Typography
+                  style={{
+                    width: "100%",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap"
+                  }}
+                  variant="body2"
+                >
+                  {link}
+                </Typography>
+                <Tooltip title="打开">
+                  <Icon
+                    style={{ color: theme.palette.primary.main }}
+                    onClick={() => {
+                      shell.openExternal(link);
+                    }}
+                  >
+                    <Launch />
+                  </Icon>
+                </Tooltip>
+              </section>
             );
           })}
       </CardContent>

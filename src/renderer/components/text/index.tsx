@@ -19,7 +19,7 @@ export const Text: React.FC<ITextProps> = ({
   children,
   ellipsis = true,
   copy: canCopy = false,
-  wrap = true,
+  wrap = true
 }) => {
   const { enqueueSnackbar } = useSnackbar();
   const copyIcon = (
@@ -27,7 +27,7 @@ export const Text: React.FC<ITextProps> = ({
       style={{
         fontSize: ".9em",
         cursor: "pointer",
-        color: blue[500],
+        color: blue[500]
       }}
       onClick={(_) => {
         if (typeof children === "string") {
@@ -68,7 +68,7 @@ export const Text: React.FC<ITextProps> = ({
             width: "100%",
             textOverflow: "ellipsis",
             overflow: "hidden",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
           variant="body2"
         >
