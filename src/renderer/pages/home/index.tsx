@@ -3,7 +3,6 @@ import { Box, Grid, TextField } from "@mui/material";
 import { TagFilter } from "./TagFilter";
 import { useHistoryState } from "./useHistoryState";
 import { ArticleItemProps } from "../../services/types";
-import { CrawOptions } from "./CrawOptions";
 import { useArticles } from "./useArticles";
 import ArticleItem from "./ArticleItem";
 import { MyPagination } from "./MyPagination";
@@ -72,7 +71,6 @@ const Home = () => {
           justifyContent: "space-between"
         }}
       >
-        <CrawOptions refetch={refetch} />
         <TextField
           label="搜索"
           value={keyword}

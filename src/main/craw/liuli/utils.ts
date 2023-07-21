@@ -1,8 +1,7 @@
-import { load } from 'cheerio';
-import config from './config';
-import fetch from 'node-fetch';
+import { load } from "cheerio";
+import fetch from "node-fetch";
 
-import { HttpsProxyAgent } from 'https-proxy-agent';
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 export function getUids(content: string) {
   if (!content) return [];
@@ -13,7 +12,7 @@ export function getUids(content: string) {
   while (hasNext) {
     const matchs = reg.exec(content);
     if (matchs) {
-      uids.push(matchs[0].split('本站不提供下载').join(''));
+      uids.push(matchs[0].split("本站不提供下载").join(""));
     } else {
       hasNext = false;
     }
@@ -21,16 +20,8 @@ export function getUids(content: string) {
   return uids;
 }
 
-export const createProxyFetch = (proxyAddress: string) => {
-  const agent = new HttpsProxyAgent(proxyAddress);
-  const xFetch = (link: string, options?: any) => {
-    return fetch(link, { ...options, agent });
-  };
-  return xFetch;
-};
-
-export const get$ = async (link: string) => {
-  const xFetch = createProxyFetch(config.PROXY);
-  const text = await xFetch(link).then((res: any) => res.text());
+export const get$ = async (link: string, proxy: string) => {
+  const agent = new HttpsProxyAgent(proxy);
+  const text = await fetch(link, { agent }).then((res) => res.text());
   return load(text);
 };
