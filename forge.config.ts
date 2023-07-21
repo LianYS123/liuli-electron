@@ -17,6 +17,7 @@ const config: ForgeConfig = {
       mainConfig,
       devContentSecurityPolicy:
         "default-src 'self' 'unsafe-inline' data:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' data:; img-src * file: data: unsafe-inline",
+      devServer: { liveReload: false },
       renderer: {
         config: rendererConfig,
         nodeIntegration: true,

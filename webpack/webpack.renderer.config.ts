@@ -15,6 +15,10 @@ export const rendererConfig: Configuration = {
   module: {
     rules
   },
+  // devServer: {
+  //   hot: true,
+  //   liveReload: false
+  // },
   output: {
     publicPath: "../"
   },
