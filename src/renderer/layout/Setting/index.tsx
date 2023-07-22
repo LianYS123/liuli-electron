@@ -8,12 +8,12 @@ import {
   Typography
 } from "@mui/material";
 import { storeAPI } from "@src/common/api/store";
-import { STORE_KEY_ENUM } from "@src/main/store/STORE_KEY_ENUM";
 import { CrawConfig } from "@src/main/store/types";
 import { useMount } from "ahooks";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { CrawOptions } from "./CrawOptions";
+import { STORE_KEY_ENUM } from "@src/common/constants";
 
 export const Setting: React.FC = () => {
   const [config, _setConfig] = useState<CrawConfig | null>(null);
