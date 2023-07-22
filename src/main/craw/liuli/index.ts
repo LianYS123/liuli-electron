@@ -8,7 +8,7 @@ import { BaseCraw } from "@src/main/utils/craw";
 import { Article } from "@src/common/interfaces/article.interface";
 import { ArticleEntity } from "@src/main/entities/article.entity";
 import { store } from "@src/main/store";
-import { STORE_KEY_ENUM } from "@src/main/store/STORE_KEY_ENUM";
+import { STORE_KEY_ENUM } from "@src/common/constants";
 
 type ListData = Pick<
   Article,

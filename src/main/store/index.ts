@@ -1,5 +1,5 @@
 import Store from "electron-store";
-import { STORE_KEY_ENUM } from "./STORE_KEY_ENUM";
+import { STORE_KEY_ENUM } from "../../common/constants";
 
 export const store = new Store({
   name: "store",
