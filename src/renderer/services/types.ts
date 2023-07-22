@@ -6,6 +6,7 @@ export interface ArticleItemProps {
   article: IArticle;
   handleTagClick: (tag: string) => void;
   refetch: () => void;
+  extraActions?: { text: string; onClick: () => void }[];
 }
 
 export interface QueryData {

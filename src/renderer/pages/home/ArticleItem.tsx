@@ -24,7 +24,7 @@ import { useSnackbar } from "notistack";
 import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import { chooseMedia } from "@src/renderer/utils";
-import { ImageListPreview, ImageListPreviewV2 } from "./ImageListPreview";
+import { ImageListPreviewV2 } from "./ImageListPreview";
 import Icon from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
@@ -32,11 +32,14 @@ import qs from "query-string";
 import { shell } from "electron";
 import { articleAPI } from "@src/common/api/article";
 import { Launch } from "@mui/icons-material";
+import { historyAPI } from "@src/common/api/history";
+import { ActionStatus } from "@src/common/constants";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
   handleTagClick,
-  refetch
+  refetch,
+  extraActions = []
 }) => {
   const {
     id,
@@ -69,7 +72,14 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           </Avatar>
         }
         title={
-          <Link style={{ textDecoration: "none" }} target="_blank" href={href}>
+          <Link
+            onClick={() => {
+              historyAPI.addOpenDetail({ articleId: id });
+            }}
+            style={{ textDecoration: "none" }}
+            target="_blank"
+            href={href}
+          >
             <Text limit={20}>{title}</Text>
           </Link>
         }
@@ -97,7 +107,15 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                   await Promise.allSettled(pros);
                   refetch();
                 }
-              }
+              },
+              {
+                text: "稍后观看",
+                onClick: async () => {
+                  await historyAPI.addWatchLater({ articleId: id });
+                  enqueueSnackbar("添加成功");
+                }
+              },
+              ...extraActions
             ].filter(Boolean)}
           />
         }
@@ -144,15 +162,29 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                   // setPreviewDir(file.directory);
                   nav({
                     pathname: routers.IMAGES,
-                    search: qs.stringify({ dir: file.directory })
+                    search: qs.stringify({
+                      dir: file.directory,
+                      articleId: article.id
+                    })
                   });
                   return;
                 }
                 // setFile(file);
                 const error = await shell.openPath(file.filePath);
                 if (error) {
+                  historyAPI.addOpenFile({
+                    articleId: id,
+                    fileId: file.id,
+                    message: error,
+                    status: ActionStatus.Error
+                  });
                   enqueueSnackbar(error, {
                     variant: "error"
+                  });
+                } else {
+                  historyAPI.addOpenFile({
+                    articleId: id,
+                    fileId: file.id
                   });
                 }
               }}
@@ -194,6 +226,10 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                   <Icon
                     style={{ color: theme.palette.primary.main }}
                     onClick={() => {
+                      historyAPI.addOpenDownload({
+                        articleId: id,
+                        source: link
+                      });
                       shell.openExternal(link);
                     }}
                   >

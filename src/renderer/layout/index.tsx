@@ -7,11 +7,11 @@ import {
   SpeedDialIcon
 } from "@mui/material";
 import React, { useState } from "react";
-import AppHeader from "./AppHeader";
 import {
   ArrowBack,
   ArrowForward,
   DarkMode,
+  HistoryOutlined,
   LightMode,
   Refresh,
   Settings
@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../models";
 import { Setting } from "./Setting";
 import { useTheme } from "../hooks/useTheme";
+import { History } from "./History";
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   children
@@ -28,6 +29,7 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   const nav = useNavigate();
   const [open, setOpen] = useState(true);
   const [configDrawerVisible, setConfigDrawerVisible] = useState(false);
+  const [historyDrawerVisible, setHistoryDrawerVisible] = useState(false);
   const { wallpaper } = useSelector((state: RootState) => state.app);
   const { isDark, toggleTheme } = useTheme();
 
@@ -69,6 +71,14 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
           />
           <SpeedDialAction
             onClick={(ev) => {
+              setHistoryDrawerVisible(true);
+              ev.stopPropagation();
+            }}
+            icon={<HistoryOutlined />}
+            tooltipTitle={"历史"}
+          />
+          <SpeedDialAction
+            onClick={(ev) => {
               setConfigDrawerVisible(true);
               ev.stopPropagation();
             }}
@@ -102,7 +112,14 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
         </SpeedDial>
 
         <Drawer
-          sx={{ width: 300 }}
+          ModalProps={{ keepMounted: true }}
+          anchor={"right"}
+          open={historyDrawerVisible}
+          onClose={() => setHistoryDrawerVisible(false)}
+        >
+          <History enabled={historyDrawerVisible} />
+        </Drawer>
+        <Drawer
           anchor={"right"}
           open={configDrawerVisible}
           onClose={() => setConfigDrawerVisible(false)}

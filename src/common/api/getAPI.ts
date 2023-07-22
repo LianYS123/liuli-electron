@@ -21,9 +21,11 @@ export const getAPI = <T extends Record<string, any>>(
   instance: ChannelsType<T>,
   { prefix = "" }: { prefix?: string } = {}
 ): T => {
-  return mapValues(instance, (key: string) => (...params: unknown[]) => {
+  return mapValues(instance, (key: string) => async (...params: unknown[]) => {
     console.log("invoke", key, params);
     const channel = `${prefix}${key}`;
-    return ipcRenderer.invoke(channel, ...params);
+    const res = await ipcRenderer.invoke(channel, ...params);
+    console.log("invoke result", res);
+    return res;
   }) as T;
 };

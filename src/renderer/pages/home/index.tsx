@@ -5,7 +5,7 @@ import { useHistoryState } from "./useHistoryState";
 import { ArticleItemProps } from "../../services/types";
 import { useArticles } from "./useArticles";
 import ArticleItem from "./ArticleItem";
-import { MyPagination } from "./MyPagination";
+import { MyPagination } from "../../components/pagination";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
 

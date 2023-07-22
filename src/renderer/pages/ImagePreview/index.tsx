@@ -14,13 +14,15 @@ import { useLocation } from "react-router-dom";
 import { fileAPI } from "@src/common/api/file";
 import { useDispatch } from "react-redux";
 import { appSlice } from "@src/renderer/models/app";
-import MemoWalpaper from "./Walpaper";
+import { Wallpaper } from "@mui/icons-material";
+import { historyAPI } from "@src/common/api/history";
 
 const ImageListPreview: React.FC<{
   visible: boolean;
   setVisible: (visible: boolean) => void;
   previewImages: string[];
-}> = ({ visible, setVisible, previewImages }) => {
+  articleId: string;
+}> = ({ visible, setVisible, previewImages, articleId }) => {
   const [images, setImages] = useState([]);
   const remainImagesRef = useRef<string[]>();
   const [current, setCurrent] = useState(0);
@@ -76,9 +78,13 @@ const ImageListPreview: React.FC<{
                 className="toolbar-wrapper"
               >
                 <Icon
-                  component={MemoWalpaper}
+                  component={Wallpaper}
                   onClick={() => {
                     handleSetWallpaper(`file://${images[current]}`);
+                    historyAPI.addSetWallpaper({
+                      articleId: Number(articleId),
+                      source: `file://${images[current]}`
+                    });
                   }}
                 />
                 <SwapOutlined rotate={90} onClick={onFlipY} />
@@ -104,6 +110,7 @@ export const ImagePreview: React.FC = () => {
   // const { dir } = useParams();
   const { search } = useLocation();
   const dir = new URLSearchParams(search).get("dir");
+  const articleId = new URLSearchParams(search).get("articleId");
   const [images, setImages] = useState<string[]>([]);
   const remainImagesRef = useRef<string[]>();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -174,6 +181,7 @@ export const ImagePreview: React.FC = () => {
       </ImageList>
       {previewImages.length ? (
         <ImageListPreview
+          articleId={articleId}
           previewImages={previewImages}
           visible={!!previewImages.length}
           setVisible={() => setPreviewImages([])}
