@@ -1,12 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Image, Space } from "antd";
-import Icon, {
-  RotateLeftOutlined,
-  RotateRightOutlined,
-  SwapOutlined,
-  ZoomInOutlined,
-  ZoomOutOutlined
-} from "@ant-design/icons";
+import { Image } from "antd";
+import Icon from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { ImageList, ImageListItem } from "@mui/material";
 import { useDebounceFn } from "ahooks";
@@ -58,43 +52,29 @@ const ImageListPreview: React.FC<{
               }
             },
 
-            toolbarRender: (
-              _,
-              {
-                transform: { scale },
-                actions: {
-                  onFlipX,
-                  onFlipY,
-                  onRotateLeft,
-                  onRotateRight,
-                  onZoomIn,
-                  onZoomOut
-                }
-              }
-            ) => (
-              <Space
-                style={{ fontSize: 20 }}
-                size={16}
-                className="toolbar-wrapper"
-              >
-                <Icon
-                  component={Wallpaper}
-                  onClick={() => {
-                    handleSetWallpaper(`file://${images[current]}`);
-                    historyAPI.addSetWallpaper({
-                      articleId: Number(articleId),
-                      source: `file://${images[current]}`
-                    });
-                  }}
-                />
-                <SwapOutlined rotate={90} onClick={onFlipY} />
-                <SwapOutlined onClick={onFlipX} />
-                <RotateLeftOutlined onClick={onRotateLeft} />
-                <RotateRightOutlined onClick={onRotateRight} />
-                <ZoomOutOutlined disabled={scale === 1} onClick={onZoomOut} />
-                <ZoomInOutlined disabled={scale === 50} onClick={onZoomIn} />
-              </Space>
-            )
+            // imageRender(originalNode) {
+            //   return <div className='ImageListPreview__image'>{originalNode}</div>;
+            // },
+
+            toolbarRender: (originalNode) => {
+              return (
+                <div style={{ display: "flex" }}>
+                  <div className="ant-image-preview-operations-operation ant-image-preview-operations-operation-flipY">
+                    <Icon
+                      component={Wallpaper}
+                      onClick={() => {
+                        handleSetWallpaper(`file://${images[current]}`);
+                        historyAPI.addSetWallpaper({
+                          articleId: Number(articleId),
+                          source: `file://${images[current]}`
+                        });
+                      }}
+                    />
+                  </div>
+                  {originalNode}
+                </div>
+              );
+            }
           }}
         >
           {images.map((src) => {
