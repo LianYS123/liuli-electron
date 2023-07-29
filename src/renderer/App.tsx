@@ -9,7 +9,6 @@ import AppThemeProvider from "./providers/AppThemeProvider";
 import AlertDialogProvider from "./providers/AlertDialogProvider";
 import store from "./models";
 import { FileList } from "./pages/file";
-import { VideoPage } from "./pages/video";
 import { AppLayout } from "./layout";
 import { routers } from "./config";
 import { ImagePreview } from "./pages/ImagePreview";
@@ -36,7 +35,6 @@ export default function App() {
                 <AppLayout>
                   <Routes>
                     <Route path={routers.FILES} element={<FileList />} />
-                    <Route path={routers.VIDEO} element={<VideoPage />} />
                     <Route path={routers.HOME} element={<Home />} />
                     <Route path={routers.IMAGES} element={<ImagePreview />} />
                     <Route path={"/"} element={<Home />} />
