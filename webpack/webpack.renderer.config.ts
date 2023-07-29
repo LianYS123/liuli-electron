@@ -4,9 +4,51 @@ import { rules } from "./webpack.rules";
 import { plugins } from "./webpack.plugins";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 
+const postcssConfig = {
+  loader: "postcss-loader",
+  options: {
+    postcssOptions: {
+      plugins: [
+        [
+          "postcss-preset-env",
+          {
+            // Options
+          }
+        ],
+        ["postcss-nesting"]
+      ]
+    }
+  }
+};
+
 rules.push({
   test: /\.css$/,
-  use: [{ loader: "style-loader" }, { loader: "css-loader" }]
+  exclude: /\.module.css/,
+  use: [
+    { loader: "style-loader" },
+    {
+      loader: "css-loader",
+      options: {
+        modules: false
+      }
+    },
+    postcssConfig
+  ]
+});
+rules.push({
+  test: /\.module.css$/,
+  exclude: /node_modules/,
+  use: [
+    { loader: "style-loader" },
+    {
+      loader: "css-loader",
+      options: {
+        modules: true
+        // scope: 'global'
+      }
+    },
+    postcssConfig
+  ]
 });
 
 export const rendererConfig: Configuration = {
@@ -15,10 +57,6 @@ export const rendererConfig: Configuration = {
   module: {
     rules
   },
-  // devServer: {
-  //   hot: true,
-  //   liveReload: false
-  // },
   output: {
     publicPath: "../"
   },

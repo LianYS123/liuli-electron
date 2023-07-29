@@ -1,1 +1,1 @@
-declare module "xgplayer/*";
+declare module "*.module.css";

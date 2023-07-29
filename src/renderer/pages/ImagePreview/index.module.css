@@ -1,0 +1,7 @@
+.previewImage {
+  & :global {
+    .ant-image-preview-img {
+      max-height: 100% !important;
+    }
+  }
+}

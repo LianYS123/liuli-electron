@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { appSlice } from "@src/renderer/models/app";
 import { Wallpaper } from "@mui/icons-material";
 import { historyAPI } from "@src/common/api/history";
+import styles from "./index.module.css";
 
 const ImageListPreview: React.FC<{
   visible: boolean;
@@ -38,6 +39,7 @@ const ImageListPreview: React.FC<{
       <div style={{ display: "none" }}>
         <Image.PreviewGroup
           preview={{
+            className: styles.previewImage,
             current,
             visible,
             onVisibleChange: (vis) => setVisible(vis),
