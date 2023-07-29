@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -14,10 +15,10 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
+import { Typography as AntdTypography } from "antd";
 import { red } from "@mui/material/colors";
 import React, { useState } from "react";
 import { ActionMenuButton } from "../../components/action/ActionMenuButton";
-import { Text } from "../../components/text";
 import { formatTimeDetail } from "../../utils/time";
 import { ArticleItemProps } from "../../services/types";
 import { useSnackbar } from "notistack";
@@ -34,12 +35,15 @@ import { articleAPI } from "@src/common/api/article";
 import { Launch } from "@mui/icons-material";
 import { historyAPI } from "@src/common/api/history";
 import { ActionStatus } from "@src/common/constants";
+import QueueIcon from "@mui/icons-material/Queue";
+import { PageDialog } from "@src/renderer/components/PageDialog";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
   handleTagClick,
   refetch,
-  extraActions = []
+  extraActions = [],
+  handleOpenDetail = window.open
 }) => {
   const {
     id,
@@ -63,24 +67,31 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   const nav = useNavigate();
   const theme = useTheme();
 
+  const handleAddToQueue = async () => {
+    await historyAPI.addWatchLater({ articleId: id });
+    enqueueSnackbar("添加成功");
+  };
+
   return (
     <Card>
       <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {id}
-          </Avatar>
-        }
         title={
           <Link
-            onClick={() => {
+            onClick={(ev) => {
+              ev.preventDefault();
+              handleOpenDetail(href);
               historyAPI.addOpenDetail({ articleId: id });
             }}
             style={{ textDecoration: "none" }}
             target="_blank"
             href={href}
           >
-            <Text limit={20}>{title}</Text>
+            <AntdTypography.Paragraph
+              style={{ color: "inherit", margin: 0 }}
+              ellipsis={{ rows: 2 }}
+            >
+              {title}
+            </AntdTypography.Paragraph>
           </Link>
         }
         subheader={formatTimeDetail(time)}
@@ -88,36 +99,17 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           <ActionMenuButton
             actions={[
               {
-                text: "关联",
-                onClick: async () => {
-                  const files = await chooseMedia();
-                  if (!files.length) {
-                    return;
-                  }
-                  const pros = files.map(async (media) => {
-                    try {
-                      await articleAPI.createAndConnectFile({
-                        articleId: id,
-                        fromPath: media
-                      });
-                    } catch (e) {
-                      enqueueSnackbar(e?.message);
-                    }
-                  });
-                  await Promise.allSettled(pros);
-                  refetch();
-                }
-              },
-              {
                 text: "稍后观看",
-                onClick: async () => {
-                  await historyAPI.addWatchLater({ articleId: id });
-                  enqueueSnackbar("添加成功");
-                }
+                onClick: handleAddToQueue
               },
               ...extraActions
-            ].filter(Boolean)}
+            ]}
           />
+          // <Tooltip title="稍后观看">
+          //   <IconButton>
+          //     <QueueIcon />
+          //   </IconButton>
+          // </Tooltip>
         }
       />
 
@@ -240,6 +232,23 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
             );
           })}
       </CardContent>
+      <CardActions>
+        <Button style={{ padding: 0 }} onClick={handleAddToQueue}>
+          稍后观看
+        </Button>
+        <Button style={{ padding: 0 }} onClick={handleConnect}>
+          选择文件
+        </Button>
+        {/* <Button
+          onClick={async () => {
+            // todo
+            enqueueSnackbar("已删除");
+            refetch();
+          }}
+        >
+          删除
+        </Button> */}
+      </CardActions>
       {fileToRemove && (
         <UnConnectDialog
           file={fileToRemove}
@@ -260,5 +269,24 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
       )}
     </Card>
   );
+
+  async function handleConnect() {
+    const files = await chooseMedia();
+    if (!files.length) {
+      return;
+    }
+    const pros = files.map(async (media) => {
+      try {
+        await articleAPI.createAndConnectFile({
+          articleId: id,
+          fromPath: media
+        });
+      } catch (e) {
+        enqueueSnackbar(e?.message);
+      }
+    });
+    await Promise.allSettled(pros);
+    refetch();
+  }
 };
 export default ArticleItem;

@@ -7,6 +7,7 @@ export interface ArticleItemProps {
   handleTagClick: (tag: string) => void;
   refetch: () => void;
   extraActions?: { text: string; onClick: () => void }[];
+  handleOpenDetail?: (src: string) => void
 }
 
 export interface QueryData {

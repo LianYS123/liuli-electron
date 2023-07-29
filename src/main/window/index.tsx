@@ -13,7 +13,8 @@ class WindowManager {
         sandbox: false,
         contextIsolation: false,
         nodeIntegration: true,
-        nodeIntegrationInWorker: true
+        nodeIntegrationInWorker: true,
+        webviewTag: true
       }
     });
 
