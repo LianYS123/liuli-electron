@@ -47,7 +47,7 @@ export const Setting: React.FC = () => {
           label="Base Link"
           variant="standard"
         />
-        <TextField
+        {/* <TextField
           value={config?.PROXY}
           onChange={(ev) => {
             const value = ev.target.value;
@@ -56,7 +56,7 @@ export const Setting: React.FC = () => {
           sx={{ mr: 2 }}
           label="Proxy"
           variant="standard"
-        />
+        /> */}
         <Stack direction={"row"} spacing={1}>
           <FormControlLabel
             control={

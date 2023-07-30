@@ -21,7 +21,7 @@ export function getUids(content: string) {
 }
 
 export const get$ = async (link: string, proxy: string) => {
-  const agent = new HttpsProxyAgent(proxy);
-  const text = await fetch(link, { agent }).then((res) => res.text());
+  // const agent = new HttpsProxyAgent(proxy);
+  const text = await fetch(link).then((res) => res.text());
   return load(text);
 };
