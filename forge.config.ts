@@ -1,5 +1,6 @@
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import { MakerDMG } from "@electron-forge/maker-dmg";
+import { MakerSquirrel } from "@electron-forge/maker-squirrel";
 import { WebpackPlugin } from "@electron-forge/plugin-webpack";
 
 import { mainConfig } from "./webpack/webpack.main.config";
@@ -10,7 +11,8 @@ const config: ForgeConfig = {
   makers: [
     new MakerDMG({
       format: "ULFO"
-    })
+    }),
+    new MakerSquirrel({})
   ],
   plugins: [
     new WebpackPlugin({

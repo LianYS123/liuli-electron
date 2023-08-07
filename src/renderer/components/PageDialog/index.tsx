@@ -1,7 +1,8 @@
 import { Dialog, DialogTitle, IconButton } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import styles from "./index.module.css";
-import type { WebviewTag } from "electron";
+import type { WebviewTag, WebFrame } from "electron";
+// import type { WebviewTag } from 'electron'
 import CloseIcon from "@mui/icons-material/Close";
 
 export const PageDialog: React.FC<{

@@ -1,0 +1,12 @@
+diff --git a/node_modules/electron/electron.d.ts b/node_modules/electron/electron.d.ts
+index a215b0d..aec8632 100644
+--- a/node_modules/electron/electron.d.ts
++++ b/node_modules/electron/electron.d.ts
+@@ -17962,6 +17962,7 @@ declare namespace Electron {
+   namespace CrossProcessExports {
+     const app: App;
+     type App = Electron.App;
++    type WebviewTag = Electron.WebviewTag
+     const autoUpdater: AutoUpdater;
+     type AutoUpdater = Electron.AutoUpdater;
+     class BrowserView extends Electron.BrowserView {}
