@@ -1,4 +1,4 @@
-import { AppBar, Button, ButtonGroup } from "@mui/material";
+import { AppBar, Button, ButtonGroup, Tab, Tabs } from "@mui/material";
 import { ActionEnum } from "@src/common/constants";
 import React from "react";
 
@@ -31,6 +31,7 @@ export function ActionList({
 }: ActionListProps) {
   return (
     <AppBar
+      color="default"
       sx={{
         position: "sticky",
         // left: 0,
@@ -42,21 +43,15 @@ export function ActionList({
         // background: (theme) => theme.palette.background.default
       }}
     >
-      <ButtonGroup>
+      <Tabs value={currentAction} onChange={(ev, action) => {
+        setCurrentAction(action)
+      }}>
         {Object.entries(actions).map(([action, { text }]) => {
           return (
-            <Button
-              variant={action === currentAction ? "contained" : "outlined"}
-              key={action}
-              onClick={() => {
-                setCurrentAction(action as ActionEnum);
-              }}
-            >
-              {text}
-            </Button>
-          );
+            <Tab value={action} label={text} />
+          )
         })}
-      </ButtonGroup>
+      </Tabs>
     </AppBar>
   );
 }

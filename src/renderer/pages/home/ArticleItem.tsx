@@ -56,7 +56,8 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     content,
     rating_count,
     rating_score,
-    files
+    files,
+    cat
   } = article;
 
   const { enqueueSnackbar } = useSnackbar();
@@ -75,6 +76,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   return (
     <Card>
       <CardHeader
+        avatar={
+          <Avatar sx={{background: theme => theme.palette.secondary.main}}>
+            {cat?.[0]}
+          </Avatar>
+        }
         title={
           <Link
             onClick={(ev) => {
@@ -132,16 +138,16 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         <div style={{ marginBottom: 8 }}>
           {tags && tags.length
             ? tags
-                .split("|")
-                .map((tag) => (
-                  <Chip
-                    onClick={() => handleTagClick(tag)}
-                    style={{ margin: 4 }}
-                    variant="outlined"
-                    key={tag}
-                    label={tag}
-                  />
-                ))
+              .split("|")
+              .map((tag) => (
+                <Chip
+                  onClick={() => handleTagClick(tag)}
+                  style={{ margin: 4 }}
+                  variant="outlined"
+                  key={tag}
+                  label={tag}
+                />
+              ))
             : null}
         </div>
 

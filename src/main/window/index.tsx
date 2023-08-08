@@ -24,6 +24,7 @@ class WindowManager {
     if (process.env.NODE_ENV === "development") {
       this.mainWindow.webContents.openDevTools();
     }
+    return this.mainWindow
   };
 }
 

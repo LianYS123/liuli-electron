@@ -7,6 +7,7 @@ import winstonDaily from "winston-daily-rotate-file";
 
 // logs dir
 const logDir: string = app.getPath("logs");
+console.log(logDir)
 
 if (!existsSync(logDir)) {
   mkdirSync(logDir);

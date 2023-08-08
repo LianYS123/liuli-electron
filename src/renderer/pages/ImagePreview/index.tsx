@@ -25,7 +25,7 @@ const ImageListPreview: React.FC<{
   const dispatch = useDispatch();
 
   const handleSetWallpaper = (src: string) => {
-    dispatch(appSlice.actions.setWallpaper(src));
+    dispatch(appSlice.actions.setWallpaper(encodeURIComponent(src)));
   };
 
   useEffect(() => {

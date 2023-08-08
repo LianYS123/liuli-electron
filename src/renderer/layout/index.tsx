@@ -23,6 +23,8 @@ import { Setting } from "./Setting";
 import { useTheme } from "../hooks/useTheme";
 import { History } from "./History";
 
+const isWin = process.platform === 'win32';
+
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
@@ -37,7 +39,7 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
     <Box
       sx={{
         height: "100%",
-        backgroundImage: wallpaper ? `url('${wallpaper}')` : undefined,
+        backgroundImage: wallpaper ? `url('${ isWin ? wallpaper.replaceAll('\\', '\\\\') : wallpaper}')` : undefined,
         overflow: "auto",
         backgroundPosition: "center",
         backgroundSize: "cover"

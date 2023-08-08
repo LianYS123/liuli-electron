@@ -4,7 +4,7 @@ import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
 import url from "url";
 import { windowManager } from "./window";
-import { initApplicationMenu } from "./menu";
+import { initApplicationMenu, menu } from "./menu";
 import { ipcHandler } from "./ipcHandler";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -21,12 +21,17 @@ logger.info(app.getPath("appData"));
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
-  windowManager.createMainWindow();
+  const mainWindow = windowManager.createMainWindow();
+
+  mainWindow.webContents.on('context-menu', () => {
+    menu.popup()
+  })
+
   // 注册协议
 
   protocol.registerFileProtocol("file", (request, callback) => {
     const filePath = url.fileURLToPath(
-      "file://" + request.url.slice("file://".length)
+      request.url
     );
     callback(filePath);
   });

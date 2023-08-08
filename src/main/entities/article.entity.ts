@@ -7,7 +7,8 @@ import {
   BaseEntity,
   Unique,
   ManyToMany,
-  JoinTable
+  JoinTable,
+  Generated
 } from "typeorm";
 import { FileEntity } from "./file.entity";
 
@@ -20,6 +21,7 @@ export class ArticleEntity extends BaseEntity implements Article {
   id: number;
 
   @Column()
+  @Generated('uuid')
   raw_id: string;
 
   @Column()

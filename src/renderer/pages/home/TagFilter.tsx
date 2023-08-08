@@ -25,7 +25,7 @@ export const TagFilter = () => {
     ["rating_count", "热度"],
     ["rating_score", "评分"]
   ];
-  const cats = ["全部", "动画", "文章", "漫画", "小说", "音乐"];
+  const cats = ["全部", "动画", '游戏', "文章", "漫画", "小说", "音乐"];
 
   return (
     <Box sx={{ my: 2 }}>
