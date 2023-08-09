@@ -1,4 +1,4 @@
-import { ArticleCraw } from "@src/main/craw/liuli";
+import { articleCraw } from "@src/main/craw/liuli";
 import {
   ArticleDto,
   ConnectDto,
@@ -85,8 +85,10 @@ export class ArticleService {
 
   // 爬虫;
   public fetchArticles = async (params: CrawDto): Promise<null> => {
-    const craw = new ArticleCraw(params.startPage, params.endPage);
-    await craw.start();
+    // const craw = new ArticleCraw(params.startPage, params.endPage);
+    articleCraw.startPage = params.startPage
+    articleCraw.endPage = params.endPage
+    await articleCraw.start();
     return null;
   };
 

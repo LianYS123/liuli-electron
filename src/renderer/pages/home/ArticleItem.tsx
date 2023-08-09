@@ -16,7 +16,6 @@ import {
   useTheme
 } from "@mui/material";
 import { Typography as AntdTypography } from "antd";
-import { red } from "@mui/material/colors";
 import React, { useState } from "react";
 import { ActionMenuButton } from "../../components/action/ActionMenuButton";
 import { formatTimeDetail } from "../../utils/time";
@@ -35,8 +34,6 @@ import { articleAPI } from "@src/common/api/article";
 import { Launch } from "@mui/icons-material";
 import { historyAPI } from "@src/common/api/history";
 import { ActionStatus } from "@src/common/constants";
-import QueueIcon from "@mui/icons-material/Queue";
-import { PageDialog } from "@src/renderer/components/PageDialog";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -105,17 +102,16 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           <ActionMenuButton
             actions={[
               {
+                text: "关联文件",
+                onClick: handleConnect
+              },
+              {
                 text: "稍后观看",
                 onClick: handleAddToQueue
               },
               ...extraActions
             ]}
           />
-          // <Tooltip title="稍后观看">
-          //   <IconButton>
-          //     <QueueIcon />
-          //   </IconButton>
-          // </Tooltip>
         }
       />
 
@@ -238,23 +234,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
             );
           })}
       </CardContent>
-      <CardActions>
-        <Button style={{ padding: 0 }} onClick={handleAddToQueue}>
-          稍后观看
-        </Button>
-        <Button style={{ padding: 0 }} onClick={handleConnect}>
-          选择文件
-        </Button>
-        {/* <Button
-          onClick={async () => {
-            // todo
-            enqueueSnackbar("已删除");
-            refetch();
-          }}
-        >
-          删除
-        </Button> */}
-      </CardActions>
+
       {fileToRemove && (
         <UnConnectDialog
           file={fileToRemove}

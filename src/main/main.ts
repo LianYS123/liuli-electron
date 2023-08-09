@@ -6,6 +6,7 @@ import url from "url";
 import { windowManager } from "./window";
 import { initApplicationMenu, menu } from "./menu";
 import { ipcHandler } from "./ipcHandler";
+import {articleCraw} from "@src/main/craw/liuli";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -26,6 +27,8 @@ app.on("ready", () => {
   mainWindow.webContents.on('context-menu', () => {
     menu.popup()
   })
+
+  articleCraw.autoFetch()
 
   // 注册协议
 
