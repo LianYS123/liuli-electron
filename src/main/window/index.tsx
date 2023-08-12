@@ -1,4 +1,5 @@
 import { BrowserWindow } from "electron";
+import path from "path";
 
 class WindowManager {
   mainWindow: BrowserWindow;
@@ -7,6 +8,7 @@ class WindowManager {
     this.mainWindow = new BrowserWindow({
       height: 750,
       width: 1200,
+      // icon: path.join(__dirname, "../../../icons/icon.png"),
       webPreferences: {
         // preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         webSecurity: false,
@@ -24,7 +26,7 @@ class WindowManager {
     if (process.env.NODE_ENV === "development") {
       this.mainWindow.webContents.openDevTools();
     }
-    return this.mainWindow
+    return this.mainWindow;
   };
 }
 

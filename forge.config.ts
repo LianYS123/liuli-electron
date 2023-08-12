@@ -7,12 +7,18 @@ import { mainConfig } from "./webpack/webpack.main.config";
 import { rendererConfig } from "./webpack/webpack.renderer.config";
 
 const config: ForgeConfig = {
+  packagerConfig: {
+    icon: "icons/icon"
+  },
   rebuildConfig: {},
   makers: [
     new MakerDMG({
-      format: "ULFO"
+      format: "ULFO",
+      icon: "icons/icon.icns"
     }),
-    new MakerSquirrel({})
+    new MakerSquirrel({
+      setupIcon: "icons/icon.ico"
+    })
   ],
   plugins: [
     new WebpackPlugin({
