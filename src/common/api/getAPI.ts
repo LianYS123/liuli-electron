@@ -22,10 +22,10 @@ export const getAPI = <T extends Record<string, any>>(
   { prefix = "" }: { prefix?: string } = {}
 ): T => {
   return mapValues(instance, (key: string) => async (...params: unknown[]) => {
-    console.log("invoke", key, params);
-    const channel = `${prefix}${key}`;
+    const channel = `${prefix}-${key}`;
+    console.log("invoke", channel, params);
     const res = await ipcRenderer.invoke(channel, ...params);
-    console.log("invoke result", res);
+    console.log("invoke result", channel, res);
     return res;
   }) as T;
 };

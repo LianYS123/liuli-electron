@@ -6,8 +6,8 @@ export const handleService = <T extends Record<string, Function>>(
   { prefix = "" }: { prefix?: string } = {}
 ) => {
   Object.entries(instance).forEach(([key, service]) => {
-    const channel = `${prefix}${key}`;
-    console.log(channel);
+    const channel = `${prefix}-${key}`;
+    console.log(channel)
     ipcMain.handle(channel, (ev, ...args) => service(...args));
   });
 };

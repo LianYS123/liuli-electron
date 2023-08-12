@@ -1,9 +1,11 @@
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { articleAPI } from "@src/common/api/article";
+import { useDebounceFn } from "ahooks";
+import { articleCrawAPI } from "@src/common/api/articleCraw";
 
 export const CrawOptions: React.FC = () => {
   const [startPage, setStartPage] = useState(1);
@@ -13,7 +15,7 @@ export const CrawOptions: React.FC = () => {
   function refetch() {
     client.refetchQueries(["/article/list"], { active: true });
   }
-  const { mutateAsync: craw, isLoading: crawing } = useMutation(
+  const { mutateAsync: craw } = useMutation(
     articleAPI.fetchArticles,
     {
       onSuccess() {
@@ -22,6 +24,19 @@ export const CrawOptions: React.FC = () => {
       }
     }
   );
+
+  const { data: crawing = 0, isIdle, isStale, isError } = useQuery(
+    'ArticleCrawPending',
+    () => articleCrawAPI.pending(),
+    {
+      refetchInterval: 1000,
+    }
+  )
+
+
+  const { run: handleCraw } = useDebounceFn(craw, { wait: 100 })
+
+
   return (
     <Box>
       <Typography mb={1}>数据同步</Typography>
@@ -47,11 +62,12 @@ export const CrawOptions: React.FC = () => {
           variant="standard"
         />
         <LoadingButton
+          disabled={isIdle}
           variant="outlined"
           onClick={() => {
-            craw({ startPage, endPage });
+            handleCraw({ startPage, endPage });
           }}
-          loading={crawing}
+          loading={!!crawing}
         >
           同步
         </LoadingButton>

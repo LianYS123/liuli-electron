@@ -1,52 +1,61 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// import PQueue from 'p-queue';
 import { formatTime } from './util';
 import { logger } from './logger';
+import PQueue from "p-queue";
 
 /**
  * 通用请求封装
  */
 export abstract class BaseCraw {
-  insertCount = 0;
+  protected insertCount = 0;
+  protected updateCount = 0;
+  protected startTime = 0;
+  protected endTime = 0;
+  protected errors: any[] = []; // 错误列表
 
-  updateCount = 0;
+  protected readonly queue = new PQueue({
+    concurrency: 5,
+    interval: 1000,
+    intervalCap: 3
+  });
 
-  status: 'idle' | 'error' | 'finished' = 'idle'; // 爬取状态(idle: 未开始，error：异常退出，finished：已完成)
+  constructor() {
+    this.queue.addListener('idle', () => {
+      console.log('Craw Query Idle')
+      this.endTime = Date.now()
+      this.logStat()
+    })
+  }
 
-  errors: any[] = []; // 错误列表
-
-  startTime = 0;
-
-  endTime = 0;
-
-  // 请求限速
-  // queue = new PQueue({ concurrency: 20, interval: 1000, intervalCap: 5 }); // 一秒内最多发起五个请求，最多有十个请求
-
-  // 运行
-  abstract run(): Promise<void>;
-
-  // 开始
-  async start() {
-    logger.info('start...');
-
-    // 记录开始时间
+  protected resetStat = () => {
+    this.insertCount = 0
+    this.updateCount = 0
+    this.errors = []
     this.startTime = Date.now();
+    this.endTime = 0
+  }
 
-    await this.run();
+  public pending = () => {
+    return this.queue.pending
+  }
 
-    // 记录结束时间
-    this.endTime = Date.now();
-
-    // 打印请求状态
-    this.logStat();
-
-    logger.info('\nover~');
+  public stat = () => {
+    const { insertCount, updateCount, startTime, errors, endTime } = this
+    // const endTime = Date.now();
+    // const cost = Math.ceil((endTime - this.startTime) / 1000); // s
+    return {
+      pending: this.pending(),
+      startTime,
+      endTime,
+      insertCount,
+      updateCount,
+      errors: errors.length,
+    }
   }
 
   // 打印请求状态
-  logStat = async () => {
+  protected logStat = () => {
     const stat = (txt: string) => {
-      logger.verbose(txt);
+      logger.info(txt);
     };
     const endTime = Date.now();
     const cost = Math.ceil((endTime - this.startTime) / 1000); // s
@@ -59,14 +68,14 @@ export abstract class BaseCraw {
   };
 
   // 错误记录
-  logError = (error: any, args: any[] = []) => {
+  protected logError = (error: any, args: any[] = []) => {
     const message = error.message || error;
     logger.error(message + '\n' + JSON.stringify(args));
     this.errors.push(error);
   };
 
   // 错误处理
-  withErrorHandler = <T extends (...args: any[]) => any>(func: T): T => {
+  protected withErrorHandler = <T extends (...args: any[]) => any>(func: T): T => {
     const resFun = async (...args: Parameters<T>) => {
       try {
         const res = await func(...args);

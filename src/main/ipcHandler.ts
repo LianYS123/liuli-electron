@@ -4,6 +4,7 @@ import { articleService } from "./services/article.service";
 import { fileService } from "./services/file.service";
 import { store } from "./store";
 import { historyService } from "./services/history.service";
+import { articleCraw } from "./craw/liuli";
 
 const storeService = {
   get: (key: string) => {
@@ -18,5 +19,6 @@ export function ipcHandler() {
   handleService({ ...fileService }, { prefix: "FileService" });
   handleService({ ...dialog }, { prefix: "Dialog" });
   handleService({ ...historyService }, { prefix: "History" });
+  handleService({ ...articleCraw }, { prefix: "ArticleCraw" });
   handleService(storeService, { prefix: "Store" });
 }

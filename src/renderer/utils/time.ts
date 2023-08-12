@@ -65,6 +65,9 @@ export function formatTimeTitle(time: string | number | Date) {
  * 非本年消息，显示“xxxx年xx月xx日 时:分”，例如：2021年07月10日 12:20
  */
 export function formatTimeDetail(time: string | number | Date) {
+  if (!time) {
+    return ''
+  }
   const t = new Date(time);
   let f;
   if (differenceInSeconds(new Date(), t) < 60) {

@@ -85,10 +85,7 @@ export class ArticleService {
 
   // 爬虫;
   public fetchArticles = async (params: CrawDto): Promise<null> => {
-    // const craw = new ArticleCraw(params.startPage, params.endPage);
-    articleCraw.startPage = params.startPage
-    articleCraw.endPage = params.endPage
-    await articleCraw.start();
+    await articleCraw.run(params.startPage, params.endPage);
     return null;
   };
 
