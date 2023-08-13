@@ -6,7 +6,7 @@ import winstonDaily from "winston-daily-rotate-file";
 // import { LOG_DIR } from '@src/main/config';
 
 // logs dir
-const logDir: string = app.getPath("logs");
+export const logDir: string = app.getPath("logs");
 console.log(logDir)
 
 if (!existsSync(logDir)) {

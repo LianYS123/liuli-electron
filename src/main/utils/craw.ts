@@ -13,9 +13,10 @@ export abstract class BaseCraw {
   protected errors: any[] = []; // 错误列表
 
   protected readonly queue = new PQueue({
-    concurrency: 5,
+    concurrency: 10,
     interval: 1000,
-    intervalCap: 3
+    intervalCap: 5,
+    timeout: 10 * 1000
   });
 
   constructor() {
