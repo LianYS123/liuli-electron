@@ -157,24 +157,24 @@ export const Setting: React.FC = () => {
           />
         </Stack>
         <LoadingButton
-          disabled={isIdle}
+          disabled={isIdle || !!pending}
           variant="outlined"
           onClick={() => {
             handleCraw({ startPage, endPage });
           }}
-          loading={!!pending}
+          // loading={!!pending}
         >
-          同步
+          {pending ? "同步中..." : "同步"}
         </LoadingButton>
         <LoadingButton
-          disabled={isIdle}
+          disabled={isIdle || !!pending}
           variant="outlined"
           onClick={() => {
             handleCraw({ startPage, endPage: totalPages });
           }}
-          loading={!!pending}
+          // loading={!!pending}
         >
-          全部{totalPages ? `（共 ${totalPages} 页）` : ""}
+          <span>全部{totalPages ? `（共 ${totalPages} 页）` : ""}</span>
         </LoadingButton>
 
         <Box sx={{ mt: 2 }}>

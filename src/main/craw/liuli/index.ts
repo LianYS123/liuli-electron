@@ -168,7 +168,16 @@ export class ArticleCraw extends BaseCraw {
   };
 
   private getPageLink = (num: number) => {
-    return `${this.config.BASE_LINK.replace(/\.html.*$/, ".html")}/page/${num}`;
+    if (this.config.BASE_LINK.includes("html")) {
+      return `${this.config.BASE_LINK.replace(
+        /\.html.*$/,
+        ".html"
+      )}/page/${num}`;
+    }
+    return `${this.config.BASE_LINK.replace(/\/?page\/?\d*$/, "").replace(
+      /\/$/,
+      ""
+    )}/page/${num}`;
   };
 
   getEndPage = async () => {
