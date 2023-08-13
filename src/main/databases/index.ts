@@ -8,7 +8,7 @@ export const dbConnection: DataSourceOptions = {
   type: "sqlite",
   database: DB_PATH,
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [ArticleEntity, FileEntity, HistoryEntity]
   // entities: ["src/main/entities/*.entity{.ts,.js}"]
   // migrations: ["../**/*.migration{.ts,.js}"],

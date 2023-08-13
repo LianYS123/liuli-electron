@@ -1,4 +1,4 @@
-import { AppBar, Button, ButtonGroup, Tab, Tabs } from "@mui/material";
+import { AppBar, Tab, Tabs } from "@mui/material";
 import { ActionEnum } from "@src/common/constants";
 import React from "react";
 
@@ -33,7 +33,7 @@ export function ActionList({
     <AppBar
       color="default"
       sx={{
-        position: "sticky",
+        position: "sticky"
         // left: 0,
         // right: 0,
         // top: 0,
@@ -43,13 +43,14 @@ export function ActionList({
         // background: (theme) => theme.palette.background.default
       }}
     >
-      <Tabs value={currentAction} onChange={(ev, action) => {
-        setCurrentAction(action)
-      }}>
+      <Tabs
+        value={currentAction}
+        onChange={(ev, action) => {
+          setCurrentAction(action);
+        }}
+      >
         {Object.entries(actions).map(([action, { text }]) => {
-          return (
-            <Tab value={action} label={text} />
-          )
+          return <Tab key={text} value={action} label={text} />;
         })}
       </Tabs>
     </AppBar>

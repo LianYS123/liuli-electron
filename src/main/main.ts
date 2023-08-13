@@ -4,7 +4,7 @@ import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
 import url from "url";
 import { windowManager } from "./window";
-import { initApplicationMenu, menu } from "./menu";
+import { initApplicationMenu, contextMenu } from "./menu";
 import { ipcHandler } from "./ipcHandler";
 import {articleCraw} from "@src/main/craw/liuli";
 
@@ -25,7 +25,7 @@ app.on("ready", () => {
   const mainWindow = windowManager.createMainWindow();
 
   mainWindow.webContents.on('context-menu', () => {
-    menu.popup()
+    contextMenu.popup()
   })
 
   articleCraw.autoFetch()

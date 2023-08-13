@@ -1,5 +1,5 @@
-import { formatTime } from './util';
-import { logger } from './logger';
+import { formatTime } from "./util";
+import { logger } from "./logger";
 import PQueue from "p-queue";
 
 /**
@@ -20,27 +20,31 @@ export abstract class BaseCraw {
   });
 
   constructor() {
-    this.queue.addListener('idle', () => {
-      console.log('Craw Query Idle')
-      this.endTime = Date.now()
-      this.logStat()
-    })
+    this.queue.addListener("idle", () => {
+      console.log("Craw Query Idle");
+      this.endTime = Date.now();
+      this.logStat();
+    });
+    this.queue.addListener("error", (err) => {
+      logger.error(err);
+      this.errors.push(err);
+    });
   }
 
   protected resetStat = () => {
-    this.insertCount = 0
-    this.updateCount = 0
-    this.errors = []
+    this.insertCount = 0;
+    this.updateCount = 0;
+    this.errors = [];
     this.startTime = Date.now();
-    this.endTime = 0
-  }
+    this.endTime = 0;
+  };
 
   public pending = () => {
-    return this.queue.pending
-  }
+    return this.queue.pending;
+  };
 
   public stat = () => {
-    const { insertCount, updateCount, startTime, errors, endTime } = this
+    const { insertCount, updateCount, startTime, errors, endTime } = this;
     // const endTime = Date.now();
     // const cost = Math.ceil((endTime - this.startTime) / 1000); // s
     return {
@@ -49,9 +53,9 @@ export abstract class BaseCraw {
       endTime,
       insertCount,
       updateCount,
-      errors: errors.length,
-    }
-  }
+      errors: errors.length
+    };
+  };
 
   // 打印请求状态
   protected logStat = () => {
@@ -68,24 +72,4 @@ export abstract class BaseCraw {
     stat(`error count: ${this.errors.length}`);
   };
 
-  // 错误记录
-  protected logError = (error: any, args: any[] = []) => {
-    const message = error.message || error;
-    logger.error(message + '\n' + JSON.stringify(args));
-    this.errors.push(error);
-  };
-
-  // 错误处理
-  protected withErrorHandler = <T extends (...args: any[]) => any>(func: T): T => {
-    const resFun = async (...args: Parameters<T>) => {
-      try {
-        const res = await func(...args);
-        return res;
-      } catch (error) {
-        this.logError(error);
-        throw error;
-      }
-    };
-    return resFun as T;
-  };
 }
