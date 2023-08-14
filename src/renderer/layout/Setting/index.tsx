@@ -19,6 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import { formatTimeDetail } from "@src/renderer/utils/time";
 import { formatDistanceStrict } from "date-fns";
 import { zhCN } from "date-fns/locale";
+import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
 
 export const Setting: React.FC = () => {
   const [config, _setConfig] = useState<CrawConfig>({
@@ -36,8 +37,11 @@ export const Setting: React.FC = () => {
     client.refetchQueries(["/article/list"], { active: true });
   }
   const { mutateAsync: craw } = useMutation(articleAPI.fetchArticles);
+  const { open } = useAlertDialog();
 
-  const prePending = useRef(0);
+  const prePending = useRef(-1);
+
+  const [refetchInterval, setRefetchInterval] = useState(1000);
 
   const {
     data: {
@@ -50,8 +54,13 @@ export const Setting: React.FC = () => {
     } = {},
     isIdle
   } = useQuery("ArticleCrawPending", () => articleCrawAPI.stat(), {
-    refetchInterval: 1000,
+    refetchInterval,
     onSuccess: ({ pending = 0 }) => {
+      if (!pending) {
+        setRefetchInterval(1000 * 5);
+      } else {
+        setRefetchInterval(1000);
+      }
       if (pending < prePending.current) {
         // refetch();
       }
@@ -157,20 +166,31 @@ export const Setting: React.FC = () => {
           />
         </Stack>
         <LoadingButton
-          disabled={isIdle || !!pending}
+          disabled={isIdle}
           variant="outlined"
-          onClick={() => {
-            handleCraw({ startPage, endPage });
+          onClick={async () => {
+            if (pending) {
+              open({
+                content: "确定要中断任务？",
+                onOk: async () => {
+                  await articleCrawAPI.clearAll();
+                  enqueueSnackbar("操作成功");
+                }
+              });
+            } else {
+              await handleCraw({ startPage, endPage });
+              enqueueSnackbar("操作成功");
+            }
           }}
-          // loading={!!pending}
         >
-          {pending ? "同步中..." : "同步"}
+          {pending ? "同步中，点击中断" : "同步"}
         </LoadingButton>
         <LoadingButton
           disabled={isIdle || !!pending}
           variant="outlined"
-          onClick={() => {
-            handleCraw({ startPage, endPage: totalPages });
+          onClick={async () => {
+            await handleCraw({ startPage, endPage: totalPages });
+            enqueueSnackbar("操作成功");
           }}
           // loading={!!pending}
         >

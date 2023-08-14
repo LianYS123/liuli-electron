@@ -43,6 +43,10 @@ export abstract class BaseCraw {
     return this.queue.pending;
   };
 
+  public clearAll = () => {
+    this.queue.clear()
+  }
+
   public stat = () => {
     const { insertCount, updateCount, startTime, errors, endTime } = this;
     // const endTime = Date.now();

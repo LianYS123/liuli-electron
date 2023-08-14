@@ -164,7 +164,12 @@ export class ArticleCraw extends BaseCraw {
 
   parse = async (link: string) => {
     const hrefs = await this.parseList(link);
-    this.queue.addAll(hrefs.map((d) => () => this.parseDetail(d)));
+    this.queue.addAll(
+      hrefs.map((d) => () => this.parseDetail(d)),
+      {
+        priority: 2 // 详情页具有更高的优先级
+      }
+    );
   };
 
   private getPageLink = (num: number) => {
@@ -202,8 +207,15 @@ export class ArticleCraw extends BaseCraw {
     }
     this.resetStat();
     logger.info(`start fetching from ${startPage} to ${endPage}`);
-    const links = range(startPage, endPage + 1).map(this.getPageLink);
-    await this.queue.addAll(links.map((link) => () => this.parse(link)));
+    const links = range(startPage, endPage + 1)
+      //   .reverse()
+      .map(this.getPageLink);
+    await this.queue.addAll(
+      links.map((link) => () => this.parse(link)),
+      {
+        priority: 1
+      }
+    );
   };
 
   async autoFetch() {
