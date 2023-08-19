@@ -8,7 +8,6 @@ import ArticleItem from "./ArticleItem";
 import { MyPagination } from "../../components/pagination";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
-import { PageDialog } from "@src/renderer/components/PageDialog";
 import { scrollToTop } from "@src/renderer/utils";
 import { useDebounceFn } from "ahooks";
 
@@ -42,8 +41,6 @@ const Home = () => {
     handleTagClick,
     refetch,
   };
-
-  const [articleSrc, setSrc] = useState("");
 
   const renderPagination = () => {
     return (
@@ -94,21 +91,11 @@ const Home = () => {
         {data?.list?.map((it) => {
           return (
             <Grid item key={it.id} xs={12} sm={6} md={4}>
-              <ArticleItem
-                handleOpenDetail={setSrc}
-                article={it}
-                {...itemProps}
-              />
+              <ArticleItem article={it} {...itemProps} />
             </Grid>
           );
         })}
       </Grid>
-
-      <PageDialog
-        src={articleSrc}
-        open={!!articleSrc}
-        onClose={() => setSrc("")}
-      />
 
       {renderPagination()}
     </Box>

@@ -39,6 +39,13 @@ import { Launch } from "@mui/icons-material";
 import { historyAPI } from "@src/common/api/history";
 import { ActionStatus } from "@src/common/constants";
 import { MagnetLinks } from "./MagnetLinks";
+import { PageDialog } from "@src/renderer/components/PageDialog";
+import { ArticlePageDialog } from "./ArticlePageDialog";
+import {
+  SEARCH_SETTINGS_KEY,
+  SearchConfig,
+  defaultSearchConfig,
+} from "@src/renderer/layout/Settings/SearchSetting";
 
 const urlReg =
   /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
@@ -63,7 +70,6 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   handleTagClick,
   refetch,
   extraActions = [],
-  handleOpenDetail = window.open,
 }) => {
   const {
     id,
@@ -89,6 +95,8 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   const [webSource, setWebSource] = useState("");
 
   const [showWebSourceDialog, setShowWebSourceDialog] = useState(false);
+
+  const [articleSrc, setSrc] = useState("");
 
   const [previewDir, setPreviewDir] = useState<string>();
   const nav = useNavigate();
@@ -130,7 +138,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           <Link
             onClick={(ev) => {
               ev.preventDefault();
-              handleOpenDetail(href);
+              setSrc(href);
               historyAPI.addOpenDetail({ articleId: id });
             }}
             style={{ textDecoration: "none" }}
@@ -156,6 +164,36 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
               {
                 text: "稍后观看",
                 onClick: handleAddToQueue,
+              },
+              {
+                text: "检索",
+                onClick: () => {
+                  const config: SearchConfig = JSON.parse(
+                    localStorage.getItem(SEARCH_SETTINGS_KEY) ||
+                      JSON.stringify(defaultSearchConfig)
+                  );
+
+                  const res = /(\[.*\])?(.*)/.exec(title);
+                  if (!res) {
+                    enqueueSnackbar("关键词异常");
+                  }
+                  let [, , search] = res;
+                  if (!search) {
+                    enqueueSnackbar("关键词异常");
+                  }
+                  search = search.trim();
+                  if (config.limit) {
+                    search = search.slice(0, config.limit);
+                  }
+                  if (config.site) {
+                    search = `site:${config.site} ${search}`;
+                  }
+                  console.log(config, search);
+                  const src = `https://www.google.com/search?q=${encodeURIComponent(
+                    search
+                  )}`;
+                  setSrc(src);
+                },
               },
               {
                 text: "添加网络资源",
@@ -253,7 +291,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
             {sources?.map((source) => (
               <Chip
                 onClick={async () => {
-                  await handleOpenDetail(source);
+                  await setSrc(source);
                 }}
                 onDelete={async () => {
                   await articleAPI.removeSource({
@@ -328,6 +366,14 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ArticlePageDialog
+        refetch={refetch}
+        articleId={id}
+        src={articleSrc}
+        open={!!articleSrc}
+        onClose={() => setSrc("")}
+      />
     </Card>
   );
 };

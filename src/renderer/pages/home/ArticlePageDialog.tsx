@@ -12,22 +12,27 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { shell, type WebviewTag } from "electron";
 import CloseIcon from "@mui/icons-material/Close";
-import { WebView } from "../WebView";
+import { WebView } from "@src/renderer/components/WebView";
+import { articleAPI } from "@src/common/api/article";
+import { useSnackbar } from "notistack";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   src: string;
-  actions?: React.ReactNode;
+  articleId: number;
+  refetch: () => void;
 }
 
-export const PageDialog: React.FC<Props> = ({
+export const ArticlePageDialog: React.FC<Props> = ({
   open,
   onClose,
   src,
-  actions,
+  articleId,
+  refetch,
 }) => {
   const webviewRef = useRef<WebviewTag>(null);
+  const { enqueueSnackbar } = useSnackbar();
   const [topSrc, setTopSrc] = useState(src);
   useEffect(() => {
     setTopSrc(src);
@@ -45,16 +50,6 @@ export const PageDialog: React.FC<Props> = ({
     <Dialog keepMounted={false} fullScreen open={open} onClose={onClose}>
       <DialogTitle sx={{ m: 0 }}>
         <Box mr={4}>
-          {/* <Link
-            target="_blank"
-            onClick={(ev) => {
-              ev.preventDefault();
-              shell.openExternal(src);
-            }}
-            href={src}
-          >
-            {src}
-          </Link> */}
           <Input fullWidth readOnly value={topSrc} />
         </Box>
         {onClose ? (
@@ -75,7 +70,18 @@ export const PageDialog: React.FC<Props> = ({
       <DialogContent>
         <WebView ref={webviewRef} src={src} />
       </DialogContent>
-      {actions && <DialogActions>{actions}</DialogActions>}
+      <DialogActions>
+        <Button
+          variant="outlined"
+          onClick={async () => {
+            await articleAPI.addSource({ articleId, source: topSrc });
+            enqueueSnackbar("操作成功");
+            refetch();
+          }}
+        >
+          添加为网络资源
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

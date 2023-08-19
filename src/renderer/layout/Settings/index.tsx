@@ -1,7 +1,23 @@
-import { Box } from "@mui/material";
+import { AppBar, Box, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
-import { ActionList, SettingActionEnum } from "./ActionList";
 import { WallpaperSetting } from "./WallpaperSetting";
+import { SearchSetting } from "./SearchSetting";
+
+export enum SettingActionEnum {
+  Wallpaper,
+  Search,
+}
+
+const actions: { key: SettingActionEnum; label: string }[] = [
+  {
+    key: SettingActionEnum.Wallpaper,
+    label: "壁纸",
+  },
+  {
+    key: SettingActionEnum.Search,
+    label: "检索",
+  },
+];
 
 export const Settings: React.FC<{ enabled: boolean }> = ({ enabled }) => {
   const [currentAction, setCurrentAction] = useState<SettingActionEnum>(
@@ -13,8 +29,11 @@ export const Settings: React.FC<{ enabled: boolean }> = ({ enabled }) => {
       case SettingActionEnum.Wallpaper:
         return <WallpaperSetting enabled={enabled} />;
 
+      case SettingActionEnum.Search:
+        return <SearchSetting />;
+
       default:
-        return <></>;
+        return <>敬请期待</>;
     }
   };
 
@@ -26,10 +45,23 @@ export const Settings: React.FC<{ enabled: boolean }> = ({ enabled }) => {
         padding: 2,
       }}
     >
-      <ActionList
-        currentAction={currentAction}
-        setCurrentAction={setCurrentAction}
-      />
+      <AppBar
+        color="default"
+        sx={{
+          position: "sticky",
+        }}
+      >
+        <Tabs
+          value={currentAction}
+          onChange={(ev, action) => {
+            setCurrentAction(action);
+          }}
+        >
+          {actions.map(({ key, label }) => {
+            return <Tab key={key} value={key} label={label} />;
+          })}
+        </Tabs>
+      </AppBar>
       <Box sx={{ height: 30 }} />
       {renderContent()}
     </Box>
