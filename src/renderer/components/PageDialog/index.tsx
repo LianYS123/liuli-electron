@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle, IconButton, Link } from "@mui/material";
 import React, { useRef } from "react";
-import type { WebviewTag } from "electron";
+import { shell, type WebviewTag } from "electron";
 import CloseIcon from "@mui/icons-material/Close";
 import { WebView } from "../WebView";
 
@@ -19,7 +19,10 @@ export const PageDialog: React.FC<{
     >
       <DialogTitle sx={{ m: 0 }}>
         <div>
-          <Link target="_blank" href={src}>
+          <Link target="_blank" onClick={(ev) => {
+            ev.preventDefault()
+            shell.openExternal(src)
+          }} href={src}>
             {src}
           </Link>
         </div>
