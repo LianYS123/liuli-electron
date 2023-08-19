@@ -12,6 +12,7 @@ import {
   ArrowForward,
   DarkMode,
   HistoryOutlined,
+  KeyboardArrowUp,
   LightMode,
   Refresh,
   Settings,
@@ -23,6 +24,7 @@ import { RootState } from "../models";
 import { DataSync } from "./DataSync";
 import { useTheme } from "../hooks/useTheme";
 import { History } from "./History";
+import { scrollToTop } from "../utils";
 
 const isWin = process.platform === "win32";
 
@@ -49,6 +51,7 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
       }}
     >
       <Container
+        id="app-container"
         sx={{
           height: "100%",
           overflow: "auto",
@@ -113,6 +116,14 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
             }}
             icon={<ArrowBack />}
             tooltipTitle={"后退"}
+          />
+          <SpeedDialAction
+            onClick={(ev) => {
+              ev.stopPropagation();
+              scrollToTop();
+            }}
+            icon={<KeyboardArrowUp />}
+            tooltipTitle={"回到顶部"}
           />
         </SpeedDial>
 

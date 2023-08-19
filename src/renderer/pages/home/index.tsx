@@ -9,16 +9,18 @@ import { MyPagination } from "../../components/pagination";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
 import { PageDialog } from "@src/renderer/components/PageDialog";
+import { scrollToTop } from "@src/renderer/utils";
+import { useDebounceFn } from "ahooks";
 
 const Home = () => {
   const {
     state: { selectedTags = [] },
-    setState
+    setState,
   } = useHistoryState();
   const pageSize = 18;
 
   const { data, refetch } = useArticles({
-    pageSize
+    pageSize,
   });
 
   // const list = useMemo(() => {
@@ -34,9 +36,11 @@ const Home = () => {
     setState({ selectedTags: newTags, pageNo: 1 });
   };
 
+  const { run: handleScrollToTop } = useDebounceFn(scrollToTop, { wait: 100 });
+
   const itemProps: Omit<ArticleItemProps, "article"> = {
     handleTagClick,
-    refetch
+    refetch,
   };
 
   const [articleSrc, setSrc] = useState("");
@@ -48,6 +52,7 @@ const Home = () => {
         page={data?.pageNo}
         onChange={(pageNo) => {
           setState({ pageNo });
+          handleScrollToTop();
         }}
         pageSize={pageSize}
       />
@@ -65,7 +70,7 @@ const Home = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
         }}
       >
         <TextField
@@ -75,7 +80,7 @@ const Home = () => {
           onKeyDown={(ev) => {
             if (ev.key === "Enter") {
               nav(routers.HOME, {
-                state: { keyword }
+                state: { keyword },
               });
             }
           }}

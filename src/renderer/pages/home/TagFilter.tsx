@@ -4,7 +4,7 @@ import {
   FormControlLabel,
   Link,
   Switch,
-  Typography
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useHistoryState } from "./useHistoryState";
@@ -17,15 +17,15 @@ export const TagFilter = () => {
     keyword,
     order = "time",
     cat = "全部",
-    onlyPlayable
+    onlyPlayable,
   } = state;
 
   const orders = [
     ["time", "时间"],
     ["rating_count", "热度"],
-    ["rating_score", "评分"]
+    ["rating_score", "评分"],
   ];
-  const cats = ["全部", "动画", '游戏', "文章", "漫画", "小说", "音乐"];
+  const cats = ["全部", "动画", "游戏", "文章", "漫画", "小说", "音乐"];
 
   return (
     <Box sx={{ my: 2 }}>
@@ -68,7 +68,9 @@ export const TagFilter = () => {
           control={
             <Switch
               checked={onlyPlayable}
-              onChange={(ev, checked) => setState({ onlyPlayable: checked })}
+              onChange={(ev, checked) =>
+                setState({ onlyPlayable: checked, pageNo: 1 })
+              }
             />
           }
           label="仅看可播放"
@@ -103,7 +105,7 @@ export const TagFilter = () => {
               <Chip
                 onDelete={() => {
                   setState({
-                    selectedTags: selectedTags.filter((it) => it !== tag)
+                    selectedTags: selectedTags.filter((it) => it !== tag),
                   });
                 }}
                 size="medium"

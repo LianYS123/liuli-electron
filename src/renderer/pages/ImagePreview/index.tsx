@@ -25,7 +25,7 @@ const ImageListPreview: React.FC<{
   const dispatch = useDispatch();
 
   const handleSetWallpaper = (src: string) => {
-    dispatch(appSlice.actions.setWallpaper(encodeURIComponent(src)));
+    dispatch(appSlice.actions.setWallpaper(src));
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const ImageListPreview: React.FC<{
                         handleSetWallpaper(`file://${images[current]}`);
                         historyAPI.addSetWallpaper({
                           articleId: Number(articleId),
-                          source: `file://${images[current]}`
+                          source: `file://${images[current]}`,
                         });
                       }}
                     />
@@ -76,7 +76,7 @@ const ImageListPreview: React.FC<{
                   {originalNode}
                 </div>
               );
-            }
+            },
           }}
         >
           {images.map((src) => {
@@ -106,7 +106,7 @@ export const ImagePreview: React.FC = () => {
         const images = data.slice(0, 30);
         setImages(images);
         remainImagesRef.current = data.slice(images.length);
-      }
+      },
     }
   );
 
@@ -132,7 +132,7 @@ export const ImagePreview: React.FC = () => {
     <div
       style={{
         height: "100vh",
-        overflow: "auto"
+        overflow: "auto",
       }}
       onScroll={handleScroll}
     >
@@ -140,7 +140,7 @@ export const ImagePreview: React.FC = () => {
         sx={{
           width: "80%",
           // maxHeight: "100vh",
-          margin: "auto"
+          margin: "auto",
           // background: (d) => d.palette.background.default
         }}
         variant="woven"

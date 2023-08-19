@@ -29,10 +29,6 @@ export const MyPagination: React.FC<IProps> = ({
         page={page}
         onChange={(_, value) => {
           onChange(value);
-          // window.scrollTo({
-          //   top: 0,
-          //   behavior: "smooth"
-          // });
         }}
       />
     </Box>
