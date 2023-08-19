@@ -15,7 +15,7 @@ import {
   KeyboardArrowUp,
   LightMode,
   Refresh,
-  Settings,
+  Settings as SettingsIcon,
   Sync,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ import { DataSync } from "./DataSync";
 import { useTheme } from "../hooks/useTheme";
 import { History } from "./History";
 import { scrollToTop } from "../utils";
+import { Settings } from "./Settings";
 
 const isWin = process.platform === "win32";
 
@@ -35,6 +36,7 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   const [open, setOpen] = useState(true);
   const [dataSyncDrawerVisible, setDataSyncDrawerVisible] = useState(false);
   const [historyDrawerVisible, setHistoryDrawerVisible] = useState(false);
+  const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
   const { wallpaper } = useSelector((state: RootState) => state.app);
   const { isDark, toggleTheme } = useTheme();
 
@@ -69,6 +71,15 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
           icon={<SpeedDialIcon />}
           ariaLabel={""}
         >
+          <SpeedDialAction
+            onClick={(ev) => {
+              ev.stopPropagation();
+              setSettingsDrawerVisible(true);
+            }}
+            icon={<SettingsIcon />}
+            tooltipTitle={"设置"}
+          />
+
           <SpeedDialAction
             onClick={(ev) => {
               toggleTheme();
@@ -141,6 +152,13 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
           onClose={() => setDataSyncDrawerVisible(false)}
         >
           <DataSync />
+        </Drawer>
+        <Drawer
+          anchor={"right"}
+          open={settingsDrawerVisible}
+          onClose={() => setSettingsDrawerVisible(false)}
+        >
+          <Settings enabled={settingsDrawerVisible} />
         </Drawer>
       </Container>
     </Box>
