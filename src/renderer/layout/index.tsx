@@ -4,7 +4,7 @@ import {
   Drawer,
   SpeedDial,
   SpeedDialAction,
-  SpeedDialIcon
+  SpeedDialIcon,
 } from "@mui/material";
 import React, { useState } from "react";
 import {
@@ -14,23 +14,24 @@ import {
   HistoryOutlined,
   LightMode,
   Refresh,
-  Settings
+  Settings,
+  Sync,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../models";
-import { Setting } from "./Setting";
+import { DataSync } from "./DataSync";
 import { useTheme } from "../hooks/useTheme";
 import { History } from "./History";
 
-const isWin = process.platform === 'win32';
+const isWin = process.platform === "win32";
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
-  children
+  children,
 }) => {
   const nav = useNavigate();
   const [open, setOpen] = useState(true);
-  const [configDrawerVisible, setConfigDrawerVisible] = useState(false);
+  const [dataSyncDrawerVisible, setDataSyncDrawerVisible] = useState(false);
   const [historyDrawerVisible, setHistoryDrawerVisible] = useState(false);
   const { wallpaper } = useSelector((state: RootState) => state.app);
   const { isDark, toggleTheme } = useTheme();
@@ -39,16 +40,18 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
     <Box
       sx={{
         height: "100%",
-        backgroundImage: wallpaper ? `url('${ isWin ? wallpaper.replaceAll('\\', '\\\\') : wallpaper}')` : undefined,
+        backgroundImage: wallpaper
+          ? `url('${isWin ? wallpaper.replaceAll("\\", "\\\\") : wallpaper}')`
+          : undefined,
         overflow: "auto",
         backgroundPosition: "center",
-        backgroundSize: "cover"
+        backgroundSize: "cover",
       }}
     >
       <Container
         sx={{
           height: "100%",
-          overflow: "auto"
+          overflow: "auto",
         }}
       >
         {/* <AppHeader /> */}
@@ -81,11 +84,11 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
           />
           <SpeedDialAction
             onClick={(ev) => {
-              setConfigDrawerVisible(true);
+              setDataSyncDrawerVisible(true);
               ev.stopPropagation();
             }}
-            icon={<Settings />}
-            tooltipTitle={"配置"}
+            icon={<Sync />}
+            tooltipTitle={"数据同步"}
           />
           <SpeedDialAction
             onClick={(ev) => {
@@ -123,10 +126,10 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
         </Drawer>
         <Drawer
           anchor={"right"}
-          open={configDrawerVisible}
-          onClose={() => setConfigDrawerVisible(false)}
+          open={dataSyncDrawerVisible}
+          onClose={() => setDataSyncDrawerVisible(false)}
         >
-          <Setting />
+          <DataSync />
         </Drawer>
       </Container>
     </Box>

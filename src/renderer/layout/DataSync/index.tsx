@@ -21,7 +21,7 @@ import { formatDistanceStrict } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
 
-export const Setting: React.FC = () => {
+export const DataSync: React.FC = () => {
   const [config, _setConfig] = useState<CrawConfig>({
     BASE_LINK: "",
     PROXY: "",
