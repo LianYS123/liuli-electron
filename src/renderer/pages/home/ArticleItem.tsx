@@ -173,7 +173,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                       JSON.stringify(defaultSearchConfig)
                   );
 
-                  const res = /(\[.*\])?(.*)/.exec(title);
+                  const res = /(\[.*?\])?(.*)/.exec(title);
                   if (!res) {
                     enqueueSnackbar("关键词异常");
                   }
