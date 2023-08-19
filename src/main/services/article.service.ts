@@ -9,6 +9,7 @@ import { ArticleEntity } from "@src/main/entities/article.entity";
 import { IpcException } from "@src/common/exceptions/IpcException";
 import { Brackets, Like } from "typeorm";
 import { fileService } from "./file.service";
+import { uniq } from "lodash";
 
 export class ArticleService {
   // 分页查找
@@ -141,6 +142,36 @@ export class ArticleService {
     });
     await article.save();
   };
+
+  private parseWebSource(source?: string): string[] {
+    if (!source) {
+      return []
+    }
+    try {
+      const res = JSON.parse(source)
+      if (Array.isArray(res)) {
+        return res as string[]
+      }
+    } catch {
+      return []
+    }
+    return []
+  }
+
+  public addSource = async ({ source, articleId }: { source: string, articleId: number }) => {
+    const article = await this.findArticleById(articleId);
+    const sources = this.parseWebSource(article.web_sources)
+    article.web_sources = JSON.stringify(uniq([...sources, source]))
+    return article.save()
+  }
+
+  public removeSource = async ({ source, articleId }: { source: string, articleId: number }) => {
+    const article = await this.findArticleById(articleId);
+    const sources = this.parseWebSource(article.web_sources)
+    article.web_sources = JSON.stringify(sources.filter(it => it !== source))
+    return article.save()
+  }
+
 }
 
 export const articleService = new ArticleService();

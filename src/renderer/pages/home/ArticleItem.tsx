@@ -8,9 +8,15 @@ import {
   CardHeader,
   CardMedia,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Link,
   Rating,
+  Stack,
+  TextField,
   Tooltip,
   Typography,
   useTheme
@@ -29,11 +35,28 @@ import Icon from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
 import qs from "query-string";
-import { shell } from "electron";
+import { clipboard, shell } from "electron";
 import { articleAPI } from "@src/common/api/article";
-import { Launch } from "@mui/icons-material";
+import { ContentCopyOutlined, Launch } from "@mui/icons-material";
 import { historyAPI } from "@src/common/api/history";
 import { ActionStatus } from "@src/common/constants";
+
+const urlReg = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+
+function parseWebSource(source?: string): string[] {
+  if (!source) {
+    return []
+  }
+  try {
+    const res = JSON.parse(source)
+    if (Array.isArray(res)) {
+      return res as string[]
+    }
+  } catch {
+    return []
+  }
+  return []
+}
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -54,12 +77,18 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     rating_count,
     rating_score,
     files,
-    cat
+    cat,
+    web_sources
   } = article;
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [fileToRemove, setFileToRemove] = useState<File>(null);
+
+  const sources = parseWebSource(web_sources)
+  const [webSource, setWebSource] = useState("");
+
+  const [showWebSourceDialog, setShowWebSourceDialog] = useState(false);
 
   const [previewDir, setPreviewDir] = useState<string>();
   const nav = useNavigate();
@@ -70,11 +99,30 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     enqueueSnackbar("添加成功");
   };
 
+  async function handleConnect() {
+    const files = await chooseMedia();
+    if (!files.length) {
+      return;
+    }
+    const pros = files.map(async (media) => {
+      try {
+        await articleAPI.createAndConnectFile({
+          articleId: id,
+          fromPath: media
+        });
+      } catch (e) {
+        enqueueSnackbar(e?.message);
+      }
+    });
+    await Promise.allSettled(pros);
+    refetch();
+  }
+
   return (
     <Card>
       <CardHeader
         avatar={
-          <Avatar sx={{background: theme => theme.palette.secondary.main}}>
+          <Avatar sx={{ background: theme => theme.palette.secondary.main }}>
             {cat?.[0]}
           </Avatar>
         }
@@ -108,6 +156,12 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
               {
                 text: "稍后观看",
                 onClick: handleAddToQueue
+              },
+              {
+                text: "添加网络资源",
+                onClick: () => {
+                  setShowWebSourceDialog(true)
+                }
               },
               ...extraActions
             ]}
@@ -193,19 +247,38 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           ))}
         </div>
 
-        {uid &&
-          [...new Set(uid.split("|"))].map((u) => {
-            const link = `magnet:?xt=urn:btih:${u}`;
-            return (
-              <section
-                key={u}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <Typography
+        <Box sx={{ mt: 2 }}>
+          {uid &&
+            [...new Set(uid.split("|"))].map((u) => {
+              const link = `magnet:?xt=urn:btih:${u}`;
+              return (
+                <section
+                  key={u}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  <Link
+                    onClick={() => {
+                      historyAPI.addOpenDownload({
+                        articleId: id,
+                        source: link
+                      });
+                      shell.openExternal(link);
+                    }}
+                    sx={{
+                      cursor: 'pointer',
+                      display: 'block',
+                      width: "100%",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap"
+                    }}>
+                    {link}
+                  </Link>
+                  {/* <Typography
                   style={{
                     width: "100%",
                     textOverflow: "ellipsis",
@@ -214,25 +287,45 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                   }}
                   variant="body2"
                 >
-                  {link}
-                </Typography>
-                <Tooltip title="打开">
-                  <Icon
-                    style={{ color: theme.palette.primary.main }}
-                    onClick={() => {
-                      historyAPI.addOpenDownload({
-                        articleId: id,
-                        source: link
-                      });
-                      shell.openExternal(link);
-                    }}
-                  >
-                    <Launch />
-                  </Icon>
-                </Tooltip>
-              </section>
-            );
-          })}
+                </Typography> */}
+                  <Tooltip title="复制">
+                    <Icon
+                      style={{ color: theme.palette.primary.main }}
+                      onClick={() => {
+                        clipboard.write({ text: link })
+                        enqueueSnackbar('复制成功')
+                        // historyAPI.addOpenDownload({
+                        //   articleId: id,
+                        //   source: link
+                        // });
+                        // shell.openExternal(link);
+                      }}
+                    >
+                      <ContentCopyOutlined />
+                      {/* <Launch /> */}
+                    </Icon>
+                  </Tooltip>
+                </section>
+              );
+            })}
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          {sources?.map((source) => (
+            <Chip
+              onClick={async () => {
+                await handleOpenDetail(source)
+              }}
+              onDelete={async () => {
+                await articleAPI.removeSource({ source, articleId: article.id })
+                refetch()
+              }}
+              style={{ margin: 4 }}
+              variant="outlined"
+              key={source}
+              label={source}
+            />
+          ))}
+        </Box>
       </CardContent>
 
       {fileToRemove && (
@@ -253,26 +346,45 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           setVisible={() => setPreviewDir("")}
         />
       )}
+      <Dialog fullWidth open={showWebSourceDialog} onClose={() => setShowWebSourceDialog(false)}>
+        <DialogTitle>
+          添加网络资源地址
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            sx={{ width: '100%' }}
+            value={webSource}
+            onChange={(ev) => {
+              setWebSource(ev.target.value)
+            }}
+            label="资源地址"
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowWebSourceDialog(false)}>
+            取消
+          </Button>
+          <Button onClick={async () => {
+            if (!webSource) {
+              enqueueSnackbar('请输入')
+              return
+            }
+            if (!urlReg.test(webSource)) {
+              enqueueSnackbar('格式错误')
+              return
+            }
+            await articleAPI.addSource({ articleId: id, source: webSource })
+            refetch()
+            setShowWebSourceDialog(false)
+          }}>
+            确认
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
+
   );
 
-  async function handleConnect() {
-    const files = await chooseMedia();
-    if (!files.length) {
-      return;
-    }
-    const pros = files.map(async (media) => {
-      try {
-        await articleAPI.createAndConnectFile({
-          articleId: id,
-          fromPath: media
-        });
-      } catch (e) {
-        enqueueSnackbar(e?.message);
-      }
-    });
-    await Promise.allSettled(pros);
-    refetch();
-  }
 };
 export default ArticleItem;

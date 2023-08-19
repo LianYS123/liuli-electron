@@ -30,4 +30,6 @@ export interface Article {
   imgs?: string;
 
   files?: File[];
+
+  web_sources?: string;
 }

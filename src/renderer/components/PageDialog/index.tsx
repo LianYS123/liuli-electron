@@ -1,8 +1,8 @@
 import { Dialog, DialogTitle, IconButton, Link } from "@mui/material";
-import React, { useEffect, useRef } from "react";
-import styles from "./index.module.css";
+import React, { useRef } from "react";
 import type { WebviewTag } from "electron";
 import CloseIcon from "@mui/icons-material/Close";
+import { WebView } from "../WebView";
 
 export const PageDialog: React.FC<{
   open: boolean;
@@ -10,18 +10,6 @@ export const PageDialog: React.FC<{
   src: string;
 }> = ({ open, onClose, src }) => {
   const webviewRef = useRef<WebviewTag>(null);
-  const onReady = () => {
-    const iframe = webviewRef.current.shadowRoot.childNodes.item(
-      1
-    ) as HTMLIFrameElement;
-    iframe.style.height = "100%";
-  };
-  useEffect(() => {
-    webviewRef.current?.addEventListener("dom-ready", onReady);
-    return () => {
-      webviewRef.current?.removeEventListener("dom-ready", onReady);
-    };
-  }, [open, webviewRef.current]);
   return (
     <Dialog
       keepMounted={true}
@@ -50,7 +38,7 @@ export const PageDialog: React.FC<{
           </IconButton>
         ) : null}
       </DialogTitle>
-      <webview ref={webviewRef} className={styles.webview} src={src} />
+      <WebView ref={webviewRef} src={src} />
     </Dialog>
   );
 };

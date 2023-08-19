@@ -77,4 +77,7 @@ export class ArticleEntity extends BaseEntity implements Article {
   @ManyToMany(() => FileEntity)
   @JoinTable()
   files: File[];
+
+  @Column({ nullable: true })
+  web_sources?: string;
 }
