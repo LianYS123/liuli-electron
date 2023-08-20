@@ -46,9 +46,8 @@ import {
   SearchConfig,
   defaultSearchConfig,
 } from "@src/renderer/layout/Settings/SearchSetting";
+import { urlReg } from "@src/renderer/constants";
 
-const urlReg =
-  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 
 function parseWebSource(source?: string): string[] {
   if (!source) {
