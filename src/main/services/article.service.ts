@@ -2,7 +2,7 @@ import { articleCraw } from "@src/main/craw/liuli";
 import {
   ArticleDto,
   ConnectDto,
-  ConnectFilesDto
+  ConnectFilesDto,
 } from "@src/common/params/article.dto";
 import { CrawDto } from "@src/common/params/craw.dto";
 import { ArticleEntity } from "@src/main/entities/article.entity";
@@ -21,7 +21,7 @@ export class ArticleService {
       cat,
       order,
       tags,
-      onlyPlayable
+      onlyPlayable,
     } = params;
 
     let query = ArticleEntity.createQueryBuilder("article")
@@ -40,9 +40,9 @@ export class ArticleService {
         new Brackets((qb) => {
           const value = Like(`%${searchValue}%`).value;
           qb.where("article.title like :searchValue", {
-            searchValue: value
+            searchValue: value,
           }).orWhere("article.content like :searchValue", {
-            searchValue: value
+            searchValue: value,
           });
         })
       );
@@ -50,7 +50,7 @@ export class ArticleService {
 
     if (cat && cat !== "全部") {
       query = query.andWhere("article.cat like :cat", {
-        cat: Like(`%${cat}%`).value
+        cat: Like(`%${cat}%`).value,
       });
     }
 
@@ -59,7 +59,7 @@ export class ArticleService {
         new Brackets((qb) => {
           tags.forEach((tag, index) => {
             qb = qb.orWhere(`tags like :tag${index}`, {
-              [`tag${index}`]: Like(`%${tag}%`).value
+              [`tag${index}`]: Like(`%${tag}%`).value,
             });
           });
         })
@@ -80,8 +80,15 @@ export class ArticleService {
       pageNo,
       pageSize,
       total,
-      list: articles
+      list: articles,
     };
+  };
+
+  public getArticleDetail = async ({ articleId }: { articleId: number }) => {
+    return ArticleEntity.findOne({
+      where: { id: articleId },
+      relations: { files: true },
+    });
   };
 
   // 爬虫;
@@ -94,8 +101,8 @@ export class ArticleService {
     const article = await ArticleEntity.findOne({
       where: { id: articleId },
       relations: {
-        files: true
-      }
+        files: true,
+      },
     });
     if (!article) {
       throw new IpcException(400, "文章不存在");
@@ -145,33 +152,44 @@ export class ArticleService {
 
   private parseWebSource(source?: string): string[] {
     if (!source) {
-      return []
+      return [];
     }
     try {
-      const res = JSON.parse(source)
+      const res = JSON.parse(source);
       if (Array.isArray(res)) {
-        return res as string[]
+        return res as string[];
       }
     } catch {
-      return []
+      return [];
     }
-    return []
+    return [];
   }
 
-  public addSource = async ({ source, articleId }: { source: string, articleId: number }) => {
+  public addSource = async ({
+    source,
+    articleId,
+  }: {
+    source: string;
+    articleId: number;
+  }) => {
     const article = await this.findArticleById(articleId);
-    const sources = this.parseWebSource(article.web_sources)
-    article.web_sources = JSON.stringify(uniq([...sources, source]))
-    return article.save()
-  }
+    const sources = this.parseWebSource(article.web_sources);
+    article.web_sources = JSON.stringify(uniq([...sources, source]));
+    return article.save();
+  };
 
-  public removeSource = async ({ source, articleId }: { source: string, articleId: number }) => {
+  public removeSource = async ({
+    source,
+    articleId,
+  }: {
+    source: string;
+    articleId: number;
+  }) => {
     const article = await this.findArticleById(articleId);
-    const sources = this.parseWebSource(article.web_sources)
-    article.web_sources = JSON.stringify(sources.filter(it => it !== source))
-    return article.save()
-  }
-
+    const sources = this.parseWebSource(article.web_sources);
+    article.web_sources = JSON.stringify(sources.filter((it) => it !== source));
+    return article.save();
+  };
 }
 
 export const articleService = new ArticleService();

@@ -7,6 +7,7 @@ import { WallpaperHistoryList } from "../History/WallpaperHistoryList";
 import { dialogAPI } from "@src/common/api/dialog";
 import { useDispatch } from "react-redux";
 import { appSlice } from "@src/renderer/models/app";
+import { useTheme } from "@src/renderer/hooks/useTheme";
 
 const pageSize = 5;
 
@@ -14,6 +15,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
   enabled,
 }) => {
   const dispatch = useDispatch();
+  const { isDark, toggleTheme } = useTheme();
   const { data, refetch, fetchNextPage, hasNextPage, isIdle, isLoading } =
     useInfiniteQuery(
       ["getHistory", ActionEnum.SetWallpaper],
@@ -38,7 +40,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
     await historyAPI.addSetWallpaper({
       source: src,
     });
-    refetch()
+    refetch();
   };
   const list = data?.pages?.flatMap((it) => it.list) ?? [];
   const total = data?.pages?.[data.pages.length - 1]?.total ?? 0;
@@ -65,19 +67,39 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
       }}
       onScroll={handleScroll}
     >
-      <Button
-        onClick={async () => {
-          const { filePaths } = await dialogAPI.showOpenDialog({
-            properties: ["openFile", "dontAddToRecent", "multiSelections"],
-            filters: [{ name: "File", extensions: ["png", "jpg", "jpeg"] }],
-          });
-          if (filePaths.length) {
-            handleSetWallpaper(filePaths[0]);
-          }
-        }}
-      >
-        选择壁纸
-      </Button>
+      <Box display={"flex"} gap={1}>
+        <Button
+          variant="outlined"
+          onClick={async () => {
+            const { filePaths } = await dialogAPI.showOpenDialog({
+              properties: ["openFile", "dontAddToRecent", "multiSelections"],
+              filters: [{ name: "File", extensions: ["png", "jpg", "jpeg"] }],
+            });
+            if (filePaths.length) {
+              handleSetWallpaper(filePaths[0]);
+            }
+          }}
+        >
+          选择壁纸
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            handleSetWallpaper("");
+          }}
+        >
+          重置
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            toggleTheme();
+          }}
+        >
+          切换主题
+        </Button>
+      </Box>
+
       <Typography sx={{ my: 2 }}>操作历史</Typography>
 
       {!total && !isIdle && !isLoading && (

@@ -11,7 +11,8 @@ const channels: ChannelsType<ArticleService> = {
   connectFiles: "connectFiles",
   removeFile: "removeFile",
   addSource: "addSource",
-  removeSource: "removeSource"
+  removeSource: "removeSource",
+  getArticleDetail: "getArticleDetail"
 };
 
 export const articleAPI = getAPI(channels, { prefix: "ArticleService" });

@@ -11,11 +11,11 @@ export enum SettingActionEnum {
 const actions: { key: SettingActionEnum; label: string }[] = [
   {
     key: SettingActionEnum.Wallpaper,
-    label: "壁纸",
+    label: "主题设置",
   },
   {
     key: SettingActionEnum.Search,
-    label: "检索",
+    label: "搜索设置",
   },
 ];
 
