@@ -22,7 +22,7 @@ import { ImageListPreviewV2 } from "./ImageListPreview";
 import { historyAPI } from "@src/common/api/history";
 import { ArticlePageDialog } from "./ArticlePageDialog";
 import { ArticleTags } from "./ArticleTags";
-import { Resource } from "./Resouce";
+import { Resource, useSearchHandler } from "./Resouce";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -56,6 +56,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     enqueueSnackbar("添加成功");
   };
 
+  const handleSearch = useSearchHandler({
+    searchValue: title,
+    onSearch: setSrc,
+  });
+
   function handleOpenResourceDrawer() {
     setResourceDrawerVisible(true);
   }
@@ -64,6 +69,10 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     {
       text: "稍后观看",
       onClick: handleAddToQueue,
+    },
+    {
+      text: "google搜索",
+      onClick: handleSearch,
     },
     ...extraActions,
   ];

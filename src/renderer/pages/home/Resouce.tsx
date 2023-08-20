@@ -47,6 +47,42 @@ interface ResourceProps {
   handleTagClick: (tag: string) => void;
 }
 
+export const useSearchHandler = ({
+  onSearch,
+  searchValue,
+}: {
+  searchValue: string;
+  onSearch: (value: string) => void;
+}) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const handleSearch = () => {
+    const config: SearchConfig = JSON.parse(
+      localStorage.getItem(SEARCH_SETTINGS_KEY) ||
+        JSON.stringify(defaultSearchConfig)
+    );
+
+    const res = /(\[.*?\])?(.*)/.exec(searchValue);
+    if (!res) {
+      enqueueSnackbar("关键词异常");
+    }
+    let [, , search] = res;
+    if (!search) {
+      enqueueSnackbar("关键词异常");
+    }
+    search = search.trim();
+    if (config.limit) {
+      search = search.slice(0, config.limit);
+    }
+    if (config.site) {
+      search = `site:${config.site} ${search}`;
+    }
+    console.log(config, search);
+    const src = `https://www.google.com/search?q=${encodeURIComponent(search)}`;
+    onSearch(src);
+  };
+  return handleSearch;
+};
+
 export const Resource: React.FC<ResourceProps> = ({
   articleId,
   open,
@@ -97,31 +133,10 @@ export const Resource: React.FC<ResourceProps> = ({
     setShowWebSourceDialog(true);
   };
 
-  const handleSearch = () => {
-    const config: SearchConfig = JSON.parse(
-      localStorage.getItem(SEARCH_SETTINGS_KEY) ||
-        JSON.stringify(defaultSearchConfig)
-    );
-
-    const res = /(\[.*?\])?(.*)/.exec(title);
-    if (!res) {
-      enqueueSnackbar("关键词异常");
-    }
-    let [, , search] = res;
-    if (!search) {
-      enqueueSnackbar("关键词异常");
-    }
-    search = search.trim();
-    if (config.limit) {
-      search = search.slice(0, config.limit);
-    }
-    if (config.site) {
-      search = `site:${config.site} ${search}`;
-    }
-    console.log(config, search);
-    const src = `https://www.google.com/search?q=${encodeURIComponent(search)}`;
-    setSrc(src);
-  };
+  const handleSearch = useSearchHandler({
+    searchValue: title,
+    onSearch: setSrc,
+  });
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -193,7 +208,7 @@ export const Resource: React.FC<ResourceProps> = ({
             <ArticleTags
               handleTagClick={(tag) => {
                 handleTagClick(tag);
-                onClose()
+                onClose();
               }}
               tags={tags}
             />
