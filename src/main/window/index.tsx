@@ -8,6 +8,8 @@ class WindowManager {
     this.mainWindow = new BrowserWindow({
       height: 750,
       width: 1200,
+      fullscreen: false,
+      fullscreenable: true,
       // icon: path.join(__dirname, "../../../icons/icon.png"),
       webPreferences: {
         // preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,

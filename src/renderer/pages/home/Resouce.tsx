@@ -93,8 +93,9 @@ export const Resource: React.FC<ResourceProps> = ({
   const [articleSrc, setSrc] = useState("");
   const [showWebSourceDialog, setShowWebSourceDialog] = useState(false);
   const { data: article, refetch } = useQuery(
-    ["get-article-detail", articleId],
-    () => articleAPI.getArticleDetail({ articleId })
+    ["get-article-detail", articleId, open],
+    () => articleAPI.getArticleDetail({ articleId }),
+    { enabled: open }
   );
   const { enqueueSnackbar } = useSnackbar();
   const {

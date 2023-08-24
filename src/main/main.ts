@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol } from "electron";
+import { app, BrowserWindow, globalShortcut, protocol } from "electron";
 import { DataSource } from "typeorm";
 import { dbConnection } from "./databases";
 import { logger } from "./utils/logger";
@@ -6,7 +6,7 @@ import url from "url";
 import { windowManager } from "./window";
 import { initApplicationMenu, contextMenu } from "./menu";
 import { ipcHandler } from "./ipcHandler";
-import {articleCraw} from "@src/main/craw/liuli";
+import { articleCraw } from "@src/main/craw/liuli";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -24,19 +24,22 @@ logger.info(app.getPath("appData"));
 app.on("ready", () => {
   const mainWindow = windowManager.createMainWindow();
 
-  mainWindow.webContents.on('context-menu', () => {
-    contextMenu.popup()
-  })
+  mainWindow.webContents.on("context-menu", () => {
+    contextMenu.popup();
+  });
 
-  articleCraw.autoFetch()
+  articleCraw.autoFetch();
 
   // 注册协议
 
   protocol.registerFileProtocol("file", (request, callback) => {
-    const filePath = url.fileURLToPath(
-      request.url
-    );
+    const filePath = url.fileURLToPath(request.url);
     callback(filePath);
+  });
+
+  // 注册全局快捷键
+  globalShortcut.register("F11", () => {
+    mainWindow.setFullScreen(!mainWindow.isFullScreen());
   });
 });
 
@@ -63,4 +66,3 @@ app.on("activate", () => {
 new DataSource(dbConnection).initialize();
 ipcHandler();
 initApplicationMenu();
-
