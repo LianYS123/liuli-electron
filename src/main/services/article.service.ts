@@ -30,9 +30,11 @@ export class ArticleService {
       .leftJoinAndSelect("article.files", "files");
 
     if (onlyPlayable) {
-      query = query.andWhere((qb) => {
-        qb.where("files.id is not null");
-      });
+      query = query.andWhere(
+        new Brackets((qb) => {
+          qb.where("article.web_sources is not null").orWhere("files.id is not null");
+        })
+      );
     }
 
     if (searchValue) {

@@ -223,13 +223,13 @@ export class ArticleCraw extends BaseCraw {
       return;
     }
     logger.info("Start auto fetch...");
-    const endPage = await this.getEndPage();
-    const total = await ArticleEntity.count();
-    const remoteTotal = (endPage || 0) * 10;
-    const remainPageCount = Math.ceil((remoteTotal - total) / 10);
-    const min = 3;
-    const fetchPageCount = Math.max(remainPageCount, min);
-    await this.run(1, fetchPageCount);
+    // const endPage = await this.getEndPage();
+    // const total = await ArticleEntity.count();
+    // const remoteTotal = (endPage || 0) * 10;
+    // const remainPageCount = Math.ceil((remoteTotal - total) / 10);
+    // const min = 3;
+    // const fetchPageCount = Math.max(remainPageCount, min);
+    await this.run(1, 1);
   }
 }
 

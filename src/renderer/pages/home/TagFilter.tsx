@@ -73,7 +73,7 @@ export const TagFilter = () => {
               }
             />
           }
-          label="仅看可播放"
+          label="仅看有关联资源"
         />
       </Box>
 

@@ -155,26 +155,9 @@ export const Resource: React.FC<ResourceProps> = ({
         </Box>
         <Descriptions bordered extra={<></>} column={1}>
           <Descriptions.Item label={"标题"}>{title}</Descriptions.Item>
-          <Descriptions.Item label={"源地址"}>
-            <Link
-              onClick={(ev) => {
-                ev.preventDefault();
-                setSrc(href);
-                historyAPI.addOpenDetail({ articleId });
-              }}
-              target="_blank"
-              href={href}
-            >
-              {href}
-            </Link>
-          </Descriptions.Item>
-          <Descriptions.Item label={"简介"}>{content}</Descriptions.Item>
-          <Descriptions.Item label={"评分"}>{rating_score}</Descriptions.Item>
-          <Descriptions.Item label={"发布时间"}>
-            {formatTimeDetail(time)}
-          </Descriptions.Item>
-          <Descriptions.Item label={"资源"}>
-            {!!sources.length && (
+
+          {!!sources.length && (
+            <Descriptions.Item label={"网络资源"}>
               <Box display="flex" gap="4px" flexWrap="wrap">
                 {sources?.map((source) => (
                   <Tooltip title={source} key={source}>
@@ -195,16 +178,96 @@ export const Resource: React.FC<ResourceProps> = ({
                         textOverflow: "ellipsis",
                       }}
                       variant="outlined"
+                      color="secondary"
                       label={source}
                     />
                   </Tooltip>
                 ))}
               </Box>
-            )}
+            </Descriptions.Item>
+          )}
+
+          {!!files.length && (
+            <Descriptions.Item label={"关联文件"}>
+              {files?.map((file) => (
+                <Tooltip title={file.name}>
+                  <Chip
+                    color="primary"
+                    sx={{
+                      maxWidth: "130px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                    onClick={async () => {
+                      console.log(file);
+                      if (file.mimetype.includes("image")) {
+                        // setPreviewDir(file.directory);
+                        nav({
+                          pathname: routers.IMAGES,
+                          search: qs.stringify({
+                            dir: file.directory,
+                            articleId: article.id,
+                          }),
+                        });
+                        return;
+                      }
+                      // setFile(file);
+                      const error = await shell.openPath(file.filePath);
+                      if (error) {
+                        historyAPI.addOpenFile({
+                          articleId,
+                          fileId: file.id,
+                          message: error,
+                          status: ActionStatus.Error,
+                        });
+                        enqueueSnackbar(error, {
+                          variant: "error",
+                        });
+                      } else {
+                        historyAPI.addOpenFile({
+                          articleId,
+                          fileId: file.id,
+                        });
+                      }
+                    }}
+                    onDelete={() => {
+                      setFileToRemove(file);
+                    }}
+                    style={{ margin: 4 }}
+                    variant="outlined"
+                    key={file.id}
+                    label={file.name}
+                  />
+                </Tooltip>
+              ))}
+            </Descriptions.Item>
+          )}
+
+          {article?.uid && (
+            <Descriptions.Item label={"磁力链接"}>
+              <MagnetLinks articleId={articleId} uid={article?.uid} />
+            </Descriptions.Item>
+          )}
+
+          <Descriptions.Item label={"评分"}>{rating_score}</Descriptions.Item>
+          <Descriptions.Item label={"发布时间"}>
+            {formatTimeDetail(time)}
           </Descriptions.Item>
-          <Descriptions.Item label={"磁力链接"}>
-            <MagnetLinks articleId={articleId} uid={article?.uid} />
+          <Descriptions.Item label={"源地址"}>
+            <Link
+              onClick={(ev) => {
+                ev.preventDefault();
+                setSrc(href);
+                historyAPI.addOpenDetail({ articleId });
+              }}
+              target="_blank"
+              href={href}
+            >
+              {href}
+            </Link>
           </Descriptions.Item>
+          <Descriptions.Item label={"简介"}>{content}</Descriptions.Item>
+
           <Descriptions.Item label={"标签"}>
             <ArticleTags
               handleTagClick={(tag) => {
@@ -213,51 +276,6 @@ export const Resource: React.FC<ResourceProps> = ({
               }}
               tags={tags}
             />
-          </Descriptions.Item>
-          <Descriptions.Item label={"关联文件"}>
-            {files?.map((file) => (
-              <Chip
-                onClick={async () => {
-                  console.log(file);
-                  if (file.mimetype.includes("image")) {
-                    // setPreviewDir(file.directory);
-                    nav({
-                      pathname: routers.IMAGES,
-                      search: qs.stringify({
-                        dir: file.directory,
-                        articleId: article.id,
-                      }),
-                    });
-                    return;
-                  }
-                  // setFile(file);
-                  const error = await shell.openPath(file.filePath);
-                  if (error) {
-                    historyAPI.addOpenFile({
-                      articleId,
-                      fileId: file.id,
-                      message: error,
-                      status: ActionStatus.Error,
-                    });
-                    enqueueSnackbar(error, {
-                      variant: "error",
-                    });
-                  } else {
-                    historyAPI.addOpenFile({
-                      articleId,
-                      fileId: file.id,
-                    });
-                  }
-                }}
-                onDelete={() => {
-                  setFileToRemove(file);
-                }}
-                style={{ margin: 4 }}
-                variant="outlined"
-                key={file.id}
-                label={file.name}
-              />
-            ))}
           </Descriptions.Item>
         </Descriptions>
       </Box>

@@ -1,5 +1,5 @@
 import { Box, Grid, Link, Stack, Tooltip } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import Icon from "@ant-design/icons";
 import { clipboard, shell } from "electron";
@@ -10,8 +10,17 @@ export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
   props
 ) => {
   const { enqueueSnackbar } = useSnackbar();
-  const uids = props.uid ? [...new Set(props.uid.split("|"))] : [];
+
+  const getUids = () => {
+    return props.uid ? [...new Set(props.uid.split("|"))].filter(Boolean) : [];
+  };
+  const uids = getUids();
   const [showUids, setShowUids] = useState<string[]>(uids.slice(0, 6));
+
+  useEffect(() => {
+    setShowUids(uids.slice(0, 6));
+  }, [props.uid]);
+
   return (
     <Box sx={{ mt: 2 }}>
       <Grid columns={3} columnGap={3} rowGap={1} container>

@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
@@ -65,6 +66,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     setResourceDrawerVisible(true);
   }
 
+  const handleOpenDetail = () => {
+    setSrc(href);
+    historyAPI.addOpenDetail({ articleId: id });
+  };
+
   const actions = [
     {
       text: "稍后观看",
@@ -74,8 +80,13 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
       text: "google搜索",
       onClick: handleSearch,
     },
+    {
+      text: "详情",
+      onClick: handleOpenResourceDrawer,
+    },
     ...extraActions,
   ];
+
   return (
     <Card>
       <CardHeader
@@ -88,7 +99,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           <Link
             onClick={(ev) => {
               ev.preventDefault();
-              handleOpenResourceDrawer();
+              handleOpenDetail();
             }}
             style={{ textDecoration: "none" }}
             target="_blank"
@@ -106,21 +117,23 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         action={<ActionMenuButton actions={actions} />}
       />
 
-      {img_src && <CardMedia component="img" src={img_src} />}
+      <CardActionArea onClick={handleOpenResourceDrawer}>
+        {img_src && <CardMedia component="img" src={img_src} />}
 
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {content}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <Tooltip title={rating_score || ""}>
-          <IconButton>
-            <Rating readOnly precision={0.1} value={rating_score} />
-          </IconButton>
-        </Tooltip>
-        <Box sx={{ ml: 2 }}>评分人数: {rating_count}</Box>
-      </CardActions>
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            {content}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <Tooltip title={rating_score || ""}>
+            <IconButton>
+              <Rating readOnly precision={0.1} value={rating_score} />
+            </IconButton>
+          </Tooltip>
+          <Box sx={{ ml: 2 }}>评分人数: {rating_count}</Box>
+        </CardActions>
+      </CardActionArea>
       <CardContent>
         <ArticleTags tags={tags} handleTagClick={handleTagClick} />
       </CardContent>
