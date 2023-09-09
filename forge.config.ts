@@ -8,17 +8,30 @@ import { rendererConfig } from "./webpack/webpack.renderer.config";
 
 const config: ForgeConfig = {
   packagerConfig: {
-    icon: "icons/icon"
+    icon: "icons/icon",
   },
   rebuildConfig: {},
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "liam",
+          name: "ruri",
+        },
+        draft: true
+      },
+    },
+  ],
+
   makers: [
     new MakerDMG({
       format: "ULFO",
-      icon: "icons/icon.icns"
+      icon: "icons/icon.icns",
     }),
     new MakerSquirrel({
-      setupIcon: "icons/icon.ico"
-    })
+      setupIcon: "icons/icon.ico",
+    }),
   ],
   plugins: [
     new WebpackPlugin({
@@ -33,12 +46,12 @@ const config: ForgeConfig = {
           {
             html: "./src/renderer/index.html",
             js: "./src/renderer/index.ts",
-            name: "main_window"
-          }
-        ]
-      }
-    })
-  ]
+            name: "main_window",
+          },
+        ],
+      },
+    }),
+  ],
 };
 
 export default config;
