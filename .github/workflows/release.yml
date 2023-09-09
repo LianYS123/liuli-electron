@@ -6,6 +6,7 @@ on:
 
 jobs:
   publish_on_mac:
+    permissions: write-all
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
