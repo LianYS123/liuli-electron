@@ -16,8 +16,8 @@ const config: ForgeConfig = {
       name: "@electron-forge/publisher-github",
       config: {
         repository: {
-          owner: "liam",
-          name: "ruri",
+          owner: "LianYS123",
+          name: "liuli-electron",
         },
         draft: true
       },
