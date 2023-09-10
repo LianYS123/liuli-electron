@@ -13,6 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { shell, type WebviewTag } from "electron";
 import CloseIcon from "@mui/icons-material/Close";
 import { WebView } from "../WebView";
+import { BrowserHeader } from "../BrowserHeader";
 
 interface Props {
   open: boolean;
@@ -43,18 +44,10 @@ export const PageDialog: React.FC<Props> = ({
   }, [webviewRef.current]);
   return (
     <Dialog keepMounted={false} fullScreen open={open} onClose={onClose}>
-      <DialogTitle sx={{ m: 0 }}>
+      <BrowserHeader />
+      <WebView ref={webviewRef} src={src} />
+      {/* <DialogTitle sx={{ m: 0 }}>
         <Box mr={4}>
-          {/* <Link
-            target="_blank"
-            onClick={(ev) => {
-              ev.preventDefault();
-              shell.openExternal(src);
-            }}
-            href={src}
-          >
-            {src}
-          </Link> */}
           <Input fullWidth readOnly value={topSrc} />
         </Box>
         {onClose ? (
@@ -75,7 +68,7 @@ export const PageDialog: React.FC<Props> = ({
       <DialogContent>
         <WebView ref={webviewRef} src={src} />
       </DialogContent>
-      {actions && <DialogActions>{actions}</DialogActions>}
+      {actions && <DialogActions>{actions}</DialogActions>} */}
     </Dialog>
   );
 };

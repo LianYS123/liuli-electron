@@ -24,6 +24,7 @@ import { historyAPI } from "@src/common/api/history";
 import { ArticlePageDialog } from "./ArticlePageDialog";
 import { ArticleTags } from "./ArticleTags";
 import { Resource, useSearchHandler } from "./Resouce";
+import { PageDialog } from "@src/renderer/components/PageDialog";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -146,9 +147,9 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         />
       )}
 
-      <ArticlePageDialog
-        refetch={refetch}
-        articleId={id}
+      <PageDialog
+        // refetch={refetch}
+        // articleId={id}
         src={articleSrc}
         open={!!articleSrc}
         onClose={() => setSrc("")}

@@ -1,0 +1,89 @@
+.wrap {
+  .tabs {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  width: 221px;
+  height: 36px;
+  position: relative;
+  cursor: pointer;
+  padding: 10px 8px 10px 12px;
+
+  &:not(.active) {
+    background: #202124;
+    box-shadow: 0px 1px 0px 0px #606164;
+  }
+
+  &.active {
+    border-radius: 8px 8px 0px 0px;
+    background: #35363a;
+  }
+
+  .favicon {
+  }
+
+  .title {
+    color: #fff;
+    font-family: SF Pro Text;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .closeIcon {
+    position: absolute;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.bottom {
+  display: flex;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  .bottomLeftActions {
+    display: flex;
+    gap: 2px;
+    margin-right: 12px;
+  }
+  .inputBar {
+    display: flex;
+    padding: 4px 12px;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+
+    border-radius: 36px;
+    background: #202124;
+    .inputPrefix {
+      display: flex;
+    }
+    .inputBox {
+      display: flex;
+      flex-grow: 1;
+      .input {
+        width: 100%;
+        outline: none;
+        border: none;
+
+        color: #fdfdfd;
+        font-family: SF Pro Text;
+        font-size: 14px;
+        font-weight: 400;
+      }
+    }
+    .inputSuffix {
+      display: flex;
+    }
+  }
+  .bottomRightActions {
+    display: flex;
+  }
+}

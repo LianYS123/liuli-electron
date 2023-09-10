@@ -53,7 +53,7 @@ rules.push({
 
 export const rendererConfig: Configuration = {
   // devtool: 'eval',
-  devtool: false,
+  // devtool: false,
   module: {
     rules
   },
