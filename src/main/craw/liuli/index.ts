@@ -7,7 +7,9 @@ import { BaseCraw } from "@src/main/utils/craw";
 import { Article } from "@src/common/interfaces/article.interface";
 import { ArticleEntity } from "@src/main/entities/article.entity";
 import { store } from "@src/main/store";
-import { STORE_KEY_ENUM } from "@src/common/constants";
+import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from "@src/common/constants";
+import { windowManager } from "@src/main/window";
+import { ipcMain } from "electron";
 
 type ListData = Pick<
   Article,
@@ -39,6 +41,21 @@ export class ArticleCraw extends BaseCraw {
 
   constructor() {
     super();
+    this.queue.addListener("idle", () => {
+      windowManager.mainWindow.webContents.send(
+        IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE
+      );
+    });
+    this.queue.addListener('active', () => {
+      windowManager.mainWindow.webContents.send(
+        IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE
+      );
+    })
+    this.queue.addListener('completed', () => {
+      windowManager.mainWindow.webContents.send(
+        IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE
+      );
+    })
   }
 
   parseDetail = async ({ uri, data: listData }: ListHref) => {
@@ -84,11 +101,11 @@ export class ArticleCraw extends BaseCraw {
       rating_score: parseFloat(rating_score) || 0,
       uid: uids.join("|"),
       imgs: imgs.join("|"),
-      raw_id
+      raw_id,
     };
     const article: CrawArticle = {
       ...detailData,
-      ...listData
+      ...listData,
     };
     if (SKIP_EMPTY_UIDS && uids.length === 0) {
       throw new Error(`skip data miss uids: ${article.title}`);
@@ -96,8 +113,8 @@ export class ArticleCraw extends BaseCraw {
 
     const { identifiers } = await ArticleEntity.upsert(article, {
       conflictPaths: {
-        raw_id: true
-      }
+        raw_id: true,
+      },
     });
 
     const insertIds = identifiers.filter(Boolean);
@@ -141,7 +158,7 @@ export class ArticleCraw extends BaseCraw {
         img_src,
         tags: tags.join("|"),
         content,
-        cat
+        cat,
       };
       const title = $(el).find("header > .entry-title").text().trim();
       const testStr = title + content;
@@ -167,7 +184,7 @@ export class ArticleCraw extends BaseCraw {
     this.queue.addAll(
       hrefs.map((d) => () => this.parseDetail(d)),
       {
-        priority: 2 // 详情页具有更高的优先级
+        priority: 2, // 详情页具有更高的优先级
       }
     );
   };
@@ -213,7 +230,7 @@ export class ArticleCraw extends BaseCraw {
     await this.queue.addAll(
       links.map((link) => () => this.parse(link)),
       {
-        priority: 1
+        priority: 1,
       }
     );
   };

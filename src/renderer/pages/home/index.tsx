@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Grid, TextField } from "@mui/material";
 import { TagFilter } from "./TagFilter";
 import { useHistoryState } from "./useHistoryState";
@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
 import { scrollToTop } from "@src/renderer/utils";
 import { useDebounceFn } from "ahooks";
+import { useIpcEvent } from "@src/renderer/hooks/useIpcEvent";
+import { IPC_CHANNEL_ENUM } from "@src/common/constants";
 
 const Home = () => {
   const {
@@ -22,9 +24,7 @@ const Home = () => {
     pageSize,
   });
 
-  // const list = useMemo(() => {
-  //   return data?.pages.map((it) => it.data.list || []).flat() || [];
-  // }, [data]);
+  useIpcEvent(IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE, refetch);
 
   // 点击标签
   const handleTagClick = (tag: string) => {

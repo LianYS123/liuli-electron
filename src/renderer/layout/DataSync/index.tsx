@@ -4,13 +4,13 @@ import {
   Paper,
   Stack,
   Switch,
-  TextField
+  TextField,
 } from "@mui/material";
 import { storeAPI } from "@src/common/api/store";
 import { CrawConfig } from "@src/main/store/types";
 import { useDebounceFn, useMount } from "ahooks";
 import React, { useRef, useState } from "react";
-import { STORE_KEY_ENUM } from "@src/common/constants";
+import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from "@src/common/constants";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { articleAPI } from "@src/common/api/article";
 import { useSnackbar } from "notistack";
@@ -20,28 +20,21 @@ import { formatTimeDetail } from "@src/renderer/utils/time";
 import { formatDistanceStrict } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
+import { useIpcEvent } from "@src/renderer/hooks/useIpcEvent";
 
 export const DataSync: React.FC = () => {
   const [config, _setConfig] = useState<CrawConfig>({
     BASE_LINK: "",
     PROXY: "",
     SKIP_ADS: false,
-    SKIP_EMPTY_UIDS: false
+    SKIP_EMPTY_UIDS: false,
   });
   const { enqueueSnackbar } = useSnackbar();
 
   const [startPage, setStartPage] = useState(1);
   const [endPage, setEndPage] = useState(1);
-  const client = useQueryClient();
-  function refetch() {
-    client.refetchQueries(["/article/list"], { active: true });
-  }
   const { mutateAsync: craw } = useMutation(articleAPI.fetchArticles);
   const { open } = useAlertDialog();
-
-  const prePending = useRef(-1);
-
-  const [refetchInterval, setRefetchInterval] = useState(1000);
 
   const {
     data: {
@@ -50,22 +43,16 @@ export const DataSync: React.FC = () => {
       pending,
       startTime,
       updateCount,
-      endTime
+      endTime,
     } = {},
-    isIdle
-  } = useQuery("ArticleCrawPending", () => articleCrawAPI.stat(), {
-    refetchInterval,
-    onSuccess: ({ pending = 0 }) => {
-      if (!pending) {
-        setRefetchInterval(1000 * 5);
-      } else {
-        setRefetchInterval(1000);
-      }
-      if (pending < prePending.current) {
-        // refetch();
-      }
-      prePending.current = pending;
-    }
+    refetch,
+    isIdle,
+  } = useQuery("ArticleCrawPending", () => articleCrawAPI.stat());
+
+  useIpcEvent(IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE, refetch);
+  useIpcEvent(IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE, () => {
+    console.log('ARTICLE_CRAW_START');
+    refetch();
   });
 
   const { data: totalPages } = useQuery(
@@ -100,7 +87,7 @@ export const DataSync: React.FC = () => {
   const getCost = () => {
     if (startTime && endTime) {
       const cost = formatDistanceStrict(endTime, startTime, {
-        locale: zhCN
+        locale: zhCN,
       });
       return cost;
     } else {
@@ -175,7 +162,7 @@ export const DataSync: React.FC = () => {
                 onOk: async () => {
                   await articleCrawAPI.clearAll();
                   enqueueSnackbar("操作成功");
-                }
+                },
               });
             } else {
               await handleCraw({ startPage, endPage });
