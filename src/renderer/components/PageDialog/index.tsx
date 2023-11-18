@@ -14,6 +14,7 @@ import { shell, type WebviewTag } from "electron";
 import CloseIcon from "@mui/icons-material/Close";
 import { WebView } from "../WebView";
 import { BrowserHeader } from "../BrowserHeader";
+import { BrowserManager } from "../../utils/BrowserManager";
 
 interface Props {
   open: boolean;
@@ -21,6 +22,8 @@ interface Props {
   src: string;
   actions?: React.ReactNode;
 }
+
+const tabManager = new BrowserManager();
 
 export const PageDialog: React.FC<Props> = ({
   open,
@@ -44,7 +47,8 @@ export const PageDialog: React.FC<Props> = ({
   }, [webviewRef.current]);
   return (
     <Dialog keepMounted={false} fullScreen open={open} onClose={onClose}>
-      <BrowserHeader />
+      <tabManager.BrowserHeader />
+      {/* <BrowserHeader tabManager={tabManager} /> */}
       <WebView ref={webviewRef} src={src} />
       {/* <DialogTitle sx={{ m: 0 }}>
         <Box mr={4}>

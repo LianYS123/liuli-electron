@@ -1,84 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./style.module.css";
 import {
   Add,
   ArrowBack,
   ArrowForward,
-  Close,
   Lock,
   Refresh,
-  Star,
   StarOutline,
 } from "@mui/icons-material";
-import { Box, IconButton, InputBase, Tooltip } from "@mui/material";
-import { uniqueId } from "lodash";
-import classNames from "classnames";
+import { IconButton, InputBase, Tooltip } from "@mui/material";
+import { BrowserTabItem } from "@src/renderer/types/browser";
+import { TabItem } from "./TabItem";
 
-interface TabItem {
-  key: string;
-  title: string;
-  url: string;
-  icon?: React.ReactNode;
+interface BrowserHeaderProps {
+  tabs: BrowserTabItem[];
+  activeTab: BrowserTabItem | null;
+  onTabClick: (tab: BrowserTabItem) => void;
+  onTabClose: (tab: BrowserTabItem) => void;
+  onAddTab: () => void;
+  onRefresh: () => void;
+  onForward: () => void;
+  onBack: () => void;
 }
 
-const Tab: React.FC<{
-  tabItem: TabItem;
-  isActive: boolean;
-  onClick: (tab: TabItem) => void;
-  onClose: (tab: TabItem) => void;
-}> = ({ onClose, isActive, tabItem, onClick }) => {
-  const { key, title, url, icon } = tabItem;
-  return (
-    <section
-      onClick={() => {
-        onClick(tabItem);
-      }}
-      className={classNames(styles.tab, { [styles.active]: isActive })}
-    >
-      <div className={styles.favicon}>{icon}</div>
-      <div className={styles.title}>{title}</div>
-      <div className={styles.closeIcon}>
-        <IconButton
-          sx={{ fontSize: 16 }}
-          onClick={(ev) => {
-            ev.stopPropagation();
-            onClose(tabItem);
-          }}
-        >
-          <Close sx={{ width: "16px", height: "16px" }} />
-        </IconButton>
-      </div>
-    </section>
-  );
-};
-
-export const BrowserHeader: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabItem | null>(null);
-  const [tabs, setTabs] = useState<TabItem[]>([]);
-
-  const addTab = (item: TabItem) => {
-    setTabs([...tabs, item]);
-  };
-
-  const removeTab = (key: string) => {
-    setTabs((tabs) => tabs.filter((tab) => tab.key !== key));
-  };
-
+export const BrowserHeader: React.FC<BrowserHeaderProps> = ({
+  tabs,
+  activeTab,
+  onTabClick,
+  onTabClose,
+  onAddTab,
+  onRefresh,
+  onBack,
+  onForward,
+}) => {
   return (
     <section className={styles.wrap}>
       <div className={styles.top}>
         <div className={styles.tabs}>
           {tabs.map((tab) => {
             return (
-              <Tab
+              <TabItem
                 isActive={tab.key === activeTab?.key}
                 key={tab.key}
                 tabItem={tab}
                 onClick={(tab) => {
-                  setActiveTab(tab);
+                  onTabClick(tab);
                 }}
                 onClose={(tab) => {
-                  removeTab(tab.key);
+                  onTabClose(tab);
                 }}
               />
             );
@@ -86,13 +55,7 @@ export const BrowserHeader: React.FC = () => {
           <div className={styles.addIcon}>
             <IconButton
               onClick={() => {
-                const newItem = {
-                  key: uniqueId(),
-                  title: "Google",
-                  url: "https://www.google.com",
-                };
-                addTab(newItem);
-                setActiveTab(newItem);
+                onAddTab();
               }}
             >
               <Add />
@@ -107,7 +70,7 @@ export const BrowserHeader: React.FC = () => {
           <Tooltip title="后退">
             <IconButton
               onClick={() => {
-                //   webviewRef.current.goBack();
+                onBack();
               }}
               sx={{
                 color: (theme) => theme.palette.grey[500],
@@ -120,7 +83,7 @@ export const BrowserHeader: React.FC = () => {
           <Tooltip title="前进">
             <IconButton
               onClick={() => {
-                //   webviewRef.current.goForward();
+                onForward();
               }}
               sx={{
                 color: (theme) => theme.palette.grey[500],
@@ -133,7 +96,7 @@ export const BrowserHeader: React.FC = () => {
           <Tooltip title="刷新">
             <IconButton
               onClick={() => {
-                //   webviewRef.current.reload();
+                onRefresh();
               }}
               sx={{
                 color: (theme) => theme.palette.grey[500],
