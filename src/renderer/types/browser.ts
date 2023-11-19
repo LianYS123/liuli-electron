@@ -3,4 +3,5 @@ export interface BrowserTabItem {
   title: string;
   url: string;
   icon?: React.ReactNode;
+  loading: boolean
 }

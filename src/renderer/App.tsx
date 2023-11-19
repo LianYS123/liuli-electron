@@ -12,6 +12,7 @@ import { FileList } from "./pages/file";
 import { AppLayout } from "./layout";
 import { routers } from "./config";
 import { ImagePreview } from "./pages/ImagePreview";
+import { Browser } from "./components/Browser";
 // import 'react-virtualized/styles.css'; // only needs to be imported once
 
 // Create a client
@@ -40,6 +41,7 @@ export default function App() {
                     <Route path={"/"} element={<Home />} />
                   </Routes>
                 </AppLayout>
+                <Browser />
               </AlertDialogProvider>
             </SnackbarProvider>
           </QueryClientProvider>

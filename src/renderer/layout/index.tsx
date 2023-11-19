@@ -17,6 +17,7 @@ import {
   Refresh,
   Settings as SettingsIcon,
   Sync,
+  Web,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -26,6 +27,7 @@ import { useTheme } from "../hooks/useTheme";
 import { History } from "./History";
 import { scrollToTop } from "../utils";
 import { Settings } from "./Settings";
+import { browserManager } from "../components/Browser/BrowserManager";
 
 const isWin = process.platform === "win32";
 
@@ -78,6 +80,15 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
             }}
             icon={<SettingsIcon />}
             tooltipTitle={"设置"}
+          />
+
+          <SpeedDialAction
+            onClick={(ev) => {
+              ev.stopPropagation();
+              browserManager.openBrowser();
+            }}
+            icon={<Web />}
+            tooltipTitle={"浏览器"}
           />
 
           <SpeedDialAction

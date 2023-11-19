@@ -25,6 +25,7 @@ import { ArticlePageDialog } from "./ArticlePageDialog";
 import { ArticleTags } from "./ArticleTags";
 import { Resource, useSearchHandler } from "./Resouce";
 import { PageDialog } from "@src/renderer/components/PageDialog";
+import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -49,7 +50,10 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
   const [resourceDrawerVisible, setResourceDrawerVisible] = useState(false);
 
-  const [articleSrc, setSrc] = useState("");
+  // const [articleSrc, setSrc] = useState("");
+  const setSrc = (url: string) => {
+    browserManager.openBrowser({ url });
+  };
 
   const [previewDir, setPreviewDir] = useState<string>();
 
@@ -147,13 +151,13 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         />
       )}
 
-      <PageDialog
+      {/* <PageDialog
         // refetch={refetch}
         // articleId={id}
         src={articleSrc}
         open={!!articleSrc}
         onClose={() => setSrc("")}
-      />
+      /> */}
 
       <Resource
         handleTagClick={handleTagClick}
