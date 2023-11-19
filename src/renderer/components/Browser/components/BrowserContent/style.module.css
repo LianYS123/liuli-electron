@@ -39,5 +39,6 @@
   }
   .bottomRightActions {
     display: flex;
+    margin-left: 6px;
   }
 }

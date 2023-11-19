@@ -1,9 +1,7 @@
-import React from "react";
+import { urlReg } from "@src/renderer/constants";
 import { BrowserTabItem } from "@src/renderer/types/browser";
 import { StateManager } from "@src/renderer/utils/StateManager";
-import { BrowserHeader } from "../components/BrowserHeader";
-import { debounce, flow, uniqueId } from "lodash";
-import { parseURL } from "whatwg-url";
+import { uniqueId } from "lodash";
 
 interface BrowserState {
   maxTabs: number;
@@ -20,11 +18,13 @@ export class BrowserManager {
 
   private generateTab = (tab: Partial<BrowserTabItem> = {}): BrowserTabItem => {
     const key = uniqueId();
+
+    const isValidUrl = tab.url && urlReg.test(tab.url);
     const item: BrowserTabItem = {
       ...tab,
       key: tab.key || key,
       title: tab.title || tab.url || "Google",
-      url: tab.url || "https://www.google.com",
+      url: isValidUrl ? tab.url : "https://www.google.com",
       loading: tab.loading || false,
     };
     return item;
@@ -86,7 +86,7 @@ export class BrowserManager {
     });
   }
 
-  openBrowser = ({ url, title }: { url?: string; title?: string } = {}) => {
+  openBrowser = (tab: Partial<BrowserTabItem> = {}) => {
     this.browserStateManager.produce((state) => {
       state.open = true;
       // const targetTab = state.tabs.find((tab) => {
@@ -98,8 +98,9 @@ export class BrowserManager {
       //   );
       // });
 
-      if (!state.tabs.length || url) {
-        const newTab = this.generateTab({ url, title });
+      const isValidUrl = tab.url && urlReg.test(tab.url);
+      if (!state.tabs.length || isValidUrl) {
+        const newTab = this.generateTab(tab);
         state.activeTabKey = newTab.key;
         state.tabs.push(newTab);
       }
@@ -117,15 +118,6 @@ export class BrowserManager {
       state.open = false;
       state.tabs = [];
       state.activeTabKey = "";
-    });
-  };
-
-  updateTab = (tab: BrowserTabItem) => {
-    this.browserStateManager.produce((state) => {
-      const index = state.tabs.findIndex((it) => it.key === tab.key);
-      if (index !== -1) {
-        state.tabs[index] = tab;
-      }
     });
   };
 

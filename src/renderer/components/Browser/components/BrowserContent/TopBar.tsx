@@ -7,10 +7,12 @@ import {
   Lock,
   Refresh,
   StarOutline,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import { IconButton, InputBase, Tooltip } from "@mui/material";
 import { BrowserTabItem } from "@src/renderer/types/browser";
 import { Loading } from "@src/renderer/components/Loading";
+import { ActionMenuButton } from "@src/renderer/components/action/ActionMenuButton";
 
 interface TopBarProps {
   tab: BrowserTabItem;
@@ -25,6 +27,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onForward,
   onRefresh,
 }) => {
+  console.log(tab);
   return (
     <div className={styles.topBar}>
       <div className={styles.bottomLeftActions}>
@@ -98,7 +101,19 @@ export const TopBar: React.FC<TopBarProps> = ({
           </IconButton>
         </div>
       </div>
-      <div className={styles.bottomRightActions}></div>
+      {!!tab.actions?.length && (
+        <div className={styles.bottomRightActions}>
+          <ActionMenuButton
+            actions={tab.actions.map((it) => ({
+              ...it,
+              onClick: () => {
+                it.onClick({ tab });
+              },
+            }))}
+            // icon={<MenuIcon />}
+          />
+        </div>
+      )}
     </div>
   );
 };

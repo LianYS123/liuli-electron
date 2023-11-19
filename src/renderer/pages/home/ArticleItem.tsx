@@ -21,11 +21,10 @@ import { ArticleItemProps } from "../../services/types";
 import { useSnackbar } from "notistack";
 import { ImageListPreviewV2 } from "./ImageListPreview";
 import { historyAPI } from "@src/common/api/history";
-import { ArticlePageDialog } from "./ArticlePageDialog";
 import { ArticleTags } from "./ArticleTags";
 import { Resource, useSearchHandler } from "./Resouce";
-import { PageDialog } from "@src/renderer/components/PageDialog";
 import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
+import { articleAPI } from "@src/common/api/article";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
@@ -50,9 +49,20 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
   const [resourceDrawerVisible, setResourceDrawerVisible] = useState(false);
 
-  // const [articleSrc, setSrc] = useState("");
-  const setSrc = (url: string) => {
-    browserManager.openBrowser({ url });
+  const openBrowser = (url: string) => {
+    browserManager.openBrowser({
+      url,
+      actions: [
+        {
+          text: "添加为网络资源",
+          onClick: async ({ tab }) => {
+            await articleAPI.addSource({ articleId: id, source: tab.url });
+            enqueueSnackbar("操作成功");
+            refetch();
+          },
+        },
+      ],
+    });
   };
 
   const [previewDir, setPreviewDir] = useState<string>();
@@ -64,7 +74,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
   const handleSearch = useSearchHandler({
     searchValue: title,
-    onSearch: setSrc,
+    onSearch: openBrowser,
   });
 
   function handleOpenResourceDrawer() {
@@ -72,7 +82,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
   }
 
   const handleOpenDetail = () => {
-    setSrc(href);
+    openBrowser(href);
     historyAPI.addOpenDetail({ articleId: id });
   };
 
@@ -151,15 +161,8 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         />
       )}
 
-      {/* <PageDialog
-        // refetch={refetch}
-        // articleId={id}
-        src={articleSrc}
-        open={!!articleSrc}
-        onClose={() => setSrc("")}
-      /> */}
-
       <Resource
+        openInBrowser={openBrowser}
         handleTagClick={handleTagClick}
         title={title}
         open={resourceDrawerVisible}

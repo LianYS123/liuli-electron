@@ -14,7 +14,6 @@ import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import qs from "query-string";
 import { chooseMedia } from "@src/renderer/utils";
-import { ArticlePageDialog } from "./ArticlePageDialog";
 import { AddWebResourceDialog } from "./AddWebResourceDialog";
 import { ArticleTags } from "./ArticleTags";
 import { formatTimeDetail } from "@src/renderer/utils/time";
@@ -45,6 +44,7 @@ interface ResourceProps {
   title: string;
   articleId: number;
   handleTagClick: (tag: string) => void;
+  openInBrowser: (url: string) => void;
 }
 
 export const useSearchHandler = ({
@@ -89,8 +89,8 @@ export const Resource: React.FC<ResourceProps> = ({
   onClose,
   title,
   handleTagClick,
+  openInBrowser,
 }) => {
-  const [articleSrc, setSrc] = useState("");
   const [showWebSourceDialog, setShowWebSourceDialog] = useState(false);
   const { data: article, refetch } = useQuery(
     ["get-article-detail", articleId, open],
@@ -136,7 +136,7 @@ export const Resource: React.FC<ResourceProps> = ({
 
   const handleSearch = useSearchHandler({
     searchValue: title,
-    onSearch: setSrc,
+    onSearch: openInBrowser,
   });
 
   return (
@@ -163,7 +163,7 @@ export const Resource: React.FC<ResourceProps> = ({
                   <Tooltip title={source} key={source}>
                     <Chip
                       onClick={async () => {
-                        await setSrc(source);
+                        await openInBrowser(source);
                       }}
                       onDelete={async () => {
                         await articleAPI.removeSource({
@@ -257,7 +257,7 @@ export const Resource: React.FC<ResourceProps> = ({
             <Link
               onClick={(ev) => {
                 ev.preventDefault();
-                setSrc(href);
+                openInBrowser(href);
                 historyAPI.addOpenDetail({ articleId });
               }}
               target="_blank"
@@ -291,14 +291,6 @@ export const Resource: React.FC<ResourceProps> = ({
           }}
         />
       )}
-
-      <ArticlePageDialog
-        refetch={refetch}
-        articleId={articleId}
-        src={articleSrc}
-        open={!!articleSrc}
-        onClose={() => setSrc("")}
-      />
 
       <AddWebResourceDialog
         open={showWebSourceDialog}

@@ -37,10 +37,13 @@ export const ContentView: React.FC<Props> = ({ tab, hidden }) => {
     if (webview) {
       async function handleNav(event: Electron.DidNavigateEvent) {
         const title = await webview.executeJavaScript("document.title");
-        browserManager.updateTab({
-          ...tab,
-          url: event.url,
-          title: title || event.url,
+
+        browserManager.browserStateManager.produce((state) => {
+          const targetTab = state.tabs.find((it) => it.key === tab.key);
+          if (targetTab) {
+            targetTab.url = event.url;
+            targetTab.title = title || event.url;
+          }
         });
       }
 
