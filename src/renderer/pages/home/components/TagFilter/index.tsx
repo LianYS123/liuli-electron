@@ -7,8 +7,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useHistoryState } from "./useHistoryState";
 import { QueryData } from "@src/renderer/services/types";
+import { useHistoryState } from "@src/renderer/hooks/useHistoryState";
 
 export const TagFilter = () => {
   const { state, setState } = useHistoryState();

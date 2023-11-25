@@ -15,14 +15,13 @@ import {
 } from "@mui/material";
 import { Typography as AntdTypography } from "antd";
 import React, { useState } from "react";
-import { ActionMenuButton } from "../../components/action/ActionMenuButton";
-import { formatTimeDetail } from "../../utils/time";
-import { ArticleItemProps } from "../../services/types";
+import { ActionMenuButton } from "@src/renderer/components/action/ActionMenuButton";
+import { formatTimeDetail } from "@src/renderer/utils/time";
+import { ArticleItemProps } from "@src/renderer/services/types";
 import { useSnackbar } from "notistack";
-import { ImageListPreviewV2 } from "./ImageListPreview";
 import { historyAPI } from "@src/common/api/history";
 import { ArticleTags } from "./ArticleTags";
-import { Resource, useSearchHandler } from "./Resouce";
+import { Resource, useSearchHandler } from "./Resource";
 import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
 import { articleAPI } from "@src/common/api/article";
 
@@ -65,7 +64,6 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     });
   };
 
-  const [previewDir, setPreviewDir] = useState<string>();
 
   const handleAddToQueue = async () => {
     await historyAPI.addWatchLater({ articleId: id });
@@ -152,14 +150,6 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
       <CardContent>
         <ArticleTags tags={tags} handleTagClick={handleTagClick} />
       </CardContent>
-
-      {previewDir && (
-        <ImageListPreviewV2
-          dir={previewDir}
-          visible={!!previewDir}
-          setVisible={() => setPreviewDir("")}
-        />
-      )}
 
       <Resource
         openInBrowser={openBrowser}

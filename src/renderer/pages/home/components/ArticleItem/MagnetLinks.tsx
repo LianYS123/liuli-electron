@@ -28,6 +28,7 @@ export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
           const link = `magnet:?xt=urn:btih:${u}`;
           return (
             <Grid
+              key={u}
               sx={{
                 display: "flex",
                 alignItems: "center",

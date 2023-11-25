@@ -1,5 +1,5 @@
-import { QueryData } from '../../services/types';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { QueryData } from '../services/types';
 
 export const useHistoryState = () => {
   const nav = useNavigate();

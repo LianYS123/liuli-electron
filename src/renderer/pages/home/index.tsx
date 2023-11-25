@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, TextField } from "@mui/material";
-import { TagFilter } from "./TagFilter";
-import { useHistoryState } from "./useHistoryState";
+import { TagFilter } from "./components/TagFilter";
 import { ArticleItemProps } from "../../services/types";
-import { useArticles } from "./useArticles";
-import ArticleItem from "./ArticleItem";
+import { useArticles } from "../../hooks/useArticles";
+import ArticleItem from "./components/ArticleItem";
 import { MyPagination } from "../../components/pagination";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/renderer/config";
@@ -12,6 +11,7 @@ import { scrollToTop } from "@src/renderer/utils";
 import { useDebounceFn } from "ahooks";
 import { useIpcEvent } from "@src/renderer/hooks/useIpcEvent";
 import { IPC_CHANNEL_ENUM } from "@src/common/constants";
+import { useHistoryState } from "@src/renderer/hooks/useHistoryState";
 
 const Home = () => {
   const {

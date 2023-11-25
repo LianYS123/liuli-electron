@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
 import { historyAPI } from "@src/common/api/history";
 import { History } from "@src/common/interfaces/history.interface";
-import ArticleItem from "@src/renderer/pages/home/ArticleItem";
-import { useHistoryState } from "@src/renderer/pages/home/useHistoryState";
+import { useHistoryState } from "@src/renderer/hooks/useHistoryState";
+import ArticleItem from "@src/renderer/pages/home/components/ArticleItem";
 import { ArticleItemProps } from "@src/renderer/services/types";
 import { useSnackbar } from "notistack";
 import React from "react";
