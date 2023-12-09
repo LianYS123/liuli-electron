@@ -21,7 +21,7 @@ export const chooseMedia = () => {
 };
 
 export const scrollToTop = () => {
-  document.getElementById('app-container')!.scrollTo({
+  document.getElementById('app-container')?.scrollTo({
     top: 0,
     behavior: 'smooth',
   });
