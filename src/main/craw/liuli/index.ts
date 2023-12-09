@@ -41,17 +41,17 @@ export class ArticleCraw extends BaseCraw {
   constructor() {
     super();
     this.queue.addListener('idle', () => {
-      windowManager.mainWindow.webContents.send(
+      windowManager.mainWindow?.webContents.send(
         IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE,
       );
     });
     this.queue.addListener('active', () => {
-      windowManager.mainWindow.webContents.send(
+      windowManager.mainWindow?.webContents.send(
         IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE,
       );
     });
     this.queue.addListener('completed', () => {
-      windowManager.mainWindow.webContents.send(
+      windowManager.mainWindow?.webContents.send(
         IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE,
       );
     });
@@ -134,8 +134,8 @@ export class ArticleCraw extends BaseCraw {
     $('article.post').each((_, el) => {
       const timestr = $(el).find('.entry-header time').attr('datetime');
       const time = new Date(+dayjs(timestr));
-      const href = $(el).find('.entry-title a').attr('href') || null;
-      const img_src = $(el).find('.entry-content img').attr('src') || null;
+      const href = $(el).find('.entry-title a').attr('href') || undefined;
+      const img_src = $(el).find('.entry-content img').attr('src') || undefined;
       const content = $(el).find('.entry-content').text().trim();
       const cat = $(el).find('span.cat-links > a').text();
       const tags: string[] = [];

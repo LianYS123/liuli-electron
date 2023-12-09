@@ -60,8 +60,12 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
         actions: [
           {
             text: '添加为网络资源',
-            onClick: async ({ tab }) => {
-              await articleAPI.addSource({ articleId: id, source: tab.url });
+            onClick: async data => {
+              const { tab } = data || {};
+              if (!tab?.url) {
+                return;
+              }
+              await articleAPI.addSource({ articleId: id, source: tab?.url });
               enqueueSnackbar('操作成功');
               refetch();
             },

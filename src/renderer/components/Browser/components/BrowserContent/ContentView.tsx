@@ -16,7 +16,7 @@ export const ContentView: React.FC<Props> = ({ tab, hidden }) => {
 
   const { run: loadingStart } = useDebounceFn(
     () => {
-      if (webviewRef.current.isLoading()) {
+      if (webviewRef.current?.isLoading()) {
         browserManager.loadingStart(tab.key);
       }
     },
@@ -25,7 +25,7 @@ export const ContentView: React.FC<Props> = ({ tab, hidden }) => {
 
   const { run: loadingFinished } = useDebounceFn(
     () => {
-      if (!webviewRef.current.isLoading()) {
+      if (!webviewRef.current?.isLoading()) {
         browserManager.loadingEnd(tab.key);
       }
     },
@@ -34,7 +34,7 @@ export const ContentView: React.FC<Props> = ({ tab, hidden }) => {
 
   const handleNav = async (event: Electron.DidNavigateEvent) => {
     const webview = webviewRef.current;
-    const title = await webview.executeJavaScript('document.title');
+    const title = await webview?.executeJavaScript('document.title');
 
     browserManager.browserStateManager.produce(state => {
       const targetTab = state.tabs.find(it => it.key === tab.key);
@@ -71,14 +71,14 @@ export const ContentView: React.FC<Props> = ({ tab, hidden }) => {
     <section hidden={hidden} style={{ height: '100%' }}>
       <TopBar
         onBack={() => {
-          webviewRef.current.goBack();
+          webviewRef.current?.goBack();
         }}
         tab={tab}
         onRefresh={() => {
-          webviewRef.current.reload();
+          webviewRef.current?.reload();
         }}
         onForward={() => {
-          webviewRef.current.goForward();
+          webviewRef.current?.goForward();
         }}
       />
       <WebView ref={webviewRef} src={tab.url} />

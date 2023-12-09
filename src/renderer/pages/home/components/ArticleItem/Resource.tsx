@@ -49,7 +49,7 @@ export const Resource: React.FC<ResourceProps> = ({
     time,
     href,
   } = article || {};
-  const [fileToRemove, setFileToRemove] = useState<File>(null);
+  const [fileToRemove, setFileToRemove] = useState<File | null>(null);
   const sources: string[] = JSON.parse(web_sources || '[]');
 
   async function handleConnect() {
@@ -63,7 +63,8 @@ export const Resource: React.FC<ResourceProps> = ({
           articleId,
           fromPath: media,
         });
-      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
         enqueueSnackbar(e?.message);
       }
     });
@@ -106,7 +107,7 @@ export const Resource: React.FC<ResourceProps> = ({
                       onDelete={async () => {
                         await articleAPI.removeSource({
                           source,
-                          articleId: article.id,
+                          articleId,
                         });
                         refetch();
                       }}
@@ -207,7 +208,7 @@ export const Resource: React.FC<ResourceProps> = ({
         </Descriptions>
       </Box>
 
-      {fileToRemove && (
+      {fileToRemove && article && (
         <UnConnectDialog
           file={fileToRemove}
           article={article}

@@ -176,6 +176,7 @@ export const DataSync: React.FC = () => {
           disabled={isIdle || !!pending}
           variant="outlined"
           onClick={async () => {
+            if (!totalPages) return;
             await handleCraw({ startPage, endPage: totalPages });
             enqueueSnackbar('操作成功');
           }}

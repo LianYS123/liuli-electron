@@ -64,7 +64,7 @@ export function formatTimeTitle(time: string | number | Date) {
  * 昨天0点以后，显示“xx月xx日 时:分”，例如：07月10日 12:20
  * 非本年消息，显示“xxxx年xx月xx日 时:分”，例如：2021年07月10日 12:20
  */
-export function formatTimeDetail(time: string | number | Date) {
+export function formatTimeDetail(time?: string | number | Date) {
   if (!time) {
     return '';
   }

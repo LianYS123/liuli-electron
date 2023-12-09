@@ -1,6 +1,6 @@
 import { dialogAPI } from '@src/common/api/dialog';
 
-export const chooseFiles = async (extensions?: string[]) => {
+export const chooseFiles = async (extensions: string[] = []) => {
   const { filePaths } = await dialogAPI.showOpenDialog({
     properties: ['openFile', 'dontAddToRecent', 'multiSelections'],
     filters: [{ name: 'File', extensions }],
@@ -21,7 +21,7 @@ export const chooseMedia = () => {
 };
 
 export const scrollToTop = () => {
-  document.getElementById('app-container').scrollTo({
+  document.getElementById('app-container')!.scrollTo({
     top: 0,
     behavior: 'smooth',
   });

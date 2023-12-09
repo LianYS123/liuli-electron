@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron';
 
 class WindowManager {
-  mainWindow: BrowserWindow;
+  mainWindow: BrowserWindow | null = null;
   createMainWindow = () => {
     // Create the browser window.
     this.mainWindow = new BrowserWindow({

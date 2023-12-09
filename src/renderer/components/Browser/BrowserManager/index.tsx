@@ -24,7 +24,8 @@ export class BrowserManager {
       ...tab,
       key: tab.key || key,
       title: tab.title || tab.url || 'Google',
-      url: isValidUrl ? tab.url : 'https://www.google.com',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      url: isValidUrl ? tab.url! : 'https://www.google.com',
       loading: tab.loading || false,
     };
     return item;

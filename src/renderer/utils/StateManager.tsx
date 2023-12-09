@@ -28,7 +28,9 @@ export class StateManager<State> {
     return this.state;
   }
 
-  produce(cb: (state: immer.Draft<State>) => ReturnType<typeof produce>) {
+  produce(
+    cb: (state: immer.Draft<State>) => immer.Draft<State> | void | undefined,
+  ) {
     const newState = produce(this.state, draft => {
       return cb(draft);
     });

@@ -18,7 +18,7 @@ const ImageListPreview: React.FC<{
   previewImages: string[];
   articleId: string;
 }> = ({ visible, setVisible, previewImages, articleId }) => {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<string[]>([]);
   const remainImagesRef = useRef<string[]>();
   const [current, setCurrent] = useState(0);
 
@@ -47,7 +47,7 @@ const ImageListPreview: React.FC<{
               setCurrent(current);
               if (
                 images.length - current < 5 &&
-                remainImagesRef.current.length
+                remainImagesRef.current?.length
               ) {
                 setImages([...images, ...remainImagesRef.current.slice(0, 5)]);
                 remainImagesRef.current = remainImagesRef.current.slice(5);
@@ -63,7 +63,7 @@ const ImageListPreview: React.FC<{
                 <div style={{ display: 'flex' }}>
                   <div className="ant-image-preview-operations-operation ant-image-preview-operations-operation-flipY">
                     <Icon
-                      component={Wallpaper}
+                      component={Wallpaper as any}
                       onClick={() => {
                         handleSetWallpaper(`file://${images[current]}`);
                         historyAPI.addSetWallpaper({
@@ -94,12 +94,12 @@ export const ImagePreview: React.FC = () => {
   const dir = new URLSearchParams(search).get('dir');
   const articleId = new URLSearchParams(search).get('articleId');
   const [images, setImages] = useState<string[]>([]);
-  const remainImagesRef = useRef<string[]>();
+  const remainImagesRef = useRef<string[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   useQuery(
     ['getAllFilesFromDir', dir],
-    () => fileAPI.getAllFilesFromDir(dir, 'image'),
+    () => fileAPI.getAllFilesFromDir(dir!, 'image'),
     {
       enabled: !!dir,
       onSuccess: data => {
@@ -161,7 +161,7 @@ export const ImagePreview: React.FC = () => {
           </ImageListItem>
         ))}
       </ImageList>
-      {previewImages.length ? (
+      {previewImages.length && articleId ? (
         <ImageListPreview
           articleId={articleId}
           previewImages={previewImages}

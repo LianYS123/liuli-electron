@@ -13,6 +13,9 @@ export const getSearchUrl = (searchValue: string) => {
   );
 
   const res = /(\[.*?\])?(.*)/.exec(searchValue);
+  if (!res) {
+    return;
+  }
   let [, , search] = res;
   search = search.trim();
   if (config.limit) {
