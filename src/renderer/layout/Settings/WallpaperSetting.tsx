@@ -15,7 +15,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
   enabled,
 }) => {
   const dispatch = useDispatch();
-  const { isDark, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
   const { data, refetch, fetchNextPage, hasNextPage, isIdle, isLoading } =
     useInfiniteQuery(
       ['getHistory', ActionEnum.SetWallpaper],

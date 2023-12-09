@@ -1,13 +1,11 @@
 import React from 'react';
 import styles from './style.module.css';
 import {
-  Add,
   ArrowBack,
   ArrowForward,
   Lock,
   Refresh,
   StarOutline,
-  Menu as MenuIcon,
 } from '@mui/icons-material';
 import { IconButton, InputBase, Tooltip } from '@mui/material';
 import { BrowserTabItem } from '@src/renderer/types/browser';

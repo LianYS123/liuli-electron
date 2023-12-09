@@ -1,8 +1,6 @@
 import { load } from 'cheerio';
 import fetch from 'node-fetch';
 
-import { HttpsProxyAgent } from 'https-proxy-agent';
-
 export function getUids(content: string) {
   if (!content) return [];
   const uids = [];
@@ -20,7 +18,7 @@ export function getUids(content: string) {
   return uids;
 }
 
-export const get$ = async (link: string, proxy: string) => {
+export const get$ = async (link: string) => {
   // const agent = new HttpsProxyAgent(proxy);
   const text = await fetch(link).then(res => res.text());
   return load(text);

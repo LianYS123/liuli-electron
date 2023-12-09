@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Button, Link, Stack } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Button } from '@mui/material';
 import filesize from 'filesize';
 import { useFiles } from './useFiles';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import LoadingButton from '@mui/lab/LoadingButton';
 import { useSnackbar } from 'notistack';
 import { File } from '@src/common/interfaces/file.interface';
 

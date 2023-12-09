@@ -10,6 +10,7 @@ export abstract class BaseCraw {
   protected updateCount = 0;
   protected startTime = 0;
   protected endTime = 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected errors: any[] = []; // 错误列表
 
   protected readonly queue = new PQueue({

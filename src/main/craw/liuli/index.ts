@@ -9,7 +9,6 @@ import { ArticleEntity } from '@src/main/entities/article.entity';
 import { store } from '@src/main/store';
 import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from '@src/common/constants';
 import { windowManager } from '@src/main/window';
-import { ipcMain } from 'electron';
 
 type ListData = Pick<
   Article,
@@ -61,7 +60,7 @@ export class ArticleCraw extends BaseCraw {
   parseDetail = async ({ uri, data: listData }: ListHref) => {
     const { SKIP_EMPTY_UIDS } = this.config;
     logger.info(`fetching detail ${uri}`);
-    const $ = await get$(uri, this.config.PROXY);
+    const $ = await get$(uri);
     const path = parseURL(uri)?.path;
     let raw_id;
     if (Array.isArray(path)) {
@@ -129,7 +128,7 @@ export class ArticleCraw extends BaseCraw {
   parseList = async (link: string) => {
     const { SKIP_ADS } = this.config;
     logger.info(`fetching ${link}...`);
-    const $ = await get$(link, this.config.PROXY);
+    const $ = await get$(link);
 
     const hrefs: ListHref[] = [];
     $('article.post').each((_, el) => {
@@ -207,7 +206,7 @@ export class ArticleCraw extends BaseCraw {
       return 0;
     }
     const firstPage = this.getPageLink(1);
-    const $ = await get$(firstPage, this.config.PROXY);
+    const $ = await get$(firstPage);
     const pagesText = $('#content .pages').text();
     const [, total] = pagesText.match(/共 (\d+) 页/) || ['0', '0'];
     const oldTotal = $('#wp_page_numbers .first_last_page > a').text();

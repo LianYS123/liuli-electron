@@ -2,7 +2,7 @@ import { IconButton, ListItemText, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, { useState } from 'react';
 
-export interface ActionItem<T = any> {
+export interface ActionItem<T = unknown> {
   text: string;
   onClick: (event?: T) => void;
 }

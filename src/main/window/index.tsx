@@ -1,5 +1,4 @@
 import { BrowserWindow } from 'electron';
-import path from 'path';
 
 class WindowManager {
   mainWindow: BrowserWindow;

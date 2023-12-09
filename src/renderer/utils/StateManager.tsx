@@ -54,6 +54,7 @@ export class StateManager<State> {
     );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hoc = <T extends React.ComponentType<any>>(Comp: T) => {
     return (props: GetProps<T>) => {
       return (

@@ -9,9 +9,9 @@ import {
 import { storeAPI } from '@src/common/api/store';
 import { CrawConfig } from '@src/main/store/types';
 import { useDebounceFn, useMount } from 'ahooks';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from '@src/common/constants';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { articleAPI } from '@src/common/api/article';
 import { useSnackbar } from 'notistack';
 import { articleCrawAPI } from '@src/common/api/articleCraw';

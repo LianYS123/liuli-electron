@@ -4,7 +4,6 @@ import { Close } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import classNames from 'classnames';
 import { BrowserTabItem } from '@src/renderer/types/browser';
-import { Loading } from '@src/renderer/components/Loading';
 
 export const TabItem: React.FC<{
   tabItem: BrowserTabItem;
@@ -12,7 +11,7 @@ export const TabItem: React.FC<{
   onClick: (tab: BrowserTabItem) => void;
   onClose: (tab: BrowserTabItem) => void;
 }> = ({ onClose, isActive, tabItem, onClick }) => {
-  const { key, title, url, icon, loading } = tabItem;
+  const { title, icon } = tabItem;
   return (
     <section
       onClick={() => {
@@ -20,9 +19,6 @@ export const TabItem: React.FC<{
       }}
       className={classNames(styles.tab, { [styles.active]: isActive })}
     >
-      {/* <div hidden={!loading} className={styles.loading}>
-        <Loading />
-      </div> */}
       <div className={styles.favicon}>{icon}</div>
       <div title={title} className={styles.title}>
         {title}

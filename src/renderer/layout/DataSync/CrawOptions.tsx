@@ -22,14 +22,13 @@ export const CrawOptions: React.FC = () => {
     },
   });
 
-  const {
-    data: crawing = 0,
-    isIdle,
-    isStale,
-    isError,
-  } = useQuery('ArticleCrawPending', () => articleCrawAPI.pending(), {
-    refetchInterval: 1000,
-  });
+  const { data: crawing = 0, isIdle } = useQuery(
+    'ArticleCrawPending',
+    () => articleCrawAPI.pending(),
+    {
+      refetchInterval: 1000,
+    },
+  );
 
   const { run: handleCraw } = useDebounceFn(craw, { wait: 100 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './style.module.css';
-import { Add, Close, Minimize, Remove } from '@mui/icons-material';
+import { Add, Close, Remove } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { TabItem } from './TabItem';
 import { DefaultMaxTabs, browserManager } from '../../BrowserManager';

@@ -29,7 +29,7 @@ export const Text: React.FC<ITextProps> = ({
         cursor: 'pointer',
         color: blue[500],
       }}
-      onClick={_ => {
+      onClick={() => {
         if (typeof children === 'string') {
           copy(children);
           enqueueSnackbar('复制成功');

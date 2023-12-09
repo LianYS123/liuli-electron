@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserHeader } from './components/BrowserHeader';
 import { browserManager } from './BrowserManager';
 import { BrowserContent } from './components/BrowserContent';
-import { Dialog, DialogContent } from '@mui/material';
+import { Dialog } from '@mui/material';
 
 const BrowserInner: React.FC = () => {
   const { keepMounted, open } = browserManager.browserStateManager.useState();
