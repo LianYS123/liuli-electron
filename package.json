@@ -49,6 +49,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.25.0",
     "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.3.0",

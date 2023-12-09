@@ -129,7 +129,7 @@ export const Resource: React.FC<ResourceProps> = ({
           {!!files.length && (
             <Descriptions.Item label={'关联文件'}>
               {files?.map(file => (
-                <Tooltip title={file.name}>
+                <Tooltip key={file.id} title={file.name}>
                   <Chip
                     color="primary"
                     sx={{
