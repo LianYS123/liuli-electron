@@ -4,39 +4,17 @@ import React, { useState } from "react";
 import { MagnetLinks } from "./MagnetLinks";
 import { useQuery } from "react-query";
 import { articleAPI } from "@src/common/api/article";
-import { useNavigate } from "react-router-dom";
-import { routers } from "@src/renderer/config";
 import { historyAPI } from "@src/common/api/history";
 import { shell } from "electron";
 import { ActionStatus } from "@src/common/constants";
 import { useSnackbar } from "notistack";
 import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
-import qs from "query-string";
-import { chooseFiles, chooseMedia } from "@src/renderer/utils";
+import { chooseFiles } from "@src/renderer/utils";
 import { AddWebResourceDialog } from "./AddWebResourceDialog";
 import { ArticleTags } from "./ArticleTags";
 import { formatTimeDetail } from "@src/renderer/utils/time";
-import {
-  SEARCH_SETTINGS_KEY,
-  SearchConfig,
-  defaultSearchConfig,
-} from "@src/renderer/layout/Settings/SearchSetting";
-
-function parseWebSource(source?: string): string[] {
-  if (!source) {
-    return [];
-  }
-  try {
-    const res = JSON.parse(source);
-    if (Array.isArray(res)) {
-      return res as string[];
-    }
-  } catch {
-    return [];
-  }
-  return [];
-}
+import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
 
 interface ResourceProps {
   open: boolean;
@@ -44,44 +22,8 @@ interface ResourceProps {
   title: string;
   articleId: number;
   handleTagClick: (tag: string) => void;
-  openInBrowser: (url: string) => void;
+  handleSearch: () => void;
 }
-
-export const useSearchHandler = ({
-  onSearch,
-  searchValue,
-}: {
-  searchValue: string;
-  onSearch: (value: string) => void;
-}) => {
-  const { enqueueSnackbar } = useSnackbar();
-  const handleSearch = () => {
-    const config: SearchConfig = JSON.parse(
-      localStorage.getItem(SEARCH_SETTINGS_KEY) ||
-        JSON.stringify(defaultSearchConfig)
-    );
-
-    const res = /(\[.*?\])?(.*)/.exec(searchValue);
-    if (!res) {
-      enqueueSnackbar("关键词异常");
-    }
-    let [, , search] = res;
-    if (!search) {
-      enqueueSnackbar("关键词异常");
-    }
-    search = search.trim();
-    if (config.limit) {
-      search = search.slice(0, config.limit);
-    }
-    if (config.site) {
-      search = `site:${config.site} ${search}`;
-    }
-    console.log(config, search);
-    const src = `https://www.google.com/search?q=${encodeURIComponent(search)}`;
-    onSearch(src);
-  };
-  return handleSearch;
-};
 
 export const Resource: React.FC<ResourceProps> = ({
   articleId,
@@ -89,7 +31,7 @@ export const Resource: React.FC<ResourceProps> = ({
   onClose,
   title,
   handleTagClick,
-  openInBrowser,
+  handleSearch
 }) => {
   const [showWebSourceDialog, setShowWebSourceDialog] = useState(false);
   const { data: article, refetch } = useQuery(
@@ -105,14 +47,13 @@ export const Resource: React.FC<ResourceProps> = ({
     content,
     rating_score,
     time,
-    href,
+    href
   } = article || {};
-  const nav = useNavigate();
   const [fileToRemove, setFileToRemove] = useState<File>(null);
-  const sources = parseWebSource(web_sources);
+  const sources: string[] = JSON.parse(web_sources || "[]");
 
   async function handleConnect() {
-    const files = await chooseFiles()
+    const files = await chooseFiles();
     if (!files.length) {
       return;
     }
@@ -120,7 +61,7 @@ export const Resource: React.FC<ResourceProps> = ({
       try {
         await articleAPI.createAndConnectFile({
           articleId,
-          fromPath: media,
+          fromPath: media
         });
       } catch (e) {
         enqueueSnackbar(e?.message);
@@ -134,11 +75,6 @@ export const Resource: React.FC<ResourceProps> = ({
     setShowWebSourceDialog(true);
   };
 
-  const handleSearch = useSearchHandler({
-    searchValue: title,
-    onSearch: openInBrowser,
-  });
-
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box sx={{ minWidth: 400, maxWidth: 400, padding: 4 }}>
@@ -150,7 +86,7 @@ export const Resource: React.FC<ResourceProps> = ({
             添加网络资源
           </Button>
           <Button variant="outlined" onClick={handleSearch}>
-            google 搜索
+            搜索
           </Button>
         </Box>
         <Descriptions bordered extra={<></>} column={1}>
@@ -163,19 +99,21 @@ export const Resource: React.FC<ResourceProps> = ({
                   <Tooltip title={source} key={source}>
                     <Chip
                       onClick={async () => {
-                        await openInBrowser(source);
+                        await browserManager.openBrowser({
+                          url: source
+                        });
                       }}
                       onDelete={async () => {
                         await articleAPI.removeSource({
                           source,
-                          articleId: article.id,
+                          articleId: article.id
                         });
                         refetch();
                       }}
                       sx={{
                         maxWidth: "130px",
                         overflow: "hidden",
-                        textOverflow: "ellipsis",
+                        textOverflow: "ellipsis"
                       }}
                       variant="outlined"
                       color="secondary"
@@ -196,37 +134,24 @@ export const Resource: React.FC<ResourceProps> = ({
                     sx={{
                       maxWidth: "130px",
                       overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      textOverflow: "ellipsis"
                     }}
                     onClick={async () => {
-                      console.log(file);
-                      if (file.mimetype.includes("image")) {
-                        // setPreviewDir(file.directory);
-                        nav({
-                          pathname: routers.IMAGES,
-                          search: qs.stringify({
-                            dir: file.directory,
-                            articleId: article.id,
-                          }),
-                        });
-                        return;
-                      }
-                      // setFile(file);
                       const error = await shell.openPath(file.filePath);
                       if (error) {
                         historyAPI.addOpenFile({
                           articleId,
                           fileId: file.id,
                           message: error,
-                          status: ActionStatus.Error,
+                          status: ActionStatus.Error
                         });
                         enqueueSnackbar(error, {
-                          variant: "error",
+                          variant: "error"
                         });
                       } else {
                         historyAPI.addOpenFile({
                           articleId,
-                          fileId: file.id,
+                          fileId: file.id
                         });
                       }
                     }}
@@ -257,7 +182,9 @@ export const Resource: React.FC<ResourceProps> = ({
             <Link
               onClick={(ev) => {
                 ev.preventDefault();
-                openInBrowser(href);
+                browserManager.openBrowser({
+                  url: href
+                });
                 historyAPI.addOpenDetail({ articleId });
               }}
               target="_blank"

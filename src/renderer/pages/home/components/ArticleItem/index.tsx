@@ -11,7 +11,7 @@ import {
   Link,
   Rating,
   Tooltip,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Typography as AntdTypography } from "antd";
 import React, { useState } from "react";
@@ -21,15 +21,16 @@ import { ArticleItemProps } from "@src/renderer/services/types";
 import { useSnackbar } from "notistack";
 import { historyAPI } from "@src/common/api/history";
 import { ArticleTags } from "./ArticleTags";
-import { Resource, useSearchHandler } from "./Resource";
+import { Resource } from "./Resource";
 import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
 import { articleAPI } from "@src/common/api/article";
+import { searchInBrowser } from "@src/renderer/utils/search";
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
   handleTagClick,
   refetch,
-  extraActions = [],
+  extraActions = []
 }) => {
   const {
     id,
@@ -41,63 +42,60 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     content,
     rating_count,
     rating_score,
-    cat,
+    cat
   } = article;
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [resourceDrawerVisible, setResourceDrawerVisible] = useState(false);
 
-  const openBrowser = (url: string) => {
-    browserManager.openBrowser({
-      url,
-      actions: [
-        {
-          text: "添加为网络资源",
-          onClick: async ({ tab }) => {
-            await articleAPI.addSource({ articleId: id, source: tab.url });
-            enqueueSnackbar("操作成功");
-            refetch();
-          },
-        },
-      ],
-    });
-  };
-
-
   const handleAddToQueue = async () => {
     await historyAPI.addWatchLater({ articleId: id });
     enqueueSnackbar("添加成功");
   };
 
-  const handleSearch = useSearchHandler({
-    searchValue: title,
-    onSearch: openBrowser,
-  });
+  const handleSearch = () => {
+    searchInBrowser(title, {
+      tab: {
+        actions: [
+          {
+            text: "添加为网络资源",
+            onClick: async ({ tab }) => {
+              await articleAPI.addSource({ articleId: id, source: tab.url });
+              enqueueSnackbar("操作成功");
+              refetch();
+            }
+          }
+        ]
+      }
+    });
+  };
 
   function handleOpenResourceDrawer() {
     setResourceDrawerVisible(true);
   }
 
   const handleOpenDetail = () => {
-    openBrowser(href);
+    browserManager.openBrowser({
+      url: href
+    });
     historyAPI.addOpenDetail({ articleId: id });
   };
 
   const actions = [
     {
       text: "稍后观看",
-      onClick: handleAddToQueue,
+      onClick: handleAddToQueue
     },
     {
-      text: "google搜索",
-      onClick: handleSearch,
+      text: "搜索",
+      onClick: handleSearch
     },
     {
       text: "详情",
-      onClick: handleOpenResourceDrawer,
+      onClick: handleOpenResourceDrawer
     },
-    ...extraActions,
+    ...extraActions
   ];
 
   return (
@@ -152,7 +150,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
       </CardContent>
 
       <Resource
-        openInBrowser={openBrowser}
+        handleSearch={handleSearch}
         handleTagClick={handleTagClick}
         title={title}
         open={resourceDrawerVisible}
