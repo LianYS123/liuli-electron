@@ -1,10 +1,10 @@
-import React from "react";
-import { useMount } from "react-use";
-import { useSelector } from "react-redux";
-import { createTheme, ThemeProvider } from "@mui/material";
-import { RootState } from "../models";
-import { useTheme } from "../hooks/useTheme";
-import { ConfigProvider, theme as antdtheme } from "antd";
+import React from 'react';
+import { useMount } from 'react-use';
+import { useSelector } from 'react-redux';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { RootState } from '../models';
+import { useTheme } from '../hooks/useTheme';
+import { ConfigProvider, theme as antdtheme } from 'antd';
 
 const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -14,7 +14,7 @@ const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // 初始化主题
   useMount(() => {
-    const t = localStorage.getItem("theme");
+    const t = localStorage.getItem('theme');
     if (t) {
       switchTo(t);
     }
@@ -30,7 +30,7 @@ const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       <ThemeProvider
         theme={createTheme({
           palette: {
-            mode: theme as "dark" | "light", // Switching the dark mode on is a single property value change.
+            mode: theme as 'dark' | 'light', // Switching the dark mode on is a single property value change.
           },
         })}
       >

@@ -1,16 +1,16 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions, Stack } from "@mui/material";
-import { History } from "@src/common/interfaces/history.interface";
-import { formatTimeDetail } from "@src/renderer/utils/time";
-import { useDispatch } from "react-redux";
-import { appSlice } from "@src/renderer/models/app";
-import { historyAPI } from "@src/common/api/history";
-import { Image } from "antd";
-import { useSnackbar } from "notistack";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions, Stack } from '@mui/material';
+import { History } from '@src/common/interfaces/history.interface';
+import { formatTimeDetail } from '@src/renderer/utils/time';
+import { useDispatch } from 'react-redux';
+import { appSlice } from '@src/renderer/models/app';
+import { historyAPI } from '@src/common/api/history';
+import { Image } from 'antd';
+import { useSnackbar } from 'notistack';
 
 interface Props {
   list: History[];
@@ -23,15 +23,15 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
   };
   const { enqueueSnackbar } = useSnackbar();
 
-  const [previewSource, setPreviewSource] = React.useState("");
+  const [previewSource, setPreviewSource] = React.useState('');
 
   return (
     <Stack spacing={2}>
       {list
-        .filter((it) => it.source)
-        .map((item) => {
+        .filter(it => it.source)
+        .map(item => {
           return (
-            <Card key={item.id} sx={{ maxWidth: "100%" }}>
+            <Card key={item.id} sx={{ maxWidth: '100%' }}>
               <CardActionArea
                 onClick={() => {
                   setPreviewSource(item.source);
@@ -41,9 +41,9 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
                 <CardContent>
                   <Typography
                     sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap"
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
                     }}
                     gutterBottom
                     variant="subtitle1"
@@ -63,7 +63,7 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
                     handleSetWallpaper(item.source);
                     await historyAPI.addSetWallpaper({
                       articleId: item.article.id,
-                      source: item.source
+                      source: item.source,
                     });
                     // refetch();
                   }}
@@ -75,7 +75,7 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
                 <Button
                   onClick={async () => {
                     await historyAPI.delete(item.id);
-                    enqueueSnackbar("已删除");
+                    enqueueSnackbar('已删除');
                     refetch();
                   }}
                 >
@@ -87,16 +87,16 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
         })}
       {previewSource && (
         <Image
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           src={previewSource || undefined}
           preview={{
             visible: !!previewSource,
             zIndex: 9999,
-            onVisibleChange: (v) => {
+            onVisibleChange: v => {
               if (!v) {
-                setPreviewSource("");
+                setPreviewSource('');
               }
-            }
+            },
           }}
         />
       )}

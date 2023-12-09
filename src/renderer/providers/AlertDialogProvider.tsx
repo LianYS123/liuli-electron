@@ -1,12 +1,12 @@
-import React, { createContext, useState, useContext } from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { noop } from "lodash";
+import React, { createContext, useState, useContext } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { noop } from 'lodash';
 
 interface IAlertProps {
   title?: string;
@@ -28,7 +28,7 @@ const Context = createContext<IAlertContext>({
   visible: false,
   props: {}, // {title, content, okText, cancelText, onOk, onCancel...}
   open: noop,
-  close: noop
+  close: noop,
 });
 
 export const useAlertDialog = () => {
@@ -42,14 +42,14 @@ const AlertDialogProvider: React.FC<{
   const [props, setProps] = useState<IAlertProps>({});
   const [loading, setLoading] = useState(false);
   const {
-    title = "提示",
-    content = "",
-    okText = "确认",
-    cancleText = "取消",
+    title = '提示',
+    content = '',
+    okText = '确认',
+    cancleText = '取消',
     onOk = () => {
       //
     },
-    onCancel = noop
+    onCancel = noop,
   } = props;
   const open = (ps = {}) => {
     setProps(ps);
@@ -64,7 +64,7 @@ const AlertDialogProvider: React.FC<{
       return;
     }
     const res = onOk();
-    if (res && typeof res.then === "function") {
+    if (res && typeof res.then === 'function') {
       setLoading(true);
       try {
         await res;

@@ -1,8 +1,8 @@
-import { Box, Stack, TextField } from "@mui/material";
-import { useLocalStorageState } from "ahooks";
-import React from "react";
+import { Box, Stack, TextField } from '@mui/material';
+import { useLocalStorageState } from 'ahooks';
+import React from 'react';
 
-export const SEARCH_SETTINGS_KEY = "SEARCH_SETTINGS_KEY";
+export const SEARCH_SETTINGS_KEY = 'SEARCH_SETTINGS_KEY';
 
 export interface SearchConfig {
   site?: string;
@@ -18,15 +18,15 @@ export const SearchSetting: React.FC = () => {
     SEARCH_SETTINGS_KEY,
     {
       defaultValue: defaultSearchConfig,
-    }
+    },
   );
   const setState = (state: Partial<SearchConfig>) => {
-    _setState((s) => ({ ...s, ...state }));
+    _setState(s => ({ ...s, ...state }));
   };
   return (
     <Box
       sx={{
-        width: "80%",
+        width: '80%',
         ml: 1,
         // margin: "0 auto",
       }}
@@ -35,7 +35,7 @@ export const SearchSetting: React.FC = () => {
         <TextField
           type="number"
           value={limit}
-          onChange={(ev) => {
+          onChange={ev => {
             const value = ev.target.value;
             setState({ limit: Number(value) });
           }}
@@ -45,7 +45,7 @@ export const SearchSetting: React.FC = () => {
         />
         <TextField
           value={site}
-          onChange={(ev) => {
+          onChange={ev => {
             const value = ev.target.value;
             setState({ site: value });
           }}

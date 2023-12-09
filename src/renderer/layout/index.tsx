@@ -5,8 +5,8 @@ import {
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
-} from "@mui/material";
-import React, { useState } from "react";
+} from '@mui/material';
+import React, { useState } from 'react';
 import {
   ArrowBack,
   ArrowForward,
@@ -18,18 +18,18 @@ import {
   Settings as SettingsIcon,
   Sync,
   Web,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../models";
-import { DataSync } from "./DataSync";
-import { useTheme } from "../hooks/useTheme";
-import { History } from "./History";
-import { scrollToTop } from "../utils";
-import { Settings } from "./Settings";
-import { browserManager } from "../components/Browser/BrowserManager";
+} from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../models';
+import { DataSync } from './DataSync';
+import { useTheme } from '../hooks/useTheme';
+import { History } from './History';
+import { scrollToTop } from '../utils';
+import { Settings } from './Settings';
+import { browserManager } from '../components/Browser/BrowserManager';
 
-const isWin = process.platform === "win32";
+const isWin = process.platform === 'win32';
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -45,20 +45,20 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   return (
     <Box
       sx={{
-        height: "100%",
+        height: '100%',
         backgroundImage: wallpaper
-          ? `url('${isWin ? wallpaper.replaceAll("\\", "\\\\") : wallpaper}')`
+          ? `url('${isWin ? wallpaper.replaceAll('\\', '\\\\') : wallpaper}')`
           : undefined,
-        overflow: "auto",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
+        overflow: 'auto',
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
       }}
     >
       <Container
         id="app-container"
         sx={{
-          height: "100%",
-          overflow: "auto",
+          height: '100%',
+          overflow: 'auto',
         }}
       >
         {/* <AppHeader /> */}
@@ -69,103 +69,103 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
             setOpen(!open);
           }}
           onOpen={() => setOpen(true)}
-          sx={{ position: "fixed", bottom: 30, right: 30 }}
+          sx={{ position: 'fixed', bottom: 30, right: 30 }}
           icon={<SpeedDialIcon />}
-          ariaLabel={""}
+          ariaLabel={''}
         >
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               ev.stopPropagation();
               setSettingsDrawerVisible(true);
             }}
             icon={<SettingsIcon />}
-            tooltipTitle={"设置"}
+            tooltipTitle={'设置'}
           />
 
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               ev.stopPropagation();
               browserManager.openBrowser();
             }}
             icon={<Web />}
-            tooltipTitle={"浏览器"}
+            tooltipTitle={'浏览器'}
           />
 
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               toggleTheme();
               ev.stopPropagation();
             }}
             icon={isDark ? <LightMode /> : <DarkMode />}
-            tooltipTitle={"切换主题"}
+            tooltipTitle={'切换主题'}
           />
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               setHistoryDrawerVisible(true);
               ev.stopPropagation();
             }}
             icon={<HistoryOutlined />}
-            tooltipTitle={"历史"}
+            tooltipTitle={'历史'}
           />
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               setDataSyncDrawerVisible(true);
               ev.stopPropagation();
             }}
             icon={<Sync />}
-            tooltipTitle={"数据同步"}
+            tooltipTitle={'数据同步'}
           />
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               ev.stopPropagation();
               location.reload();
             }}
             icon={<Refresh />}
-            tooltipTitle={"刷新"}
+            tooltipTitle={'刷新'}
           />
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               ev.stopPropagation();
               nav(1);
             }}
             icon={<ArrowForward />}
-            tooltipTitle={"前进"}
+            tooltipTitle={'前进'}
           />
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               ev.stopPropagation();
               nav(-1);
             }}
             icon={<ArrowBack />}
-            tooltipTitle={"后退"}
+            tooltipTitle={'后退'}
           />
           <SpeedDialAction
-            onClick={(ev) => {
+            onClick={ev => {
               ev.stopPropagation();
               scrollToTop();
             }}
             icon={<KeyboardArrowUp />}
-            tooltipTitle={"回到顶部"}
+            tooltipTitle={'回到顶部'}
           />
         </SpeedDial>
 
         <Drawer
           ModalProps={{ keepMounted: true }}
-          anchor={"right"}
+          anchor={'right'}
           open={historyDrawerVisible}
           onClose={() => setHistoryDrawerVisible(false)}
         >
           <History enabled={historyDrawerVisible} />
         </Drawer>
         <Drawer
-          anchor={"right"}
+          anchor={'right'}
           open={dataSyncDrawerVisible}
           onClose={() => setDataSyncDrawerVisible(false)}
         >
           <DataSync />
         </Drawer>
         <Drawer
-          anchor={"right"}
+          anchor={'right'}
           open={settingsDrawerVisible}
           onClose={() => setSettingsDrawerVisible(false)}
         >

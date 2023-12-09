@@ -7,14 +7,14 @@ import {
   DialogContentText,
   DialogProps,
   DialogTitle,
-  FormControlLabel
-} from "@mui/material";
-import { articleAPI } from "@src/common/api/article";
-import { fileAPI } from "@src/common/api/file";
-import { Article } from "@src/common/interfaces/article.interface";
-import { File } from "@src/common/interfaces/file.interface";
-import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+  FormControlLabel,
+} from '@mui/material';
+import { articleAPI } from '@src/common/api/article';
+import { fileAPI } from '@src/common/api/file';
+import { Article } from '@src/common/interfaces/article.interface';
+import { File } from '@src/common/interfaces/file.interface';
+import { useSnackbar } from 'notistack';
+import React, { useState } from 'react';
 
 interface IProps extends DialogProps {
   file: File;
@@ -60,16 +60,19 @@ export const UnConnectDialog: React.FC<IProps> = ({
         </Button>
         <Button
           onClick={async () => {
-            await articleAPI.removeFile({ fileId: file.id, articleId: article.id });
+            await articleAPI.removeFile({
+              fileId: file.id,
+              articleId: article.id,
+            });
             if (removeSourceFlag) {
               await fileAPI.deleteFile({
                 fileId: file.id,
-                removeSource: true
+                removeSource: true,
               });
             }
             dialogProps.onClose();
-            enqueueSnackbar("操作成功", {
-              variant: "success"
+            enqueueSnackbar('操作成功', {
+              variant: 'success',
             });
             refetch();
           }}

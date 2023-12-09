@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./style.module.css";
+import React from 'react';
+import styles from './style.module.css';
 import {
   Add,
   ArrowBack,
@@ -8,11 +8,11 @@ import {
   Refresh,
   StarOutline,
   Menu as MenuIcon,
-} from "@mui/icons-material";
-import { IconButton, InputBase, Tooltip } from "@mui/material";
-import { BrowserTabItem } from "@src/renderer/types/browser";
-import { Loading } from "@src/renderer/components/Loading";
-import { ActionMenuButton } from "@src/renderer/components/action/ActionMenuButton";
+} from '@mui/icons-material';
+import { IconButton, InputBase, Tooltip } from '@mui/material';
+import { BrowserTabItem } from '@src/renderer/types/browser';
+import { Loading } from '@src/renderer/components/Loading';
+import { ActionMenuButton } from '@src/renderer/components/action/ActionMenuButton';
 
 interface TopBarProps {
   tab: BrowserTabItem;
@@ -37,7 +37,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               onBack();
             }}
             sx={{
-              color: (theme) => theme.palette.grey[500],
+              color: theme => theme.palette.grey[500],
             }}
           >
             <ArrowBack />
@@ -50,7 +50,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               onForward();
             }}
             sx={{
-              color: (theme) => theme.palette.grey[500],
+              color: theme => theme.palette.grey[500],
             }}
           >
             <ArrowForward />
@@ -61,11 +61,11 @@ export const TopBar: React.FC<TopBarProps> = ({
           {tab.loading ? (
             <div
               style={{
-                display: "inline-flex",
+                display: 'inline-flex',
                 width: 40,
                 height: 40,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <Loading style={{ fontSize: 18 }} />
@@ -76,7 +76,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 onRefresh();
               }}
               sx={{
-                color: (theme) => theme.palette.grey[500],
+                color: theme => theme.palette.grey[500],
               }}
             >
               <Refresh />
@@ -86,7 +86,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       </div>
       <div className={styles.inputBar}>
         <div className={styles.inputPrefix}>
-          <Lock sx={{ width: "12px", height: "12px" }} />
+          <Lock sx={{ width: '12px', height: '12px' }} />
         </div>
         <div className={styles.inputBox}>
           <InputBase
@@ -97,14 +97,14 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
         <div className={styles.inputSuffix}>
           <IconButton>
-            <StarOutline sx={{ width: "16px", height: "16px" }} />
+            <StarOutline sx={{ width: '16px', height: '16px' }} />
           </IconButton>
         </div>
       </div>
       {!!tab.actions?.length && (
         <div className={styles.bottomRightActions}>
           <ActionMenuButton
-            actions={tab.actions.map((it) => ({
+            actions={tab.actions.map(it => ({
               ...it,
               onClick: () => {
                 it.onClick({ tab });

@@ -1,20 +1,20 @@
-import { Box, Button, Chip, Drawer, Link, Tooltip } from "@mui/material";
-import { Descriptions } from "antd";
-import React, { useState } from "react";
-import { MagnetLinks } from "./MagnetLinks";
-import { useQuery } from "react-query";
-import { articleAPI } from "@src/common/api/article";
-import { historyAPI } from "@src/common/api/history";
-import { shell } from "electron";
-import { ActionStatus } from "@src/common/constants";
-import { useSnackbar } from "notistack";
-import { File } from "@src/common/interfaces/file.interface";
-import { UnConnectDialog } from "./UnConnectDialog";
-import { chooseFiles } from "@src/renderer/utils";
-import { AddWebResourceDialog } from "./AddWebResourceDialog";
-import { ArticleTags } from "./ArticleTags";
-import { formatTimeDetail } from "@src/renderer/utils/time";
-import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
+import { Box, Button, Chip, Drawer, Link, Tooltip } from '@mui/material';
+import { Descriptions } from 'antd';
+import React, { useState } from 'react';
+import { MagnetLinks } from './MagnetLinks';
+import { useQuery } from 'react-query';
+import { articleAPI } from '@src/common/api/article';
+import { historyAPI } from '@src/common/api/history';
+import { shell } from 'electron';
+import { ActionStatus } from '@src/common/constants';
+import { useSnackbar } from 'notistack';
+import { File } from '@src/common/interfaces/file.interface';
+import { UnConnectDialog } from './UnConnectDialog';
+import { chooseFiles } from '@src/renderer/utils';
+import { AddWebResourceDialog } from './AddWebResourceDialog';
+import { ArticleTags } from './ArticleTags';
+import { formatTimeDetail } from '@src/renderer/utils/time';
+import { browserManager } from '@src/renderer/components/Browser/BrowserManager';
 
 interface ResourceProps {
   open: boolean;
@@ -31,13 +31,13 @@ export const Resource: React.FC<ResourceProps> = ({
   onClose,
   title,
   handleTagClick,
-  handleSearch
+  handleSearch,
 }) => {
   const [showWebSourceDialog, setShowWebSourceDialog] = useState(false);
   const { data: article, refetch } = useQuery(
-    ["get-article-detail", articleId, open],
+    ['get-article-detail', articleId, open],
     () => articleAPI.getArticleDetail({ articleId }),
-    { enabled: open }
+    { enabled: open },
   );
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -47,21 +47,21 @@ export const Resource: React.FC<ResourceProps> = ({
     content,
     rating_score,
     time,
-    href
+    href,
   } = article || {};
   const [fileToRemove, setFileToRemove] = useState<File>(null);
-  const sources: string[] = JSON.parse(web_sources || "[]");
+  const sources: string[] = JSON.parse(web_sources || '[]');
 
   async function handleConnect() {
     const files = await chooseFiles();
     if (!files.length) {
       return;
     }
-    const pros = files.map(async (media) => {
+    const pros = files.map(async media => {
       try {
         await articleAPI.createAndConnectFile({
           articleId,
-          fromPath: media
+          fromPath: media,
         });
       } catch (e) {
         enqueueSnackbar(e?.message);
@@ -78,7 +78,7 @@ export const Resource: React.FC<ResourceProps> = ({
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box sx={{ minWidth: 400, maxWidth: 400, padding: 4 }}>
-        <Box sx={{ display: "flex", gap: 1, mb: 1, flexWrap: "wrap" }}>
+        <Box sx={{ display: 'flex', gap: 1, mb: 1, flexWrap: 'wrap' }}>
           <Button variant="outlined" onClick={handleConnect}>
             选择关联文件
           </Button>
@@ -90,30 +90,30 @@ export const Resource: React.FC<ResourceProps> = ({
           </Button>
         </Box>
         <Descriptions bordered extra={<></>} column={1}>
-          <Descriptions.Item label={"标题"}>{title}</Descriptions.Item>
+          <Descriptions.Item label={'标题'}>{title}</Descriptions.Item>
 
           {!!sources.length && (
-            <Descriptions.Item label={"网络资源"}>
+            <Descriptions.Item label={'网络资源'}>
               <Box display="flex" gap="4px" flexWrap="wrap">
-                {sources?.map((source) => (
+                {sources?.map(source => (
                   <Tooltip title={source} key={source}>
                     <Chip
                       onClick={async () => {
                         await browserManager.openBrowser({
-                          url: source
+                          url: source,
                         });
                       }}
                       onDelete={async () => {
                         await articleAPI.removeSource({
                           source,
-                          articleId: article.id
+                          articleId: article.id,
                         });
                         refetch();
                       }}
                       sx={{
-                        maxWidth: "130px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis"
+                        maxWidth: '130px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                       variant="outlined"
                       color="secondary"
@@ -126,15 +126,15 @@ export const Resource: React.FC<ResourceProps> = ({
           )}
 
           {!!files.length && (
-            <Descriptions.Item label={"关联文件"}>
-              {files?.map((file) => (
+            <Descriptions.Item label={'关联文件'}>
+              {files?.map(file => (
                 <Tooltip title={file.name}>
                   <Chip
                     color="primary"
                     sx={{
-                      maxWidth: "130px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
+                      maxWidth: '130px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                     onClick={async () => {
                       const error = await shell.openPath(file.filePath);
@@ -143,15 +143,15 @@ export const Resource: React.FC<ResourceProps> = ({
                           articleId,
                           fileId: file.id,
                           message: error,
-                          status: ActionStatus.Error
+                          status: ActionStatus.Error,
                         });
                         enqueueSnackbar(error, {
-                          variant: "error"
+                          variant: 'error',
                         });
                       } else {
                         historyAPI.addOpenFile({
                           articleId,
-                          fileId: file.id
+                          fileId: file.id,
                         });
                       }
                     }}
@@ -169,21 +169,21 @@ export const Resource: React.FC<ResourceProps> = ({
           )}
 
           {article?.uid && (
-            <Descriptions.Item label={"磁力链接"}>
+            <Descriptions.Item label={'磁力链接'}>
               <MagnetLinks articleId={articleId} uid={article?.uid} />
             </Descriptions.Item>
           )}
 
-          <Descriptions.Item label={"评分"}>{rating_score}</Descriptions.Item>
-          <Descriptions.Item label={"发布时间"}>
+          <Descriptions.Item label={'评分'}>{rating_score}</Descriptions.Item>
+          <Descriptions.Item label={'发布时间'}>
             {formatTimeDetail(time)}
           </Descriptions.Item>
-          <Descriptions.Item label={"源地址"}>
+          <Descriptions.Item label={'源地址'}>
             <Link
-              onClick={(ev) => {
+              onClick={ev => {
                 ev.preventDefault();
                 browserManager.openBrowser({
-                  url: href
+                  url: href,
                 });
                 historyAPI.addOpenDetail({ articleId });
               }}
@@ -193,11 +193,11 @@ export const Resource: React.FC<ResourceProps> = ({
               {href}
             </Link>
           </Descriptions.Item>
-          <Descriptions.Item label={"简介"}>{content}</Descriptions.Item>
+          <Descriptions.Item label={'简介'}>{content}</Descriptions.Item>
 
-          <Descriptions.Item label={"标签"}>
+          <Descriptions.Item label={'标签'}>
             <ArticleTags
-              handleTagClick={(tag) => {
+              handleTagClick={tag => {
                 handleTagClick(tag);
                 onClose();
               }}

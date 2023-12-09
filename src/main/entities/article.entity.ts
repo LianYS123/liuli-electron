@@ -1,5 +1,5 @@
-import { Article } from "@src/common/interfaces/article.interface";
-import { File } from "@src/common/interfaces/file.interface";
+import { Article } from '@src/common/interfaces/article.interface';
+import { File } from '@src/common/interfaces/file.interface';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,14 +8,14 @@ import {
   Unique,
   ManyToMany,
   JoinTable,
-  Generated
-} from "typeorm";
-import { FileEntity } from "./file.entity";
+  Generated,
+} from 'typeorm';
+import { FileEntity } from './file.entity';
 
 @Entity({
-  name: "article",
+  name: 'article',
 })
-@Unique(["raw_id"])
+@Unique(['raw_id'])
 export class ArticleEntity extends BaseEntity implements Article {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,7 +28,7 @@ export class ArticleEntity extends BaseEntity implements Article {
   title: string;
 
   @Column({
-    type: "datetime"
+    type: 'datetime',
   })
   time: Date;
 
@@ -36,7 +36,7 @@ export class ArticleEntity extends BaseEntity implements Article {
   href: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   img_src?: string;
 
@@ -44,7 +44,7 @@ export class ArticleEntity extends BaseEntity implements Article {
   tags: string;
 
   @Column({
-    type: "text"
+    type: 'text',
   })
   content: string;
 
@@ -55,22 +55,22 @@ export class ArticleEntity extends BaseEntity implements Article {
   entry_content: string;
 
   @Column({
-    type: "int"
+    type: 'int',
   })
   rating_count: number;
 
   @Column({
-    type: "float"
+    type: 'float',
   })
   rating_score: number;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   uid: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   imgs?: string;
 

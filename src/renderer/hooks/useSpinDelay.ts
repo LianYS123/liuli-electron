@@ -14,7 +14,7 @@ export const defaultOptions = {
 
 export function useSpinDelay(
   loading: boolean,
-  options?: SpinDelayOptions
+  options?: SpinDelayOptions,
 ): boolean {
   const opts = { ...defaultOptions, ...options };
 
@@ -25,18 +25,24 @@ export function useSpinDelay(
     if (loading && state === 'IDLE') {
       clearTimeout(timeout.current);
 
-      timeout.current = setTimeout(() => {
-        if (!loading) {
-          setState('IDLE');
-          return;
-        }
+      timeout.current = setTimeout(
+        () => {
+          if (!loading) {
+            setState('IDLE');
+            return;
+          }
 
-        timeout.current = setTimeout(() => {
-          setState('EXPIRE');
-        }, opts?.minDuration as number);
+          timeout.current = setTimeout(
+            () => {
+              setState('EXPIRE');
+            },
+            opts?.minDuration as number,
+          );
 
-        setState('DISPLAY');
-      }, opts?.delay);
+          setState('DISPLAY');
+        },
+        opts?.delay,
+      );
 
       setState('DELAY');
     }

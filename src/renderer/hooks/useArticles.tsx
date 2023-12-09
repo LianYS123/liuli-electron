@@ -1,20 +1,20 @@
-import { useQuery } from "react-query";
-import { useHistoryState } from "./useHistoryState";
-import { articleAPI } from "@src/common/api/article";
+import { useQuery } from 'react-query';
+import { useHistoryState } from './useHistoryState';
+import { articleAPI } from '@src/common/api/article';
 
 export const useArticles = ({ pageSize }: { pageSize: number }) => {
   const {
     state: {
       selectedTags = [],
       keyword,
-      order = "time",
-      cat = "全部",
+      order = 'time',
+      cat = '全部',
       onlyPlayable,
-      pageNo = 1
-    }
+      pageNo = 1,
+    },
   } = useHistoryState();
   return useQuery(
-    ["/article/list", selectedTags, keyword, order, cat, onlyPlayable, pageNo],
+    ['/article/list', selectedTags, keyword, order, cat, onlyPlayable, pageNo],
     () => {
       return articleAPI.getArticles({
         tags: selectedTags,
@@ -23,12 +23,12 @@ export const useArticles = ({ pageSize }: { pageSize: number }) => {
         cat,
         onlyPlayable,
         pageNo,
-        pageSize
+        pageSize,
       });
     },
     {
-      keepPreviousData: true
-    }
+      keepPreviousData: true,
+    },
     // {
     //   getNextPageParam(lastPage) {
     //     const { pageNo, pageSize, total } = lastPage.data;

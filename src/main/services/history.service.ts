@@ -1,8 +1,8 @@
-import { GetHistoriesDto } from "@src/common/params/history.dto";
-import { HistoryEntity } from "../entities/history.entity";
-import { PageResult } from "@src/common/types";
-import { ActionEnum, ActionStatus } from "@src/common/constants";
-import { History } from "@src/common/interfaces/history.interface";
+import { GetHistoriesDto } from '@src/common/params/history.dto';
+import { HistoryEntity } from '../entities/history.entity';
+import { PageResult } from '@src/common/types';
+import { ActionEnum, ActionStatus } from '@src/common/constants';
+import { History } from '@src/common/interfaces/history.interface';
 
 interface AddParams {
   articleId?: number;
@@ -22,19 +22,19 @@ export class HistoryService {
       skip: pageSize * (pageNo - 1),
       order: {
         updateTime: {
-          direction: "DESC"
-        }
+          direction: 'DESC',
+        },
       },
       relations: {
         file: true,
-        article: true
-      }
+        article: true,
+      },
     });
     return {
       list,
       total,
       pageNo,
-      pageSize
+      pageSize,
     };
   };
 
@@ -42,7 +42,7 @@ export class HistoryService {
     const params = {
       article: articleId ? { id: articleId } : undefined,
       file: fileId ? { id: fileId } : undefined,
-      ...rest
+      ...rest,
     };
     const old = await HistoryEntity.findOneBy(params);
     if (old) {
@@ -58,25 +58,25 @@ export class HistoryService {
   // WatchLater = 'watch_later',
   // SetWallpaper = 'set_wallpaper'
 
-  addOpenDownload = (params: Pick<AddParams, "articleId" | "source">) => {
+  addOpenDownload = (params: Pick<AddParams, 'articleId' | 'source'>) => {
     return this.add({ ...params, action: ActionEnum.OpenDownload });
   };
 
   addOpenFile = (
-    params: Pick<AddParams, "articleId" | "fileId" | "message" | "status">
+    params: Pick<AddParams, 'articleId' | 'fileId' | 'message' | 'status'>,
   ) => {
     return this.add({ ...params, action: ActionEnum.OpenFile });
   };
 
-  addOpenDetail = (params: Pick<AddParams, "articleId">) => {
+  addOpenDetail = (params: Pick<AddParams, 'articleId'>) => {
     return this.add({ ...params, action: ActionEnum.Detail });
   };
 
-  addWatchLater = (params: Pick<AddParams, "articleId">) => {
+  addWatchLater = (params: Pick<AddParams, 'articleId'>) => {
     return this.add({ ...params, action: ActionEnum.WatchLater });
   };
 
-  addSetWallpaper = (params: Pick<AddParams, "articleId" | "source">) => {
+  addSetWallpaper = (params: Pick<AddParams, 'articleId' | 'source'>) => {
     return this.add({ ...params, action: ActionEnum.SetWallpaper });
   };
 

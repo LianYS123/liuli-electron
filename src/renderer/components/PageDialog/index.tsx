@@ -8,13 +8,13 @@ import {
   IconButton,
   Input,
   Link,
-} from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { shell, type WebviewTag } from "electron";
-import CloseIcon from "@mui/icons-material/Close";
-import { WebView } from "../WebView";
-import { BrowserHeader } from "../Browser/components/BrowserHeader";
-import { BrowserManager } from "../Browser/BrowserManager";
+} from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { shell, type WebviewTag } from 'electron';
+import CloseIcon from '@mui/icons-material/Close';
+import { WebView } from '../WebView';
+import { BrowserHeader } from '../Browser/components/BrowserHeader';
+import { BrowserManager } from '../Browser/BrowserManager';
 
 interface Props {
   open: boolean;
@@ -40,9 +40,9 @@ export const PageDialog: React.FC<Props> = ({
     function handleNav(event: Electron.DidNavigateEvent) {
       setTopSrc(event.url);
     }
-    webviewRef.current?.addEventListener("did-navigate", handleNav);
+    webviewRef.current?.addEventListener('did-navigate', handleNav);
     return () => {
-      webviewRef.current?.removeEventListener("did-navigate", handleNav);
+      webviewRef.current?.removeEventListener('did-navigate', handleNav);
     };
   }, [webviewRef.current]);
   return (
@@ -59,10 +59,10 @@ export const PageDialog: React.FC<Props> = ({
             aria-label="close"
             onClick={onClose}
             sx={{
-              position: "absolute",
+              position: 'absolute',
               right: 8,
               top: 8,
-              color: (theme) => theme.palette.grey[500],
+              color: theme => theme.palette.grey[500],
             }}
           >
             <CloseIcon />

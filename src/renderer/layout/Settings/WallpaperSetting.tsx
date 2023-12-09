@@ -1,13 +1,13 @@
-import { Box, Button, Typography } from "@mui/material";
-import { historyAPI } from "@src/common/api/history";
-import { ActionEnum } from "@src/common/constants";
-import React from "react";
-import { useInfiniteQuery } from "react-query";
-import { WallpaperHistoryList } from "../History/WallpaperHistoryList";
-import { dialogAPI } from "@src/common/api/dialog";
-import { useDispatch } from "react-redux";
-import { appSlice } from "@src/renderer/models/app";
-import { useTheme } from "@src/renderer/hooks/useTheme";
+import { Box, Button, Typography } from '@mui/material';
+import { historyAPI } from '@src/common/api/history';
+import { ActionEnum } from '@src/common/constants';
+import React from 'react';
+import { useInfiniteQuery } from 'react-query';
+import { WallpaperHistoryList } from '../History/WallpaperHistoryList';
+import { dialogAPI } from '@src/common/api/dialog';
+import { useDispatch } from 'react-redux';
+import { appSlice } from '@src/renderer/models/app';
+import { useTheme } from '@src/renderer/hooks/useTheme';
 
 const pageSize = 5;
 
@@ -18,7 +18,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
   const { isDark, toggleTheme } = useTheme();
   const { data, refetch, fetchNextPage, hasNextPage, isIdle, isLoading } =
     useInfiniteQuery(
-      ["getHistory", ActionEnum.SetWallpaper],
+      ['getHistory', ActionEnum.SetWallpaper],
       ({ pageParam }) =>
         historyAPI.list({
           pageNo: pageParam || 1,
@@ -32,7 +32,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
             return pageNo + 1;
           }
         },
-      }
+      },
     );
 
   const handleSetWallpaper = async (src: string) => {
@@ -42,9 +42,9 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
     });
     refetch();
   };
-  const list = data?.pages?.flatMap((it) => it.list) ?? [];
+  const list = data?.pages?.flatMap(it => it.list) ?? [];
   const total = data?.pages?.[data.pages.length - 1]?.total ?? 0;
-  const handleScroll: React.UIEventHandler<HTMLDivElement> = (ev) => {
+  const handleScroll: React.UIEventHandler<HTMLDivElement> = ev => {
     const { scrollTop, clientHeight, scrollHeight } = ev.currentTarget;
     if (scrollTop + clientHeight >= scrollHeight - 100) {
       if (hasNextPage) {
@@ -61,19 +61,19 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
   return (
     <Box
       sx={{
-        height: "100%",
-        overflow: "auto",
-        position: "relative",
+        height: '100%',
+        overflow: 'auto',
+        position: 'relative',
       }}
       onScroll={handleScroll}
     >
-      <Box display={"flex"} gap={1}>
+      <Box display={'flex'} gap={1}>
         <Button
           variant="outlined"
           onClick={async () => {
             const { filePaths } = await dialogAPI.showOpenDialog({
-              properties: ["openFile", "dontAddToRecent", "multiSelections"],
-              filters: [{ name: "File", extensions: ["png", "jpg", "jpeg"] }],
+              properties: ['openFile', 'dontAddToRecent', 'multiSelections'],
+              filters: [{ name: 'File', extensions: ['png', 'jpg', 'jpeg'] }],
             });
             if (filePaths.length) {
               handleSetWallpaper(filePaths[0]);
@@ -85,7 +85,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
         <Button
           variant="outlined"
           onClick={() => {
-            handleSetWallpaper("");
+            handleSetWallpaper('');
           }}
         >
           重置

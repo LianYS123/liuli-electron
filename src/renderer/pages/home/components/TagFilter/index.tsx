@@ -5,27 +5,27 @@ import {
   Link,
   Switch,
   Typography,
-} from "@mui/material";
-import React from "react";
-import { QueryData } from "@src/renderer/services/types";
-import { useHistoryState } from "@src/renderer/hooks/useHistoryState";
+} from '@mui/material';
+import React from 'react';
+import { QueryData } from '@src/renderer/services/types';
+import { useHistoryState } from '@src/renderer/hooks/useHistoryState';
 
 export const TagFilter = () => {
   const { state, setState } = useHistoryState();
   const {
     selectedTags = [],
     keyword,
-    order = "time",
-    cat = "全部",
+    order = 'time',
+    cat = '全部',
     onlyPlayable,
   } = state;
 
   const orders = [
-    ["time", "时间"],
-    ["rating_count", "热度"],
-    ["rating_score", "评分"],
+    ['time', '时间'],
+    ['rating_count', '热度'],
+    ['rating_score', '评分'],
   ];
-  const cats = ["全部", "动画", "游戏", "文章", "漫画", "小说", "音乐"];
+  const cats = ['全部', '动画', '游戏', '文章', '漫画', '小说', '音乐'];
 
   return (
     <Box sx={{ my: 2 }}>
@@ -34,9 +34,9 @@ export const TagFilter = () => {
         {orders.map(([cur, name]) => {
           return (
             <Chip
-              color={order === cur ? "primary" : "default"}
+              color={order === cur ? 'primary' : 'default'}
               onClick={() =>
-                setState({ order: cur as QueryData["order"], pageNo: 1 })
+                setState({ order: cur as QueryData['order'], pageNo: 1 })
               }
               size="medium"
               sx={{ mr: 1, mb: 1 }}
@@ -49,10 +49,10 @@ export const TagFilter = () => {
 
       {/* 分类 */}
       <Box mb={2}>
-        {cats.map((cur) => {
+        {cats.map(cur => {
           return (
             <Chip
-              color={cat === cur ? "primary" : "default"}
+              color={cat === cur ? 'primary' : 'default'}
               onClick={() => setState({ cat: cur, pageNo: 1 })}
               size="medium"
               sx={{ mr: 1, mb: 1 }}
@@ -89,7 +89,7 @@ export const TagFilter = () => {
 
           <Link
             ml={2}
-            sx={{ cursor: "pointer" }}
+            sx={{ cursor: 'pointer' }}
             onClick={() => setState({ keyword: undefined })}
           >
             重置
@@ -99,13 +99,13 @@ export const TagFilter = () => {
 
       {/* 标签 */}
       {selectedTags.length ? (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {selectedTags.map((tag) => {
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {selectedTags.map(tag => {
             return (
               <Chip
                 onDelete={() => {
                   setState({
-                    selectedTags: selectedTags.filter((it) => it !== tag),
+                    selectedTags: selectedTags.filter(it => it !== tag),
                   });
                 }}
                 size="medium"

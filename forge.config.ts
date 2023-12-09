@@ -1,36 +1,37 @@
-import type { ForgeConfig } from "@electron-forge/shared-types";
-import { MakerDMG } from "@electron-forge/maker-dmg";
-import { MakerSquirrel } from "@electron-forge/maker-squirrel";
-import { WebpackPlugin } from "@electron-forge/plugin-webpack";
+import type { ForgeConfig } from '@electron-forge/shared-types';
+import { MakerDMG } from '@electron-forge/maker-dmg';
+import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 
-import { mainConfig } from "./webpack/webpack.main.config";
-import { rendererConfig } from "./webpack/webpack.renderer.config";
+import { mainConfig } from './webpack/webpack.main.config';
+import { rendererConfig } from './webpack/webpack.renderer.config';
 
 const config: ForgeConfig = {
   packagerConfig: {
-    icon: "icons/icon",
+    icon: 'icons/icon',
   },
   rebuildConfig: {},
+
   publishers: [
     {
-      name: "@electron-forge/publisher-github",
+      name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: "LianYS123",
-          name: "liuli-electron",
+          owner: 'LianYS123',
+          name: 'liuli-electron',
         },
-        draft: true
+        draft: true,
       },
     },
   ],
 
   makers: [
     new MakerDMG({
-      format: "ULFO",
-      icon: "icons/icon.icns",
+      format: 'ULFO',
+      icon: 'icons/icon.icns',
     }),
     new MakerSquirrel({
-      setupIcon: "icons/icon.ico",
+      setupIcon: 'icons/icon.ico',
     }),
   ],
   plugins: [
@@ -44,9 +45,9 @@ const config: ForgeConfig = {
         nodeIntegration: true,
         entryPoints: [
           {
-            html: "./src/renderer/index.html",
-            js: "./src/renderer/index.ts",
-            name: "main_window",
+            html: './src/renderer/index.html',
+            js: './src/renderer/index.ts',
+            name: 'main_window',
           },
         ],
       },

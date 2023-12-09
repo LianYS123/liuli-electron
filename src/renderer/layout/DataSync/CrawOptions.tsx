@@ -1,11 +1,11 @@
-import { Box, Stack, TextField, Typography } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
-import React, { useState } from "react";
-import { articleAPI } from "@src/common/api/article";
-import { useDebounceFn } from "ahooks";
-import { articleCrawAPI } from "@src/common/api/articleCraw";
+import { Box, Stack, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useSnackbar } from 'notistack';
+import React, { useState } from 'react';
+import { articleAPI } from '@src/common/api/article';
+import { useDebounceFn } from 'ahooks';
+import { articleCrawAPI } from '@src/common/api/articleCraw';
 
 export const CrawOptions: React.FC = () => {
   const [startPage, setStartPage] = useState(1);
@@ -13,29 +13,25 @@ export const CrawOptions: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
   function refetch() {
-    client.refetchQueries(["/article/list"], { active: true });
+    client.refetchQueries(['/article/list'], { active: true });
   }
-  const { mutateAsync: craw } = useMutation(
-    articleAPI.fetchArticles,
-    {
-      onSuccess() {
-        enqueueSnackbar("同步成功");
-        refetch();
-      }
-    }
-  );
+  const { mutateAsync: craw } = useMutation(articleAPI.fetchArticles, {
+    onSuccess() {
+      enqueueSnackbar('同步成功');
+      refetch();
+    },
+  });
 
-  const { data: crawing = 0, isIdle, isStale, isError } = useQuery(
-    'ArticleCrawPending',
-    () => articleCrawAPI.pending(),
-    {
-      refetchInterval: 1000,
-    }
-  )
+  const {
+    data: crawing = 0,
+    isIdle,
+    isStale,
+    isError,
+  } = useQuery('ArticleCrawPending', () => articleCrawAPI.pending(), {
+    refetchInterval: 1000,
+  });
 
-
-  const { run: handleCraw } = useDebounceFn(craw, { wait: 100 })
-
+  const { run: handleCraw } = useDebounceFn(craw, { wait: 100 });
 
   return (
     <Box>
@@ -44,7 +40,7 @@ export const CrawOptions: React.FC = () => {
         <TextField
           type="number"
           value={startPage}
-          onChange={(ev) => {
+          onChange={ev => {
             setStartPage(Number(ev.target.value));
           }}
           sx={{ mr: 2 }}
@@ -54,7 +50,7 @@ export const CrawOptions: React.FC = () => {
         <TextField
           type="number"
           value={endPage}
-          onChange={(ev) => {
+          onChange={ev => {
             setEndPage(Number(ev.target.value));
           }}
           sx={{ mr: 2 }}

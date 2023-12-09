@@ -1,68 +1,68 @@
-import type { Configuration } from "webpack";
+import type { Configuration } from 'webpack';
 
-import { rules } from "./webpack.rules";
-import { plugins } from "./webpack.plugins";
-import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import { rules } from './webpack.rules';
+import { plugins } from './webpack.plugins';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 const postcssConfig = {
-  loader: "postcss-loader",
+  loader: 'postcss-loader',
   options: {
     postcssOptions: {
       plugins: [
         [
-          "postcss-preset-env",
+          'postcss-preset-env',
           {
             // Options
-          }
+          },
         ],
-        ["postcss-nesting"]
-      ]
-    }
-  }
+        ['postcss-nesting'],
+      ],
+    },
+  },
 };
 
 rules.push({
   test: /\.css$/,
   exclude: /\.module.css/,
   use: [
-    { loader: "style-loader" },
+    { loader: 'style-loader' },
     {
-      loader: "css-loader",
+      loader: 'css-loader',
       options: {
-        modules: false
-      }
+        modules: false,
+      },
     },
-    postcssConfig
-  ]
+    postcssConfig,
+  ],
 });
 rules.push({
   test: /\.module.css$/,
   exclude: /node_modules/,
   use: [
-    { loader: "style-loader" },
+    { loader: 'style-loader' },
     {
-      loader: "css-loader",
+      loader: 'css-loader',
       options: {
-        modules: true
+        modules: true,
         // scope: 'global'
-      }
+      },
     },
-    postcssConfig
-  ]
+    postcssConfig,
+  ],
 });
 
 export const rendererConfig: Configuration = {
   // devtool: 'eval',
   // devtool: false,
   module: {
-    rules
+    rules,
   },
   output: {
-    publicPath: "../"
+    publicPath: '../',
   },
   plugins,
   resolve: {
-    extensions: [".js", ".ts", ".jsx", ".tsx", ".css"],
-    plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.json" })]
-  }
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    plugins: [new TsconfigPathsPlugin({ configFile: 'tsconfig.json' })],
+  },
 };

@@ -26,13 +26,13 @@ const SearchBar: React.FC<{
       <div>
         <InputBase
           placeholder="输入关键词搜索"
-          onKeyDown={(ev) => {
+          onKeyDown={ev => {
             if (ev.key.toLowerCase() === 'enter') {
               handleRequestSearch();
             }
           }}
           value={value}
-          onChange={(ev) => setValue(ev.target.value)}
+          onChange={ev => setValue(ev.target.value)}
         />
       </div>
       <IconButton onClick={handleRequestSearch}>

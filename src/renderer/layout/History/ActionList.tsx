@@ -1,23 +1,23 @@
-import { AppBar, Tab, Tabs } from "@mui/material";
-import { ActionEnum } from "@src/common/constants";
-import React from "react";
+import { AppBar, Tab, Tabs } from '@mui/material';
+import { ActionEnum } from '@src/common/constants';
+import React from 'react';
 
 const actions: Record<ActionEnum, { text: string }> = {
   [ActionEnum.OpenDownload]: {
-    text: "磁力下载"
+    text: '磁力下载',
   },
   [ActionEnum.OpenFile]: {
-    text: "打开文件"
+    text: '打开文件',
   },
   [ActionEnum.Detail]: {
-    text: "查看详情"
+    text: '查看详情',
   },
   [ActionEnum.WatchLater]: {
-    text: "稍后观看"
+    text: '稍后观看',
   },
   [ActionEnum.SetWallpaper]: {
-    text: "设置壁纸"
-  }
+    text: '设置壁纸',
+  },
 };
 
 interface ActionListProps {
@@ -27,13 +27,13 @@ interface ActionListProps {
 
 export function ActionList({
   currentAction,
-  setCurrentAction
+  setCurrentAction,
 }: ActionListProps) {
   return (
     <AppBar
       color="default"
       sx={{
-        position: "sticky"
+        position: 'sticky',
         // left: 0,
         // right: 0,
         // top: 0,

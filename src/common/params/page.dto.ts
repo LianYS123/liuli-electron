@@ -1,4 +1,3 @@
-
 export class PageDto {
   public pageNo: number;
 

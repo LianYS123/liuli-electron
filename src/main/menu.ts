@@ -1,13 +1,13 @@
-import { Menu, app, shell } from "electron";
-import { DB_PATH } from "./config";
+import { Menu, app, shell } from 'electron';
+import { DB_PATH } from './config';
 // import { windowManager } from "./window";
 
-const isMac = process.platform === "darwin";
+const isMac = process.platform === 'darwin';
 
 export const contextMenu = Menu.buildFromTemplate([
   {
     label: '控制台',
-    role: 'toggleDevTools'
+    role: 'toggleDevTools',
   },
   {
     label: '应用',
@@ -15,17 +15,17 @@ export const contextMenu = Menu.buildFromTemplate([
       {
         label: '日志',
         click: () => {
-          shell.showItemInFolder(app.getPath('logs'))
-        }
+          shell.showItemInFolder(app.getPath('logs'));
+        },
       },
       {
         label: '数据库',
         click: () => {
-          shell.showItemInFolder(DB_PATH)
-        }
-      }
+          shell.showItemInFolder(DB_PATH);
+        },
+      },
     ],
-  }
+  },
 ]);
 
 export const macMenu = Menu.buildFromTemplate([
@@ -33,77 +33,75 @@ export const macMenu = Menu.buildFromTemplate([
   {
     label: app.name,
     submenu: [
-      { role: "about" },
-      { type: "separator" },
-      { role: "services" },
-      { type: "separator" },
-      { role: "hide" },
-      { role: "hideOthers" },
-      { role: "unhide" },
-      { type: "separator" },
-      { role: "quit" }
-    ]
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideOthers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' },
+    ],
   },
   // { role: 'fileMenu' }
   {
-    label: "File",
-    submenu: [isMac ? { role: "close" } : { role: "quit" }]
+    label: 'File',
+    submenu: [isMac ? { role: 'close' } : { role: 'quit' }],
   },
   // { role: 'editMenu' }
   {
-    label: "Edit",
+    label: 'Edit',
     submenu: [
-      { role: "undo" },
-      { role: "redo" },
-      { type: "separator" },
-      { role: "cut" },
-      { role: "copy" },
-      { role: "paste" },
-      { role: "pasteAndMatchStyle" },
-      { role: "delete" },
-      { role: "selectAll" },
-      { type: "separator" },
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'pasteAndMatchStyle' },
+      { role: 'delete' },
+      { role: 'selectAll' },
+      { type: 'separator' },
       {
-        label: "Speech",
-        submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }]
-      }
-    ]
+        label: 'Speech',
+        submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
+      },
+    ],
   },
   // { role: 'viewMenu' }
   {
-    label: "View",
+    label: 'View',
     submenu: [
-      { role: "reload" },
-      { role: "forceReload" },
-      { role: "toggleDevTools" },
-      { type: "separator" },
-      { role: "resetZoom" },
-      { role: "zoomIn" },
-      { role: "zoomOut" },
-      { type: "separator" },
-      { role: "togglefullscreen" }
-    ]
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' },
+    ],
   },
   // { role: 'windowMenu' }
   {
-    label: "Window",
+    label: 'Window',
     submenu: [
-      { role: "minimize" },
-      { role: "zoom" },
-      { type: "separator" },
-      { role: "front" },
-      { type: "separator" },
-      { role: "window" }
-    ]
-  }
+      { role: 'minimize' },
+      { role: 'zoom' },
+      { type: 'separator' },
+      { role: 'front' },
+      { type: 'separator' },
+      { role: 'window' },
+    ],
+  },
 ]);
-
 
 export const initApplicationMenu = () => {
   if (isMac) {
     Menu.setApplicationMenu(macMenu);
   } else {
-    Menu.setApplicationMenu(null)
+    Menu.setApplicationMenu(null);
   }
-
 };

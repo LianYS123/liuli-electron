@@ -1,4 +1,4 @@
-import { Article } from "@src/common/interfaces/article.interface";
+import { Article } from '@src/common/interfaces/article.interface';
 
 export type IArticle = Article;
 
@@ -7,13 +7,13 @@ export interface ArticleItemProps {
   handleTagClick: (tag: string) => void;
   refetch: () => void;
   extraActions?: { text: string; onClick: () => void }[];
-  handleOpenDetail?: (src: string) => void
+  handleOpenDetail?: (src: string) => void;
 }
 
 export interface QueryData {
   selectedTags?: string[];
   keyword?: string;
-  order?: "time" | "rating_count" | "rating_score";
+  order?: 'time' | 'rating_count' | 'rating_score';
   cat?: string;
   pageNo?: number;
   onlyPlayable?: boolean;

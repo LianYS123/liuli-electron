@@ -1,9 +1,9 @@
-import { FileCopyOutlined } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import { blue } from "@mui/material/colors";
-import { useSnackbar } from "notistack";
-import copy from "copy-to-clipboard";
-import React from "react";
+import { FileCopyOutlined } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+import { blue } from '@mui/material/colors';
+import { useSnackbar } from 'notistack';
+import copy from 'copy-to-clipboard';
+import React from 'react';
 
 interface ITextProps {
   limit?: number;
@@ -19,26 +19,26 @@ export const Text: React.FC<ITextProps> = ({
   children,
   ellipsis = true,
   copy: canCopy = false,
-  wrap = true
+  wrap = true,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
   const copyIcon = (
     <FileCopyOutlined
       style={{
-        fontSize: ".9em",
-        cursor: "pointer",
-        color: blue[500]
+        fontSize: '.9em',
+        cursor: 'pointer',
+        color: blue[500],
       }}
-      onClick={(_) => {
-        if (typeof children === "string") {
+      onClick={_ => {
+        if (typeof children === 'string') {
           copy(children);
-          enqueueSnackbar("复制成功");
+          enqueueSnackbar('复制成功');
         }
       }}
     />
   );
   if (
-    typeof children === "string" &&
+    typeof children === 'string' &&
     limit &&
     limit < (children as string).length
   ) {
@@ -49,7 +49,7 @@ export const Text: React.FC<ITextProps> = ({
       substr
     );
     return (
-      <span style={{ whiteSpace: wrap ? "normal" : "nowrap" }}>
+      <span style={{ whiteSpace: wrap ? 'normal' : 'nowrap' }}>
         {canCopy ? (
           <>
             {contentStr} {copyIcon}
@@ -62,13 +62,13 @@ export const Text: React.FC<ITextProps> = ({
   }
   if (ellipsis) {
     return (
-      <section style={{ display: "flex", justifyContent: "space-between" }}>
+      <section style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography
           style={{
-            width: "100%",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            whiteSpace: "nowrap"
+            width: '100%',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
           }}
           variant="body2"
         >

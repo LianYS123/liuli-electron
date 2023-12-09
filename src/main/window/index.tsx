@@ -1,5 +1,5 @@
-import { BrowserWindow } from "electron";
-import path from "path";
+import { BrowserWindow } from 'electron';
+import path from 'path';
 
 class WindowManager {
   mainWindow: BrowserWindow;
@@ -18,14 +18,14 @@ class WindowManager {
         contextIsolation: false,
         nodeIntegration: true,
         nodeIntegrationInWorker: true,
-        webviewTag: true
-      }
+        webviewTag: true,
+      },
     });
 
     // and load the index.html of the app.
     this.mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       this.mainWindow.webContents.openDevTools();
     }
     return this.mainWindow;

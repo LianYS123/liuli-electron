@@ -11,26 +11,26 @@ import {
   Link,
   Rating,
   Tooltip,
-  Typography
-} from "@mui/material";
-import { Typography as AntdTypography } from "antd";
-import React, { useState } from "react";
-import { ActionMenuButton } from "@src/renderer/components/action/ActionMenuButton";
-import { formatTimeDetail } from "@src/renderer/utils/time";
-import { ArticleItemProps } from "@src/renderer/services/types";
-import { useSnackbar } from "notistack";
-import { historyAPI } from "@src/common/api/history";
-import { ArticleTags } from "./ArticleTags";
-import { Resource } from "./Resource";
-import { browserManager } from "@src/renderer/components/Browser/BrowserManager";
-import { articleAPI } from "@src/common/api/article";
-import { searchInBrowser } from "@src/renderer/utils/search";
+  Typography,
+} from '@mui/material';
+import { Typography as AntdTypography } from 'antd';
+import React, { useState } from 'react';
+import { ActionMenuButton } from '@src/renderer/components/action/ActionMenuButton';
+import { formatTimeDetail } from '@src/renderer/utils/time';
+import { ArticleItemProps } from '@src/renderer/services/types';
+import { useSnackbar } from 'notistack';
+import { historyAPI } from '@src/common/api/history';
+import { ArticleTags } from './ArticleTags';
+import { Resource } from './Resource';
+import { browserManager } from '@src/renderer/components/Browser/BrowserManager';
+import { articleAPI } from '@src/common/api/article';
+import { searchInBrowser } from '@src/renderer/utils/search';
 
 const ArticleItem: React.FC<ArticleItemProps> = ({
   article,
   handleTagClick,
   refetch,
-  extraActions = []
+  extraActions = [],
 }) => {
   const {
     id,
@@ -38,11 +38,11 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
     img_src,
     href,
     time,
-    tags = "",
+    tags = '',
     content,
     rating_count,
     rating_score,
-    cat
+    cat,
   } = article;
 
   const { enqueueSnackbar } = useSnackbar();
@@ -51,7 +51,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
   const handleAddToQueue = async () => {
     await historyAPI.addWatchLater({ articleId: id });
-    enqueueSnackbar("添加成功");
+    enqueueSnackbar('添加成功');
   };
 
   const handleSearch = () => {
@@ -59,15 +59,15 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
       tab: {
         actions: [
           {
-            text: "添加为网络资源",
+            text: '添加为网络资源',
             onClick: async ({ tab }) => {
               await articleAPI.addSource({ articleId: id, source: tab.url });
-              enqueueSnackbar("操作成功");
+              enqueueSnackbar('操作成功');
               refetch();
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     });
   };
 
@@ -77,47 +77,47 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
   const handleOpenDetail = () => {
     browserManager.openBrowser({
-      url: href
+      url: href,
     });
     historyAPI.addOpenDetail({ articleId: id });
   };
 
   const actions = [
     {
-      text: "稍后观看",
-      onClick: handleAddToQueue
+      text: '稍后观看',
+      onClick: handleAddToQueue,
     },
     {
-      text: "搜索",
-      onClick: handleSearch
+      text: '搜索',
+      onClick: handleSearch,
     },
     {
-      text: "详情",
-      onClick: handleOpenResourceDrawer
+      text: '详情',
+      onClick: handleOpenResourceDrawer,
     },
-    ...extraActions
+    ...extraActions,
   ];
 
   return (
     <Card>
       <CardHeader
         avatar={
-          <Avatar sx={{ background: (theme) => theme.palette.secondary.main }}>
+          <Avatar sx={{ background: theme => theme.palette.secondary.main }}>
             {cat?.[0]}
           </Avatar>
         }
         title={
           <Link
-            onClick={(ev) => {
+            onClick={ev => {
               ev.preventDefault();
               handleOpenDetail();
             }}
-            style={{ textDecoration: "none" }}
+            style={{ textDecoration: 'none' }}
             target="_blank"
             href={href}
           >
             <AntdTypography.Paragraph
-              style={{ color: "inherit", margin: 0 }}
+              style={{ color: 'inherit', margin: 0 }}
               ellipsis={{ rows: 2 }}
             >
               {title}
@@ -137,7 +137,7 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <Tooltip title={rating_score || ""}>
+          <Tooltip title={rating_score || ''}>
             <IconButton>
               <Rating readOnly precision={0.1} value={rating_score} />
             </IconButton>

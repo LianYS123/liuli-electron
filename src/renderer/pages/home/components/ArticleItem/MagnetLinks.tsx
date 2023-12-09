@@ -1,18 +1,19 @@
-import { Box, Grid, Link, Stack, Tooltip } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useSnackbar } from "notistack";
-import Icon from "@ant-design/icons";
-import { clipboard, shell } from "electron";
-import { ContentCopyOutlined } from "@mui/icons-material";
-import { historyAPI } from "@src/common/api/history";
+import { Box, Grid, Link, Stack, Tooltip } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import Icon from '@ant-design/icons';
+import { clipboard, shell } from 'electron';
+import { ContentCopyOutlined } from '@mui/icons-material';
+import { historyAPI } from '@src/common/api/history';
 
-export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
-  props
-) => {
+export const MagnetLinks: React.FC<{
+  uid: string;
+  articleId: number;
+}> = props => {
   const { enqueueSnackbar } = useSnackbar();
 
   const getUids = () => {
-    return props.uid ? [...new Set(props.uid.split("|"))].filter(Boolean) : [];
+    return props.uid ? [...new Set(props.uid.split('|'))].filter(Boolean) : [];
   };
   const uids = getUids();
   const [showUids, setShowUids] = useState<string[]>(uids.slice(0, 6));
@@ -30,8 +31,8 @@ export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
             <Grid
               key={u}
               sx={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
               <Link
@@ -44,7 +45,7 @@ export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
                   shell.openExternal(link);
                 }}
                 sx={{
-                  cursor: "pointer",
+                  cursor: 'pointer',
                   mr: 1,
                   // display: "block",
                   // width: "100%",
@@ -62,7 +63,7 @@ export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
                     clipboard.write({
                       text: link,
                     });
-                    enqueueSnackbar("复制成功");
+                    enqueueSnackbar('复制成功');
                   }}
                 >
                   <ContentCopyOutlined />
@@ -74,11 +75,11 @@ export const MagnetLinks: React.FC<{ uid: string; articleId: number }> = (
         {showUids.length < uids.length ? (
           <Box>
             <Link
-              onClick={(ev) => {
+              onClick={ev => {
                 ev.preventDefault();
                 setShowUids(uids);
               }}
-              sx={{ cursor: "pointer" }}
+              sx={{ cursor: 'pointer' }}
             >
               更多...
             </Link>

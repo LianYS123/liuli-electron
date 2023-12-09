@@ -1,19 +1,19 @@
-import { getUids, get$ } from "./utils";
-import dayjs from "dayjs";
-import { parseURL } from "whatwg-url";
-import { range } from "lodash";
-import { logger } from "@src/main/utils/logger";
-import { BaseCraw } from "@src/main/utils/craw";
-import { Article } from "@src/common/interfaces/article.interface";
-import { ArticleEntity } from "@src/main/entities/article.entity";
-import { store } from "@src/main/store";
-import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from "@src/common/constants";
-import { windowManager } from "@src/main/window";
-import { ipcMain } from "electron";
+import { getUids, get$ } from './utils';
+import dayjs from 'dayjs';
+import { parseURL } from 'whatwg-url';
+import { range } from 'lodash';
+import { logger } from '@src/main/utils/logger';
+import { BaseCraw } from '@src/main/utils/craw';
+import { Article } from '@src/common/interfaces/article.interface';
+import { ArticleEntity } from '@src/main/entities/article.entity';
+import { store } from '@src/main/store';
+import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from '@src/common/constants';
+import { windowManager } from '@src/main/window';
+import { ipcMain } from 'electron';
 
 type ListData = Pick<
   Article,
-  "time" | "href" | "img_src" | "tags" | "content" | "cat"
+  'time' | 'href' | 'img_src' | 'tags' | 'content' | 'cat'
 >;
 
 interface ListHref {
@@ -23,16 +23,16 @@ interface ListHref {
 
 type DetailData = Pick<
   Article,
-  | "title"
-  | "entry_content"
-  | "rating_count"
-  | "rating_score"
-  | "uid"
-  | "imgs"
-  | "raw_id"
+  | 'title'
+  | 'entry_content'
+  | 'rating_count'
+  | 'rating_score'
+  | 'uid'
+  | 'imgs'
+  | 'raw_id'
 >;
 
-type CrawArticle = Omit<Article, "id">;
+type CrawArticle = Omit<Article, 'id'>;
 
 export class ArticleCraw extends BaseCraw {
   private get config() {
@@ -41,21 +41,21 @@ export class ArticleCraw extends BaseCraw {
 
   constructor() {
     super();
-    this.queue.addListener("idle", () => {
+    this.queue.addListener('idle', () => {
       windowManager.mainWindow.webContents.send(
-        IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE
+        IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE,
       );
     });
     this.queue.addListener('active', () => {
       windowManager.mainWindow.webContents.send(
-        IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE
+        IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE,
       );
-    })
+    });
     this.queue.addListener('completed', () => {
       windowManager.mainWindow.webContents.send(
-        IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE
+        IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE,
       );
-    })
+    });
   }
 
   parseDetail = async ({ uri, data: listData }: ListHref) => {
@@ -65,29 +65,29 @@ export class ArticleCraw extends BaseCraw {
     const path = parseURL(uri)?.path;
     let raw_id;
     if (Array.isArray(path)) {
-      raw_id = path.pop?.()?.replace(".html", "");
-    } else if (typeof path === "string") {
-      raw_id = path.replace(".html", "");
+      raw_id = path.pop?.()?.replace('.html', '');
+    } else if (typeof path === 'string') {
+      raw_id = path.replace('.html', '');
     }
     if (!raw_id) {
-      throw new Error("no row id");
+      throw new Error('no row id');
     }
-    const title = $(".entry-title").text();
-    const rating_count = $(".post-ratings strong")
+    const title = $('.entry-title').text();
+    const rating_count = $('.post-ratings strong')
       .eq(0)
       .text()
       .trim()
-      .replace(",", "");
-    const rating_score = $(".post-ratings strong").eq(1).text().trim();
-    const entry_content = $(".entry-content").text();
+      .replace(',', '');
+    const rating_score = $('.post-ratings strong').eq(1).text().trim();
+    const entry_content = $('.entry-content').text();
     if (!title) {
       throw new Error(`skip data without title: ${uri}`);
     }
     const imgs: string[] = [];
-    $(".entry-content")
-      .find("img")
+    $('.entry-content')
+      .find('img')
       .each((_, el) => {
-        const src = $(el).attr("src");
+        const src = $(el).attr('src');
         if (src) {
           imgs.push(src);
         }
@@ -99,8 +99,8 @@ export class ArticleCraw extends BaseCraw {
       entry_content,
       rating_count: parseInt(rating_count, 10) || 0,
       rating_score: parseFloat(rating_score) || 0,
-      uid: uids.join("|"),
-      imgs: imgs.join("|"),
+      uid: uids.join('|'),
+      imgs: imgs.join('|'),
       raw_id,
     };
     const article: CrawArticle = {
@@ -132,19 +132,19 @@ export class ArticleCraw extends BaseCraw {
     const $ = await get$(link, this.config.PROXY);
 
     const hrefs: ListHref[] = [];
-    $("article.post").each((_, el) => {
-      const timestr = $(el).find(".entry-header time").attr("datetime");
+    $('article.post').each((_, el) => {
+      const timestr = $(el).find('.entry-header time').attr('datetime');
       const time = new Date(+dayjs(timestr));
-      const href = $(el).find(".entry-title a").attr("href") || null;
-      const img_src = $(el).find(".entry-content img").attr("src") || null;
-      const content = $(el).find(".entry-content").text().trim();
-      const cat = $(el).find("span.cat-links > a").text();
+      const href = $(el).find('.entry-title a').attr('href') || null;
+      const img_src = $(el).find('.entry-content img').attr('src') || null;
+      const content = $(el).find('.entry-content').text().trim();
+      const cat = $(el).find('span.cat-links > a').text();
       const tags: string[] = [];
       if (!href) {
-        throw new Error("no href...");
+        throw new Error('no href...');
       }
       $(el)
-        .find(".tag-links a[rel=tag]")
+        .find('.tag-links a[rel=tag]')
         // eslint-disable-next-line func-names
         .each(function () {
           const tag = $(this).text();
@@ -156,16 +156,16 @@ export class ArticleCraw extends BaseCraw {
         time,
         href,
         img_src,
-        tags: tags.join("|"),
+        tags: tags.join('|'),
         content,
         cat,
       };
-      const title = $(el).find("header > .entry-title").text().trim();
+      const title = $(el).find('header > .entry-title').text().trim();
       const testStr = title + content;
-      const adArr = ["广告", "点击购买", "优惠券"];
+      const adArr = ['广告', '点击购买', '优惠券'];
       if (
         (SKIP_ADS && !title) ||
-        adArr.some((adStr) => testStr.includes(adStr))
+        adArr.some(adStr => testStr.includes(adStr))
       ) {
         return;
       }
@@ -182,23 +182,23 @@ export class ArticleCraw extends BaseCraw {
   parse = async (link: string) => {
     const hrefs = await this.parseList(link);
     this.queue.addAll(
-      hrefs.map((d) => () => this.parseDetail(d)),
+      hrefs.map(d => () => this.parseDetail(d)),
       {
         priority: 2, // 详情页具有更高的优先级
-      }
+      },
     );
   };
 
   private getPageLink = (num: number) => {
-    if (this.config.BASE_LINK.includes("html")) {
+    if (this.config.BASE_LINK.includes('html')) {
       return `${this.config.BASE_LINK.replace(
         /\.html.*$/,
-        ".html"
+        '.html',
       )}/page/${num}`;
     }
-    return `${this.config.BASE_LINK.replace(/\/?page\/?\d*$/, "").replace(
+    return `${this.config.BASE_LINK.replace(/\/?page\/?\d*$/, '').replace(
       /\/$/,
-      ""
+      '',
     )}/page/${num}`;
   };
 
@@ -208,9 +208,9 @@ export class ArticleCraw extends BaseCraw {
     }
     const firstPage = this.getPageLink(1);
     const $ = await get$(firstPage, this.config.PROXY);
-    const pagesText = $("#content .pages").text();
-    const [, total] = pagesText.match(/共 (\d+) 页/) || ["0", "0"];
-    const oldTotal = $("#wp_page_numbers .first_last_page > a").text();
+    const pagesText = $('#content .pages').text();
+    const [, total] = pagesText.match(/共 (\d+) 页/) || ['0', '0'];
+    const oldTotal = $('#wp_page_numbers .first_last_page > a').text();
     return parseInt(total || oldTotal, 10);
   };
 
@@ -228,10 +228,10 @@ export class ArticleCraw extends BaseCraw {
       //   .reverse()
       .map(this.getPageLink);
     await this.queue.addAll(
-      links.map((link) => () => this.parse(link)),
+      links.map(link => () => this.parse(link)),
       {
         priority: 1,
-      }
+      },
     );
   };
 
@@ -239,7 +239,7 @@ export class ArticleCraw extends BaseCraw {
     if (!this.config.BASE_LINK) {
       return;
     }
-    logger.info("Start auto fetch...");
+    logger.info('Start auto fetch...');
     // const endPage = await this.getEndPage();
     // const total = await ArticleEntity.count();
     // const remoteTotal = (endPage || 0) * 10;

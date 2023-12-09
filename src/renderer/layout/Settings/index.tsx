@@ -1,7 +1,7 @@
-import { AppBar, Box, Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
-import { WallpaperSetting } from "./WallpaperSetting";
-import { SearchSetting } from "./SearchSetting";
+import { AppBar, Box, Tab, Tabs } from '@mui/material';
+import React, { useState } from 'react';
+import { WallpaperSetting } from './WallpaperSetting';
+import { SearchSetting } from './SearchSetting';
 
 export enum SettingActionEnum {
   Wallpaper,
@@ -11,17 +11,17 @@ export enum SettingActionEnum {
 const actions: { key: SettingActionEnum; label: string }[] = [
   {
     key: SettingActionEnum.Wallpaper,
-    label: "主题设置",
+    label: '主题设置',
   },
   {
     key: SettingActionEnum.Search,
-    label: "搜索设置",
+    label: '搜索设置',
   },
 ];
 
 export const Settings: React.FC<{ enabled: boolean }> = ({ enabled }) => {
   const [currentAction, setCurrentAction] = useState<SettingActionEnum>(
-    SettingActionEnum.Wallpaper
+    SettingActionEnum.Wallpaper,
   );
 
   const renderContent = () => {
@@ -48,7 +48,7 @@ export const Settings: React.FC<{ enabled: boolean }> = ({ enabled }) => {
       <AppBar
         color="default"
         sx={{
-          position: "sticky",
+          position: 'sticky',
         }}
       >
         <Tabs

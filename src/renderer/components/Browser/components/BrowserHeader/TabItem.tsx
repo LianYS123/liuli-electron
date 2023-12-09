@@ -1,10 +1,10 @@
-import React from "react";
-import styles from "./style.module.css";
-import { Close } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import classNames from "classnames";
-import { BrowserTabItem } from "@src/renderer/types/browser";
-import { Loading } from "@src/renderer/components/Loading";
+import React from 'react';
+import styles from './style.module.css';
+import { Close } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import classNames from 'classnames';
+import { BrowserTabItem } from '@src/renderer/types/browser';
+import { Loading } from '@src/renderer/components/Loading';
 
 export const TabItem: React.FC<{
   tabItem: BrowserTabItem;
@@ -30,12 +30,12 @@ export const TabItem: React.FC<{
       <div className={styles.closeIcon}>
         <IconButton
           sx={{ fontSize: 16 }}
-          onClick={(ev) => {
+          onClick={ev => {
             ev.stopPropagation();
             onClose(tabItem);
           }}
         >
-          <Close sx={{ width: "16px", height: "16px" }} />
+          <Close sx={{ width: '16px', height: '16px' }} />
         </IconButton>
       </div>
     </section>

@@ -1,5 +1,5 @@
-import { Box, Chip } from "@mui/material";
-import React from "react";
+import { Box, Chip } from '@mui/material';
+import React from 'react';
 
 export const ArticleTags: React.FC<{
   tags?: string;
@@ -9,8 +9,8 @@ export const ArticleTags: React.FC<{
     <Box>
       {tags && tags.length
         ? tags
-            .split("|")
-            .map((tag) => (
+            .split('|')
+            .map(tag => (
               <Chip
                 onClick={() => handleTagClick?.(tag)}
                 style={{ margin: 4 }}

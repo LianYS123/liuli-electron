@@ -1,15 +1,15 @@
-import { FileEntity } from "@src/main/entities/file.entity";
-import { IpcException } from "@src/common/exceptions/IpcException";
-import fs from "fs-extra";
-import { basename, dirname, join } from "path";
-import mime from "mime-types";
+import { FileEntity } from '@src/main/entities/file.entity';
+import { IpcException } from '@src/common/exceptions/IpcException';
+import fs from 'fs-extra';
+import { basename, dirname, join } from 'path';
+import mime from 'mime-types';
 import {
   AddFileByPathDto,
   GetFilesDto,
   RemoveFileDto,
-  UpdateFileDto
-} from "@src/common/params/file.dto";
-import { Like } from "typeorm";
+  UpdateFileDto,
+} from '@src/common/params/file.dto';
+import { Like } from 'typeorm';
 
 export class FileService {
   public getFiles = async (dto: GetFilesDto) => {
@@ -19,8 +19,8 @@ export class FileService {
       .take(pageSize);
 
     if (searchValue) {
-      query = query.where("name like :searchValue", {
-        searchValue: Like(`%${searchValue}%`).value
+      query = query.where('name like :searchValue', {
+        searchValue: Like(`%${searchValue}%`).value,
       });
     }
 
@@ -30,18 +30,18 @@ export class FileService {
       pageNo,
       pageSize,
       total,
-      list: articles
+      list: articles,
     };
   };
 
   private checkFilePath = (filePath: string) => {
     if (!fs.existsSync(filePath)) {
-      throw new IpcException(400, "文件不存在");
+      throw new IpcException(400, '文件不存在');
     }
     const stat = fs.statSync(filePath);
 
     if (!stat.isFile()) {
-      throw new IpcException(400, "该路径内容不是一个文件");
+      throw new IpcException(400, '该路径内容不是一个文件');
     }
     return stat;
   };
@@ -71,7 +71,7 @@ export class FileService {
 
   public createFileByPath = async (fromPath: string) => {
     const old = await FileEntity.findOneBy({
-      filePath: fromPath
+      filePath: fromPath,
     });
     if (old) {
       // throw new HttpException(400, "文件已存在");
@@ -83,23 +83,23 @@ export class FileService {
     const directory = dirname(fromPath);
 
     const size = stat.size;
-    const mimetype = mime.lookup(name) || "unknow";
+    const mimetype = mime.lookup(name) || 'unknow';
     const file = await FileEntity.save({
       name,
       directory,
       size,
       filePath: fromPath,
-      mimetype
+      mimetype,
     });
     return file;
   };
 
   public findFileById = async (fileId: number) => {
     const file = await FileEntity.findOneBy({
-      id: fileId
+      id: fileId,
     });
     if (!file) {
-      throw new IpcException(400, "数据库中未找到该文件");
+      throw new IpcException(400, '数据库中未找到该文件');
     }
     return file;
   };
@@ -107,24 +107,24 @@ export class FileService {
   public getAllFilesFromDir = (dir: string, type?: string) => {
     const stat = fs.statSync(dir);
     if (!stat.isDirectory()) {
-      throw new IpcException(400, "不是一个文件夹");
+      throw new IpcException(400, '不是一个文件夹');
     }
     const files = fs
       .readdirSync(dir)
-      .filter((name) => {
+      .filter(name => {
         const filePath = join(dir, name);
 
         const stat = fs.statSync(filePath);
         if (!stat.isFile()) {
           return false;
         }
-        const mimetype = mime.lookup(name) || "unknow";
+        const mimetype = mime.lookup(name) || 'unknow';
         if (type && !mimetype.includes(type)) {
           return false;
         }
         return true;
       })
-      .map((name) => join(dir, name));
+      .map(name => join(dir, name));
     return files;
   };
 }

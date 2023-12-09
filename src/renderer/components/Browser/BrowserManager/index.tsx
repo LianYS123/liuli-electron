@@ -1,7 +1,7 @@
-import { urlReg } from "@src/renderer/constants";
-import { BrowserTabItem } from "@src/renderer/types/browser";
-import { StateManager } from "@src/renderer/utils/StateManager";
-import { uniqueId } from "lodash";
+import { urlReg } from '@src/renderer/constants';
+import { BrowserTabItem } from '@src/renderer/types/browser';
+import { StateManager } from '@src/renderer/utils/StateManager';
+import { uniqueId } from 'lodash';
 
 interface BrowserState {
   maxTabs: number;
@@ -23,8 +23,8 @@ export class BrowserManager {
     const item: BrowserTabItem = {
       ...tab,
       key: tab.key || key,
-      title: tab.title || tab.url || "Google",
-      url: isValidUrl ? tab.url : "https://www.google.com",
+      title: tab.title || tab.url || 'Google',
+      url: isValidUrl ? tab.url : 'https://www.google.com',
       loading: tab.loading || false,
     };
     return item;
@@ -37,7 +37,7 @@ export class BrowserManager {
 
   addTab = () => {
     const tab = this.generateTab();
-    this.browserStateManager.produce((state) => {
+    this.browserStateManager.produce(state => {
       if (state.tabs.length < state.maxTabs) {
         state.tabs.push(tab);
         state.activeTabKey = tab.key;
@@ -48,8 +48,8 @@ export class BrowserManager {
 
   closeTab = (tab: BrowserTabItem) => {
     const { key } = tab;
-    this.browserStateManager.produce((state) => {
-      const newTabs = state.tabs.filter((tab) => tab.key !== key);
+    this.browserStateManager.produce(state => {
+      const newTabs = state.tabs.filter(tab => tab.key !== key);
       state.tabs = newTabs;
       if (!newTabs.length) {
         state.open = false;
@@ -70,15 +70,15 @@ export class BrowserManager {
     return {
       maxTabs: DefaultMaxTabs,
       tabs: [],
-      activeTabKey: "",
+      activeTabKey: '',
       open: false,
       keepMounted: true,
     };
   }
 
   setActiveTab(activeTabKey: string) {
-    this.browserStateManager.produce((state) => {
-      const activeTab = state.tabs.find((it) => it.key === activeTabKey);
+    this.browserStateManager.produce(state => {
+      const activeTab = state.tabs.find(it => it.key === activeTabKey);
       if (!activeTab) {
         return;
       }
@@ -87,7 +87,7 @@ export class BrowserManager {
   }
 
   openBrowser = (tab: Partial<BrowserTabItem> = {}) => {
-    this.browserStateManager.produce((state) => {
+    this.browserStateManager.produce(state => {
       state.open = true;
       // const targetTab = state.tabs.find((tab) => {
       //   return (
@@ -108,22 +108,22 @@ export class BrowserManager {
   };
 
   hideBrowser = () => {
-    this.browserStateManager.produce((state) => {
+    this.browserStateManager.produce(state => {
       state.open = false;
     });
   };
 
   closeBrowser = () => {
-    this.browserStateManager.produce((state) => {
+    this.browserStateManager.produce(state => {
       state.open = false;
       state.tabs = [];
-      state.activeTabKey = "";
+      state.activeTabKey = '';
     });
   };
 
   setTabTitle = (key: string, title: string) => {
-    this.browserStateManager.produce((state) => {
-      const index = state.tabs.findIndex((it) => it.key === key);
+    this.browserStateManager.produce(state => {
+      const index = state.tabs.findIndex(it => it.key === key);
       if (index !== -1) {
         state.tabs[index].title = title;
       }
@@ -131,8 +131,8 @@ export class BrowserManager {
   };
 
   setTabLoading = (key: string, loading: boolean) => {
-    this.browserStateManager.produce((state) => {
-      const index = state.tabs.findIndex((it) => it.key === key);
+    this.browserStateManager.produce(state => {
+      const index = state.tabs.findIndex(it => it.key === key);
       if (index !== -1) {
         state.tabs[index].loading = loading;
       }
@@ -148,7 +148,7 @@ export class BrowserManager {
 
   useTab = () => {
     const { activeTabKey, tabs, maxTabs } = this.browserStateManager.useState();
-    const activeTab = tabs.find((it) => it.key === activeTabKey);
+    const activeTab = tabs.find(it => it.key === activeTabKey);
     return { activeTab, tabs, activeTabKey, maxTabs };
   };
 }

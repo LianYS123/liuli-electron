@@ -1,7 +1,7 @@
-import { load } from "cheerio";
-import fetch from "node-fetch";
+import { load } from 'cheerio';
+import fetch from 'node-fetch';
 
-import { HttpsProxyAgent } from "https-proxy-agent";
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 export function getUids(content: string) {
   if (!content) return [];
@@ -12,7 +12,7 @@ export function getUids(content: string) {
   while (hasNext) {
     const matchs = reg.exec(content);
     if (matchs) {
-      uids.push(matchs[0].split("本站不提供下载").join(""));
+      uids.push(matchs[0].split('本站不提供下载').join(''));
     } else {
       hasNext = false;
     }
@@ -22,6 +22,6 @@ export function getUids(content: string) {
 
 export const get$ = async (link: string, proxy: string) => {
   // const agent = new HttpsProxyAgent(proxy);
-  const text = await fetch(link).then((res) => res.text());
+  const text = await fetch(link).then(res => res.text());
   return load(text);
 };

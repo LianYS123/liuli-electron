@@ -1,15 +1,15 @@
-import { articleCraw } from "@src/main/craw/liuli";
+import { articleCraw } from '@src/main/craw/liuli';
 import {
   ArticleDto,
   ConnectDto,
   ConnectFilesDto,
-} from "@src/common/params/article.dto";
-import { CrawDto } from "@src/common/params/craw.dto";
-import { ArticleEntity } from "@src/main/entities/article.entity";
-import { IpcException } from "@src/common/exceptions/IpcException";
-import { Brackets, Like } from "typeorm";
-import { fileService } from "./file.service";
-import { uniq } from "lodash";
+} from '@src/common/params/article.dto';
+import { CrawDto } from '@src/common/params/craw.dto';
+import { ArticleEntity } from '@src/main/entities/article.entity';
+import { IpcException } from '@src/common/exceptions/IpcException';
+import { Brackets, Like } from 'typeorm';
+import { fileService } from './file.service';
+import { uniq } from 'lodash';
 
 export class ArticleService {
   // 分页查找
@@ -24,56 +24,58 @@ export class ArticleService {
       onlyPlayable,
     } = params;
 
-    let query = ArticleEntity.createQueryBuilder("article")
+    let query = ArticleEntity.createQueryBuilder('article')
       .skip(pageSize * (pageNo - 1))
       .take(pageSize)
-      .leftJoinAndSelect("article.files", "files");
+      .leftJoinAndSelect('article.files', 'files');
 
     if (onlyPlayable) {
       query = query.andWhere(
-        new Brackets((qb) => {
-          qb.where("article.web_sources is not null").orWhere("files.id is not null");
-        })
+        new Brackets(qb => {
+          qb.where('article.web_sources is not null').orWhere(
+            'files.id is not null',
+          );
+        }),
       );
     }
 
     if (searchValue) {
       query = query.andWhere(
-        new Brackets((qb) => {
+        new Brackets(qb => {
           const value = Like(`%${searchValue}%`).value;
-          qb.where("article.title like :searchValue", {
+          qb.where('article.title like :searchValue', {
             searchValue: value,
-          }).orWhere("article.content like :searchValue", {
+          }).orWhere('article.content like :searchValue', {
             searchValue: value,
           });
-        })
+        }),
       );
     }
 
-    if (cat && cat !== "全部") {
-      query = query.andWhere("article.cat like :cat", {
+    if (cat && cat !== '全部') {
+      query = query.andWhere('article.cat like :cat', {
         cat: Like(`%${cat}%`).value,
       });
     }
 
     if (tags && tags.length) {
       query.andWhere(
-        new Brackets((qb) => {
+        new Brackets(qb => {
           tags.forEach((tag, index) => {
             qb = qb.orWhere(`tags like :tag${index}`, {
               [`tag${index}`]: Like(`%${tag}%`).value,
             });
           });
-        })
+        }),
       );
     }
 
     if (order) {
       query = query
-        .orderBy(`article.${order}`, "DESC")
-        .addOrderBy("article.time", "DESC");
+        .orderBy(`article.${order}`, 'DESC')
+        .addOrderBy('article.time', 'DESC');
     } else {
-      query = query.orderBy("article.time", "DESC");
+      query = query.orderBy('article.time', 'DESC');
     }
 
     const [articles, total] = await query.getManyAndCount();
@@ -107,7 +109,7 @@ export class ArticleService {
       },
     });
     if (!article) {
-      throw new IpcException(400, "文章不存在");
+      throw new IpcException(400, '文章不存在');
     }
     return article;
   };
@@ -117,7 +119,7 @@ export class ArticleService {
     const article = await this.findArticleById(articleId);
     const file = await fileService.findFileById(fileId);
 
-    if (!article.files.some((it) => it.id === file.id)) {
+    if (!article.files.some(it => it.id === file.id)) {
       article.files.push(file);
     }
     await article.save();
@@ -146,7 +148,7 @@ export class ArticleService {
   public removeFile = async ({ articleId, fileId }: ConnectDto) => {
     const article = await this.findArticleById(articleId);
     const file = await fileService.findFileById(fileId);
-    article.files = article.files.filter((it) => {
+    article.files = article.files.filter(it => {
       return it.id !== file.id;
     });
     await article.save();
@@ -189,7 +191,7 @@ export class ArticleService {
   }) => {
     const article = await this.findArticleById(articleId);
     const sources = this.parseWebSource(article.web_sources);
-    article.web_sources = JSON.stringify(sources.filter((it) => it !== source));
+    article.web_sources = JSON.stringify(sources.filter(it => it !== source));
     return article.save();
   };
 }

@@ -1,61 +1,61 @@
-import * as React from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useMutation, useQuery } from "react-query";
-import { Box, FormControlLabel, Link, Stack, Switch } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import filesize from "filesize";
-import { useSnackbar } from "notistack";
-import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
-import { File } from "@src/common/interfaces/file.interface";
-import { fileAPI } from "@src/common/api/file";
+import * as React from 'react';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useMutation, useQuery } from 'react-query';
+import { Box, FormControlLabel, Link, Stack, Switch } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import filesize from 'filesize';
+import { useSnackbar } from 'notistack';
+import { useAlertDialog } from '@src/renderer/providers/AlertDialogProvider';
+import { File } from '@src/common/interfaces/file.interface';
+import { fileAPI } from '@src/common/api/file';
 
 export function FileList() {
   const [page, setPage] = React.useState(0);
   const [pageSize] = React.useState(10);
   const [selectionModel, setSelectedModel] = React.useState<number[]>([]);
   const { data, isLoading } = useQuery(
-    ["GET_FILE_LIST", page, pageSize],
+    ['GET_FILE_LIST', page, pageSize],
     () => {
       return fileAPI.getFiles({
         pageNo: page + 1,
-        pageSize
+        pageSize,
       });
-    }
+    },
   );
   const { open: openAlertDialog } = useAlertDialog();
   const { enqueueSnackbar } = useSnackbar();
 
   const { mutateAsync: del } = useMutation(fileAPI.deleteFile, {
     onSuccess: () => {
-      enqueueSnackbar("删除成功");
-    }
+      enqueueSnackbar('删除成功');
+    },
   });
   const { mutateAsync: update } = useMutation(fileAPI.updateFile, {
     onSuccess: () => {
-      enqueueSnackbar("修改成功");
-    }
+      enqueueSnackbar('修改成功');
+    },
   });
   const { mutateAsync: add } = useMutation(fileAPI.addFileByPath, {
     onSuccess: () => {
-      enqueueSnackbar("添加成功");
-    }
+      enqueueSnackbar('添加成功');
+    },
   });
 
   const columns: GridColDef<File>[] = [
-    { field: "name", headerName: "文件名", editable: true, width: 400 },
-    { field: "mimetype", headerName: "文件类型", width: 200 },
+    { field: 'name', headerName: '文件名', editable: true, width: 400 },
+    { field: 'mimetype', headerName: '文件类型', width: 200 },
     {
-      field: "size",
-      headerName: "文件大小",
-      type: "number",
+      field: 'size',
+      headerName: '文件大小',
+      type: 'number',
       width: 90,
-      valueGetter: (params) => {
+      valueGetter: params => {
         return filesize(params.value);
-      }
+      },
     },
     {
-      field: "opt",
-      headerName: "操作",
+      field: 'opt',
+      headerName: '操作',
       sortable: false,
       width: 160,
       renderCell: ({ row }) => {
@@ -63,10 +63,10 @@ export function FileList() {
         return (
           <Stack spacing={1} direction="row">
             <Link
-              sx={{ cursor: "pointer" }}
+              sx={{ cursor: 'pointer' }}
               onClick={() => {
                 openAlertDialog({
-                  title: "确认删除？",
+                  title: '确认删除？',
                   content: (
                     <Box component="span">
                       {/* <Typography variant="subtitle1">
@@ -85,7 +85,7 @@ export function FileList() {
                   ),
                   onOk: async () => {
                     del({ fileId: row.id, removeSource });
-                  }
+                  },
                 });
               }}
             >
@@ -96,8 +96,8 @@ export function FileList() {
             </Link>
           </Stack>
         );
-      }
-    }
+      },
+    },
   ];
 
   const processRowUpdate = React.useCallback(
@@ -108,18 +108,18 @@ export function FileList() {
       await update({ id: newRow.id, name: newRow.name });
       return newRow;
     },
-    []
+    [],
   );
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         loading={isLoading}
         rows={data.list}
         rowCount={data.total}
         columns={columns}
         page={page}
-        onPageChange={(page) => {
+        onPageChange={page => {
           setPage(page);
         }}
         autoHeight
@@ -127,7 +127,7 @@ export function FileList() {
         rowsPerPageOptions={[pageSize]}
         paginationMode="server"
         checkboxSelection
-        getRowId={(row) => row.id}
+        getRowId={row => row.id}
         selectionModel={selectionModel}
         processRowUpdate={processRowUpdate}
         experimentalFeatures={{ newEditingApi: true }}

@@ -1,6 +1,6 @@
-import { ActionEnum, ActionStatus } from "../constants";
-import { Article } from "./article.interface";
-import { File } from "./file.interface";
+import { ActionEnum, ActionStatus } from '../constants';
+import { Article } from './article.interface';
+import { File } from './file.interface';
 
 export interface History {
   id: number;
@@ -9,7 +9,7 @@ export interface History {
   source?: string;
   action: ActionEnum;
   status: ActionStatus;
-  message?: string
+  message?: string;
   createTime: Date;
   updateTime: Date;
 }

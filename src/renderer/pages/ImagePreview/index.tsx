@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Image } from "antd";
-import Icon from "@ant-design/icons";
-import { useQuery } from "react-query";
-import { ImageList, ImageListItem } from "@mui/material";
-import { useDebounceFn } from "ahooks";
-import { useLocation } from "react-router-dom";
-import { fileAPI } from "@src/common/api/file";
-import { useDispatch } from "react-redux";
-import { appSlice } from "@src/renderer/models/app";
-import { Wallpaper } from "@mui/icons-material";
-import { historyAPI } from "@src/common/api/history";
-import styles from "./index.module.css";
+import React, { useEffect, useRef, useState } from 'react';
+import { Image } from 'antd';
+import Icon from '@ant-design/icons';
+import { useQuery } from 'react-query';
+import { ImageList, ImageListItem } from '@mui/material';
+import { useDebounceFn } from 'ahooks';
+import { useLocation } from 'react-router-dom';
+import { fileAPI } from '@src/common/api/file';
+import { useDispatch } from 'react-redux';
+import { appSlice } from '@src/renderer/models/app';
+import { Wallpaper } from '@mui/icons-material';
+import { historyAPI } from '@src/common/api/history';
+import styles from './index.module.css';
 
 const ImageListPreview: React.FC<{
   visible: boolean;
@@ -36,13 +36,13 @@ const ImageListPreview: React.FC<{
 
   return (
     <>
-      <div style={{ display: "none" }}>
+      <div style={{ display: 'none' }}>
         <Image.PreviewGroup
           preview={{
             className: styles.previewImage,
             current,
             visible,
-            onVisibleChange: (vis) => setVisible(vis),
+            onVisibleChange: vis => setVisible(vis),
             onChange(current) {
               setCurrent(current);
               if (
@@ -58,9 +58,9 @@ const ImageListPreview: React.FC<{
             //   return <div className='ImageListPreview__image'>{originalNode}</div>;
             // },
 
-            toolbarRender: (originalNode) => {
+            toolbarRender: originalNode => {
               return (
-                <div style={{ display: "flex" }}>
+                <div style={{ display: 'flex' }}>
                   <div className="ant-image-preview-operations-operation ant-image-preview-operations-operation-flipY">
                     <Icon
                       component={Wallpaper}
@@ -79,7 +79,7 @@ const ImageListPreview: React.FC<{
             },
           }}
         >
-          {images.map((src) => {
+          {images.map(src => {
             return <Image key={src} src={`file://${src}`} />;
           })}
         </Image.PreviewGroup>
@@ -91,23 +91,23 @@ const ImageListPreview: React.FC<{
 export const ImagePreview: React.FC = () => {
   // const { dir } = useParams();
   const { search } = useLocation();
-  const dir = new URLSearchParams(search).get("dir");
-  const articleId = new URLSearchParams(search).get("articleId");
+  const dir = new URLSearchParams(search).get('dir');
+  const articleId = new URLSearchParams(search).get('articleId');
   const [images, setImages] = useState<string[]>([]);
   const remainImagesRef = useRef<string[]>();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   useQuery(
-    ["getAllFilesFromDir", dir],
-    () => fileAPI.getAllFilesFromDir(dir, "image"),
+    ['getAllFilesFromDir', dir],
+    () => fileAPI.getAllFilesFromDir(dir, 'image'),
     {
       enabled: !!dir,
-      onSuccess: (data) => {
+      onSuccess: data => {
         const images = data.slice(0, 30);
         setImages(images);
         remainImagesRef.current = data.slice(images.length);
       },
-    }
+    },
   );
 
   // const pageNoRef = useRef(1);
@@ -117,10 +117,10 @@ export const ImagePreview: React.FC = () => {
       setImages([...images, ...remainImagesRef.current.slice(0, 30)]);
       remainImagesRef.current = remainImagesRef.current.slice(30);
     },
-    { wait: 200 }
+    { wait: 200 },
   );
 
-  const handleScroll: React.UIEventHandler<HTMLDivElement> = (ev) => {
+  const handleScroll: React.UIEventHandler<HTMLDivElement> = ev => {
     const { scrollTop, clientHeight, scrollHeight } = ev.currentTarget;
     if (scrollTop + clientHeight >= scrollHeight - 100) {
       // 页面滚动到底部
@@ -131,16 +131,16 @@ export const ImagePreview: React.FC = () => {
   return (
     <div
       style={{
-        height: "100vh",
-        overflow: "auto",
+        height: '100vh',
+        overflow: 'auto',
       }}
       onScroll={handleScroll}
     >
       <ImageList
         sx={{
-          width: "80%",
+          width: '80%',
           // maxHeight: "100vh",
-          margin: "auto",
+          margin: 'auto',
           // background: (d) => d.palette.background.default
         }}
         variant="woven"
@@ -150,10 +150,10 @@ export const ImagePreview: React.FC = () => {
         {images.map((src, index) => (
           <ImageListItem key={src}>
             <img
-              style={{ width: "100%", cursor: "pointer" }}
+              style={{ width: '100%', cursor: 'pointer' }}
               onClick={() => {
                 setPreviewImages(
-                  images.slice(index).concat(remainImagesRef.current)
+                  images.slice(index).concat(remainImagesRef.current),
                 );
               }}
               src={`file://${src}`}

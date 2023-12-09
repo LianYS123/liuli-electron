@@ -1,4 +1,4 @@
-import { ActionItem } from "../components/action/ActionMenuButton";
+import { ActionItem } from '../components/action/ActionMenuButton';
 
 export interface BrowserTabItem {
   key: string;

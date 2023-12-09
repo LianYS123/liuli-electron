@@ -13,7 +13,11 @@ export const isEmpty = (value: string | number | object): boolean => {
     return true;
   } else if (typeof value === 'undefined' || value === undefined) {
     return true;
-  } else if (value !== null && typeof value === 'object' && !Object.keys(value).length) {
+  } else if (
+    value !== null &&
+    typeof value === 'object' &&
+    !Object.keys(value).length
+  ) {
     return true;
   } else {
     return false;

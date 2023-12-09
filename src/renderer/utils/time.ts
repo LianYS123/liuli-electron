@@ -9,7 +9,7 @@ import {
 
 export function commonDateFormat(
   date: string | number | unknown,
-  formatStr: string
+  formatStr: string,
 ) {
   return date ? format(Number(date), formatStr) : '';
 }
@@ -66,7 +66,7 @@ export function formatTimeTitle(time: string | number | Date) {
  */
 export function formatTimeDetail(time: string | number | Date) {
   if (!time) {
-    return ''
+    return '';
   }
   const t = new Date(time);
   let f;

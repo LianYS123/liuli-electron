@@ -1,12 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
 
 function LoadingIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       className="prefix__icon"
       viewBox="0 0 1024 1024"
-      width={"1em"}
-      height={"1em"}
+      width={'1em'}
+      height={'1em'}
       {...props}
     >
       <path

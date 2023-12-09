@@ -1,6 +1,6 @@
-import { IconButton, ListItemText, Menu, MenuItem } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import React, { useState } from "react";
+import { IconButton, ListItemText, Menu, MenuItem } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import React, { useState } from 'react';
 
 export interface ActionItem<T = any> {
   text: string;
@@ -20,7 +20,7 @@ export const ActionMenuButton: React.FC<IActionMenuProps> = ({
   return (
     <>
       <IconButton
-        onClick={(ev) => {
+        onClick={ev => {
           ev.stopPropagation();
           setAnchorEl(ev.currentTarget);
         }}
@@ -33,12 +33,12 @@ export const ActionMenuButton: React.FC<IActionMenuProps> = ({
         onClose={() => setAnchorEl(null)}
         anchorEl={anchorEl}
       >
-        {actions.map((action) => {
+        {actions.map(action => {
           const { text, onClick } = action;
           return (
             <MenuItem
               key={action.text}
-              onClick={(ev) => {
+              onClick={ev => {
                 ev.stopPropagation();
                 setAnchorEl(null);
                 onClick();

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import immer, { produce } from "immer";
-import { EventEmitter } from "eventemitter3";
+import React, { useEffect, useState } from 'react';
+import immer, { produce } from 'immer';
+import { EventEmitter } from 'eventemitter3';
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export class StateManager<State> {
 
   setState(state: State) {
     this.state = state;
-    this.emitter.emit("commit", state);
+    this.emitter.emit('commit', state);
   }
 
   getState() {
@@ -29,7 +29,7 @@ export class StateManager<State> {
   }
 
   produce(cb: (state: immer.Draft<State>) => ReturnType<typeof produce>) {
-    const newState = produce(this.state, (draft) => {
+    const newState = produce(this.state, draft => {
       return cb(draft);
     });
     this.setState(newState);
@@ -43,9 +43,9 @@ export class StateManager<State> {
     const [state, setState] = useState(this.state);
 
     useEffect(() => {
-      this.emitter.on("commit", setState);
+      this.emitter.on('commit', setState);
       return () => {
-        this.emitter.off("commit");
+        this.emitter.off('commit');
       };
     }, []);
 

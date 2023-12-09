@@ -5,27 +5,27 @@ import {
   Stack,
   Switch,
   TextField,
-} from "@mui/material";
-import { storeAPI } from "@src/common/api/store";
-import { CrawConfig } from "@src/main/store/types";
-import { useDebounceFn, useMount } from "ahooks";
-import React, { useRef, useState } from "react";
-import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from "@src/common/constants";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { articleAPI } from "@src/common/api/article";
-import { useSnackbar } from "notistack";
-import { articleCrawAPI } from "@src/common/api/articleCraw";
-import { LoadingButton } from "@mui/lab";
-import { formatTimeDetail } from "@src/renderer/utils/time";
-import { formatDistanceStrict } from "date-fns";
-import { zhCN } from "date-fns/locale";
-import { useAlertDialog } from "@src/renderer/providers/AlertDialogProvider";
-import { useIpcEvent } from "@src/renderer/hooks/useIpcEvent";
+} from '@mui/material';
+import { storeAPI } from '@src/common/api/store';
+import { CrawConfig } from '@src/main/store/types';
+import { useDebounceFn, useMount } from 'ahooks';
+import React, { useRef, useState } from 'react';
+import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from '@src/common/constants';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { articleAPI } from '@src/common/api/article';
+import { useSnackbar } from 'notistack';
+import { articleCrawAPI } from '@src/common/api/articleCraw';
+import { LoadingButton } from '@mui/lab';
+import { formatTimeDetail } from '@src/renderer/utils/time';
+import { formatDistanceStrict } from 'date-fns';
+import { zhCN } from 'date-fns/locale';
+import { useAlertDialog } from '@src/renderer/providers/AlertDialogProvider';
+import { useIpcEvent } from '@src/renderer/hooks/useIpcEvent';
 
 export const DataSync: React.FC = () => {
   const [config, _setConfig] = useState<CrawConfig>({
-    BASE_LINK: "",
-    PROXY: "",
+    BASE_LINK: '',
+    PROXY: '',
     SKIP_ADS: false,
     SKIP_EMPTY_UIDS: false,
   });
@@ -47,7 +47,7 @@ export const DataSync: React.FC = () => {
     } = {},
     refetch,
     isIdle,
-  } = useQuery("ArticleCrawPending", () => articleCrawAPI.stat());
+  } = useQuery('ArticleCrawPending', () => articleCrawAPI.stat());
 
   useIpcEvent(IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE, refetch);
   useIpcEvent(IPC_CHANNEL_ENUM.ARTICLE_CRAW_STATUS_CHANGE, () => {
@@ -56,9 +56,9 @@ export const DataSync: React.FC = () => {
   });
 
   const { data: totalPages } = useQuery(
-    ["ArticleCrawGetEndPage"],
+    ['ArticleCrawGetEndPage'],
     () => articleCrawAPI.getEndPage(),
-    {}
+    {},
   );
 
   const { run: handleCraw } = useDebounceFn(craw, { wait: 100 });
@@ -67,7 +67,7 @@ export const DataSync: React.FC = () => {
     async () => {
       await storeAPI.set(STORE_KEY_ENUM.CRAW_LIULI, config);
     },
-    { wait: 100 }
+    { wait: 100 },
   );
 
   const setConfig = (_config: Partial<CrawConfig>) => {
@@ -91,7 +91,7 @@ export const DataSync: React.FC = () => {
       });
       return cost;
     } else {
-      return "";
+      return '';
     }
   };
 
@@ -101,7 +101,7 @@ export const DataSync: React.FC = () => {
         <TextField
           type="number"
           value={startPage}
-          onChange={(ev) => {
+          onChange={ev => {
             setStartPage(Number(ev.target.value));
           }}
           sx={{ mr: 2 }}
@@ -111,7 +111,7 @@ export const DataSync: React.FC = () => {
         <TextField
           type="number"
           value={endPage}
-          onChange={(ev) => {
+          onChange={ev => {
             setEndPage(Number(ev.target.value));
           }}
           sx={{ mr: 2 }}
@@ -121,7 +121,7 @@ export const DataSync: React.FC = () => {
 
         <TextField
           value={config?.BASE_LINK}
-          onChange={(ev) => {
+          onChange={ev => {
             const value = ev.target.value;
             setConfig({ BASE_LINK: value });
           }}
@@ -129,7 +129,7 @@ export const DataSync: React.FC = () => {
           label="Base Link"
           variant="standard"
         />
-        <Stack direction={"row"} spacing={1}>
+        <Stack direction={'row'} spacing={1}>
           <FormControlLabel
             control={
               <Switch
@@ -158,40 +158,38 @@ export const DataSync: React.FC = () => {
           onClick={async () => {
             if (pending) {
               open({
-                content: "确定要中断任务？",
+                content: '确定要中断任务？',
                 onOk: async () => {
                   await articleCrawAPI.clearAll();
-                  enqueueSnackbar("操作成功");
+                  enqueueSnackbar('操作成功');
                 },
               });
             } else {
               await handleCraw({ startPage, endPage });
-              enqueueSnackbar("操作成功");
+              enqueueSnackbar('操作成功');
             }
           }}
         >
-          {pending ? "同步中，点击中断" : "同步"}
+          {pending ? '同步中，点击中断' : '同步'}
         </LoadingButton>
         <LoadingButton
           disabled={isIdle || !!pending}
           variant="outlined"
           onClick={async () => {
             await handleCraw({ startPage, endPage: totalPages });
-            enqueueSnackbar("操作成功");
+            enqueueSnackbar('操作成功');
           }}
           // loading={!!pending}
         >
-          <span>全部{totalPages ? `（共 ${totalPages} 页）` : ""}</span>
+          <span>全部{totalPages ? `（共 ${totalPages} 页）` : ''}</span>
         </LoadingButton>
 
         <Box sx={{ mt: 2 }}>
-          <Paper
-            sx={{ padding: "8px", color: (t) => t.palette.text.secondary }}
-          >
+          <Paper sx={{ padding: '8px', color: t => t.palette.text.secondary }}>
             <Stack spacing={1}>
-              <Box>开始时间：{formatTimeDetail(startTime) || "--"}</Box>
-              <Box>结束时间：{formatTimeDetail(endTime) || "--"}</Box>
-              <Box>耗时：{getCost() || "--"}</Box>
+              <Box>开始时间：{formatTimeDetail(startTime) || '--'}</Box>
+              <Box>结束时间：{formatTimeDetail(endTime) || '--'}</Box>
+              <Box>耗时：{getCost() || '--'}</Box>
               <Box>插入条数: {insertCount || 0}</Box>
               <Box>更新条数: {updateCount || 0}</Box>
               <Box>错误数: {errors || 0}</Box>
