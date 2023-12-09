@@ -1,6 +1,6 @@
 import { dialogAPI } from "@src/common/api/dialog";
 
-export const chooseFiles = async (extensions: string[]) => {
+export const chooseFiles = async (extensions?: string[]) => {
   const { filePaths } = await dialogAPI.showOpenDialog({
     properties: ["openFile", "dontAddToRecent", "multiSelections"],
     filters: [{ name: "File", extensions }],

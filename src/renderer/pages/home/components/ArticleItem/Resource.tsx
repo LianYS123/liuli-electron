@@ -13,7 +13,7 @@ import { useSnackbar } from "notistack";
 import { File } from "@src/common/interfaces/file.interface";
 import { UnConnectDialog } from "./UnConnectDialog";
 import qs from "query-string";
-import { chooseMedia } from "@src/renderer/utils";
+import { chooseFiles, chooseMedia } from "@src/renderer/utils";
 import { AddWebResourceDialog } from "./AddWebResourceDialog";
 import { ArticleTags } from "./ArticleTags";
 import { formatTimeDetail } from "@src/renderer/utils/time";
@@ -112,7 +112,7 @@ export const Resource: React.FC<ResourceProps> = ({
   const sources = parseWebSource(web_sources);
 
   async function handleConnect() {
-    const files = await chooseMedia();
+    const files = await chooseFiles()
     if (!files.length) {
       return;
     }
