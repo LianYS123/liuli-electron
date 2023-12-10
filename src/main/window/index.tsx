@@ -29,6 +29,13 @@ class WindowManager {
     }
     return this.mainWindow;
   };
+
+  getMainWindow() {
+    if (!this.mainWindow) {
+      throw new Error('主窗口不存在');
+    }
+    return this.mainWindow;
+  }
 }
 
 export const windowManager = new WindowManager();
