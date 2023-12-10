@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import { Box, Grid, TextField } from '@mui/material';
-import { TagFilter } from './components/TagFilter';
-import { ArticleItemProps } from '../../services/types';
-import { useArticles } from '../../hooks/useArticles';
-import ArticleItem from './components/ArticleItem';
-import { MyPagination } from '../../components/pagination';
-import { useNavigate } from 'react-router-dom';
-import { routers } from '@src/renderer/config';
-import { scrollToTop } from '@src/renderer/utils';
-import { useDebounceFn } from 'ahooks';
-import { useIpcEvent } from '@src/renderer/hooks/useIpcEvent';
-import { IPC_CHANNEL_ENUM } from '@src/common/constants';
-import { useHistoryState } from '@src/renderer/hooks/useHistoryState';
+import React, { useState, useEffect } from "react";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { TagFilter } from "./components/TagFilter";
+import { ArticleItemProps } from "../../services/types";
+import { useArticles } from "../../hooks/useArticles";
+import ArticleItem from "./components/ArticleItem";
+import { MyPagination } from "../../components/pagination";
+import { useNavigate } from "react-router-dom";
+import { routers } from "@src/renderer/config";
+import { scrollToTop } from "@src/renderer/utils";
+import { useDebounceFn } from "ahooks";
+import { useIpcEvent } from "@src/renderer/hooks/useIpcEvent";
+import { IPC_CHANNEL_ENUM } from "@src/common/constants";
+import { useHistoryState } from "@src/renderer/hooks/useHistoryState";
+import {
+  OperateArticleDrawer,
+  OperateType,
+} from "./components/OperateArticleDrawer";
 
 const Home = () => {
   const {
@@ -23,6 +27,7 @@ const Home = () => {
   const { data, refetch } = useArticles({
     pageSize,
   });
+  const [operateType, setOperateType] = useState<OperateType | null>(null);
 
   useIpcEvent(IPC_CHANNEL_ENUM.ARTICLE_CRAW_IDLE, refetch);
 
@@ -84,8 +89,25 @@ const Home = () => {
           variant="standard"
         />
       </Box>
-
-      {renderPagination()}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {renderPagination()}
+        <Box>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setOperateType("add");
+            }}
+          >
+            创建文章
+          </Button>
+        </Box>
+      </Box>
 
       <Grid container spacing={2}>
         {data?.list?.map(it => {
@@ -98,6 +120,13 @@ const Home = () => {
       </Grid>
 
       {renderPagination()}
+      <OperateArticleDrawer
+        operateType={operateType}
+        open={!!operateType}
+        onClose={() => {
+          setOperateType(null);
+        }}
+      />
     </Box>
   );
 };
