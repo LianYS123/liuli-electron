@@ -1,8 +1,43 @@
 import { Menu, app, shell } from 'electron';
 import { DB_PATH } from './config';
+import { windowManager } from './window';
 // import { windowManager } from "./window";
 
 const isMac = process.platform === 'darwin';
+
+const zoomMenu = Menu.buildFromTemplate([
+  {
+    label: 'View',
+    submenu: [
+      {
+        label: 'Zoom In',
+        accelerator: 'CmdOrCtrl+Plus', // 适当设置快捷键
+        click() {
+          const win = windowManager.getMainWindow();
+          const factor = win?.webContents.getZoomFactor();
+          win?.webContents.setZoomFactor(factor + 0.1);
+        },
+      },
+      {
+        label: 'Zoom Out',
+        accelerator: 'CmdOrCtrl+-', // 适当设置快捷键
+        click() {
+          const win = windowManager.getMainWindow();
+          const factor = win?.webContents.getZoomFactor();
+          win?.webContents.setZoomFactor(factor - 0.1);
+        },
+      },
+      {
+        label: 'Reset Zoom',
+        accelerator: 'CmdOrCtrl+0',
+        click() {
+          const win = windowManager.getMainWindow();
+          win.webContents.setZoomFactor(1); // 重置为默认缩放
+        },
+      },
+    ],
+  },
+]);
 
 export const contextMenu = Menu.buildFromTemplate([
   {
@@ -25,6 +60,10 @@ export const contextMenu = Menu.buildFromTemplate([
         },
       },
     ],
+  },
+  {
+    label: '视图',
+    submenu: [{ role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' }],
   },
 ]);
 
