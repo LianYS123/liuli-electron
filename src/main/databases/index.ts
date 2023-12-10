@@ -1,8 +1,8 @@
-import { DataSourceOptions } from 'typeorm';
-import { ArticleEntity } from '../entities/article.entity';
-import { FileEntity } from '../entities/file.entity';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { ArticleEntity } from '../entity/article.entity';
+import { FileEntity } from '../entity/file.entity';
 import { DB_PATH } from '../config';
-import { HistoryEntity } from '../entities/history.entity';
+import { HistoryEntity } from '../entity/history.entity';
 
 export const dbConnection: DataSourceOptions = {
   type: 'sqlite',
@@ -14,3 +14,5 @@ export const dbConnection: DataSourceOptions = {
   // migrations: ["../**/*.migration{.ts,.js}"],
   // subscribers: ["../**/*.subscriber{.ts,.js}"]
 };
+
+export const dataSource = new DataSource(dbConnection)

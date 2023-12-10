@@ -18,22 +18,22 @@ import { FileEntity } from './file.entity';
 @Unique(['raw_id'])
 export class ArticleEntity extends BaseEntity implements Article {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
   @Generated('uuid')
-  raw_id: string;
+  raw_id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({
     type: 'datetime',
   })
-  time: Date;
+  time!: Date;
 
   @Column()
-  href: string;
+  href!: string;
 
   @Column({
     nullable: true,
@@ -41,33 +41,33 @@ export class ArticleEntity extends BaseEntity implements Article {
   img_src?: string;
 
   @Column()
-  tags: string;
+  tags!: string;
 
   @Column({
     type: 'text',
   })
-  content: string;
+  content!: string;
 
   @Column()
-  cat: string;
+  cat!: string;
 
   @Column()
-  entry_content: string;
+  entry_content!: string;
 
   @Column({
     type: 'int',
   })
-  rating_count: number;
+  rating_count!: number;
 
   @Column({
     type: 'float',
   })
-  rating_score: number;
+  rating_score!: number;
 
   @Column({
     nullable: true,
   })
-  uid: string;
+  uid!: string;
 
   @Column({
     nullable: true,
@@ -76,7 +76,7 @@ export class ArticleEntity extends BaseEntity implements Article {
 
   @ManyToMany(() => FileEntity)
   @JoinTable()
-  files: File[];
+  files!: File[];
 
   @Column({ nullable: true })
   web_sources?: string;

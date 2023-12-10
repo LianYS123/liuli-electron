@@ -17,7 +17,7 @@ import { ActionEnum, ActionStatus } from '@src/common/constants';
 @Entity({ name: 'history' })
 export class HistoryEntity extends BaseEntity implements History {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne(() => ArticleEntity)
   article?: Article;
@@ -29,21 +29,21 @@ export class HistoryEntity extends BaseEntity implements History {
   source?: string;
 
   @Column({ type: 'simple-enum', enum: ActionEnum })
-  action: ActionEnum;
+  action!: ActionEnum;
 
   @Column({
     type: 'simple-enum',
     enum: ActionStatus,
     default: ActionStatus.Success,
   })
-  status: ActionStatus;
+  status!: ActionStatus;
 
   @Column({ nullable: true })
   message?: string;
 
   @CreateDateColumn()
-  createTime: Date;
+  createTime!: Date;
 
   @UpdateDateColumn()
-  updateTime: Date;
+  updateTime!: Date;
 }

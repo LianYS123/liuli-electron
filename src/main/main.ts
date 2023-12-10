@@ -1,6 +1,5 @@
 import { app, BrowserWindow, globalShortcut, protocol } from 'electron';
-import { DataSource } from 'typeorm';
-import { dbConnection } from './databases';
+import { dataSource } from './databases';
 import { logger } from './utils/logger';
 import url from 'url';
 import { windowManager } from './window';
@@ -63,6 +62,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-new DataSource(dbConnection).initialize();
+// new DataSource(dbConnection).initialize();
+dataSource.initialize()
 ipcHandler();
 initApplicationMenu();

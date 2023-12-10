@@ -5,7 +5,7 @@ import {
   ConnectFilesDto,
 } from '@src/common/params/article.dto';
 import { CrawDto } from '@src/common/params/craw.dto';
-import { ArticleEntity } from '@src/main/entities/article.entity';
+import { ArticleEntity } from '@src/main/entity/article.entity';
 import { IpcException } from '@src/common/exceptions/IpcException';
 import { Brackets, Like } from 'typeorm';
 import { fileService } from './file.service';
@@ -127,19 +127,27 @@ export class ArticleService {
 
   // 创建文件并关联
   public createAndConnectFile = async ({ articleId, fromPath }: ConnectDto) => {
+    if (!fromPath) {
+      throw new Error('请选择关联文件');
+    }
     const file = await fileService.createFileByPath(fromPath);
     await this.connectArticle(articleId, file.id);
   };
 
   // 创建已有关联
   public connectFile = async ({ articleId, fileId }: ConnectDto) => {
+    if (!fileId) {
+      throw new Error('文件不存在');
+    }
     await this.connectArticle(articleId, fileId);
   };
 
   async connectFiles({ items }: ConnectFilesDto) {
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
-      console.log(it);
+      if (!it.fileId) {
+        continue;
+      }
       await this.connectArticle(it.articleId, it.fileId);
     }
   }
@@ -147,6 +155,9 @@ export class ArticleService {
   // 移除关联
   public removeFile = async ({ articleId, fileId }: ConnectDto) => {
     const article = await this.findArticleById(articleId);
+    if (!fileId) {
+      throw new Error('文件不存在');
+    }
     const file = await fileService.findFileById(fileId);
     article.files = article.files.filter(it => {
       return it.id !== file.id;

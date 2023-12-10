@@ -4,20 +4,20 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 @Entity({ name: 'file' })
 export class FileEntity extends BaseEntity implements File {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  directory: string;
+  directory!: string;
 
   @Column()
-  mimetype: string;
+  mimetype!: string;
 
   @Column()
-  size: number;
+  size!: number;
 
   @Column()
-  filePath: string;
+  filePath!: string;
 }

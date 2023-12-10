@@ -19,3 +19,8 @@ export enum IPC_CHANNEL_ENUM {
   ARTICLE_CRAW_IDLE = 'ARTICLE_CRAW_IDLE',
   ARTICLE_CRAW_STATUS_CHANGE = 'ARTICLE_CRAW_STATUS_CHANGE',
 }
+
+export enum ItemType {
+  CATEGORY = 'category',
+  FAVORITE = 'favorite',
+}

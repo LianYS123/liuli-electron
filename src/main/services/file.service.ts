@@ -1,4 +1,4 @@
-import { FileEntity } from '@src/main/entities/file.entity';
+import { FileEntity } from '@src/main/entity/file.entity';
 import { IpcException } from '@src/common/exceptions/IpcException';
 import fs from 'fs-extra';
 import { basename, dirname, join } from 'path';
@@ -13,7 +13,7 @@ import { Like } from 'typeorm';
 
 export class FileService {
   public getFiles = async (dto: GetFilesDto) => {
-    const { pageNo, pageSize, searchValue } = dto;
+    const { pageNo, pageSize = 12, searchValue } = dto;
     let query = FileEntity.createQueryBuilder()
       .skip(pageSize * (pageNo - 1))
       .take(pageSize);

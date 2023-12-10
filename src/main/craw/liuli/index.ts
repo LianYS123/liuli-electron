@@ -5,7 +5,7 @@ import { range } from 'lodash';
 import { logger } from '@src/main/utils/logger';
 import { BaseCraw } from '@src/main/utils/craw';
 import { Article } from '@src/common/interfaces/article.interface';
-import { ArticleEntity } from '@src/main/entities/article.entity';
+import { ArticleEntity } from '@src/main/entity/article.entity';
 import { store } from '@src/main/store';
 import { IPC_CHANNEL_ENUM, STORE_KEY_ENUM } from '@src/common/constants';
 import { windowManager } from '@src/main/window';

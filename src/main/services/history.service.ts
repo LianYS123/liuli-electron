@@ -1,5 +1,5 @@
 import { GetHistoriesDto } from '@src/common/params/history.dto';
-import { HistoryEntity } from '../entities/history.entity';
+import { HistoryEntity } from '../entity/history.entity';
 import { PageResult } from '@src/common/types';
 import { ActionEnum, ActionStatus } from '@src/common/constants';
 import { History } from '@src/common/interfaces/history.interface';
@@ -15,7 +15,7 @@ interface AddParams {
 
 export class HistoryService {
   list = async (params: GetHistoriesDto): Promise<PageResult<History>> => {
-    const { pageNo, pageSize, action } = params;
+    const { pageNo, pageSize = 10, action } = params;
     const [list, total] = await HistoryEntity.findAndCount({
       where: { action },
       take: pageSize,

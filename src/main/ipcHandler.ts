@@ -1,3 +1,4 @@
+import { favoriteItemService } from './services/favorite-item.service';
 import { dialog } from 'electron';
 import { handleService } from './utils/handleService';
 import { articleService } from './services/article.service';
@@ -20,5 +21,6 @@ export function ipcHandler() {
   handleService({ ...dialog }, { prefix: 'Dialog' });
   handleService({ ...historyService }, { prefix: 'History' });
   handleService({ ...articleCraw }, { prefix: 'ArticleCraw' });
+  handleService({ ...favoriteItemService }, { prefix: 'FavoriteItemService' });
   handleService(storeService, { prefix: 'Store' });
 }
