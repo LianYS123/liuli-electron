@@ -188,24 +188,21 @@ export class ArticleCraw extends BaseCraw {
     );
   };
 
-  private getPageLink = (num: number) => {
-    if (this.config.BASE_LINK.includes('html')) {
-      return `${this.config.BASE_LINK.replace(
-        /\.html.*$/,
-        '.html',
-      )}/page/${num}`;
+  private getPageLink = (num?: number | string) => {
+    const basePath = `${this.config.BASE_LINK.replace(/\.html.*$/, '.html')}`
+      .replace(/\/?page\/?\d*$/, '')
+      .replace(/\/$/, '');
+    if (!num) {
+      return basePath;
     }
-    return `${this.config.BASE_LINK.replace(/\/?page\/?\d*$/, '').replace(
-      /\/$/,
-      '',
-    )}/page/${num}`;
+    return `${basePath}/page/${num}`;
   };
 
   getEndPage = async () => {
     if (!this.config.BASE_LINK) {
       return 0;
     }
-    const firstPage = this.getPageLink(1);
+    const firstPage = this.getPageLink();
     const $ = await get$(firstPage);
     const pagesText = $('#content .pages').text();
     const [, total] = pagesText.match(/共 (\d+) 页/) || ['0', '0'];
@@ -226,6 +223,7 @@ export class ArticleCraw extends BaseCraw {
     const links = range(startPage, endPage + 1)
       //   .reverse()
       .map(this.getPageLink);
+    links.unshift(this.getPageLink());
     await this.queue.addAll(
       links.map(link => () => this.parse(link)),
       {
