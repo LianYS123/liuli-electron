@@ -63,7 +63,19 @@ export const contextMenu = Menu.buildFromTemplate([
   },
   {
     label: '视图',
-    submenu: [{ role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' }],
+    submenu: [
+      { role: 'resetZoom', label: '重置缩放' },
+      { role: 'zoomIn', label: '放大' },
+      { role: 'zoomOut', label: '缩小' },
+      {
+        label: '切换全屏', // 菜单项名称
+        click: () => {
+          // 点击时触发的函数
+          const win = windowManager.getMainWindow();
+          win.setFullScreen(!win.isFullScreen()); // 切换全屏状态
+        },
+      },
+    ],
   },
 ]);
 

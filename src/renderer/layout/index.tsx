@@ -28,8 +28,26 @@ import { History } from './History';
 import { scrollToTop } from '../utils';
 import { Settings } from './Settings';
 import { browserManager } from '../components/Browser/BrowserManager';
+import { useEventListener, useThrottleFn } from 'ahooks';
+import { webFrame } from 'electron';
+import { useKeyPress } from 'react-use';
 
 const isWin = process.platform === 'win32';
+
+const useMetaPressed = () => {
+  const [pressed, setPressed] = useState(false);
+  useEventListener('keydown', ev => {
+    if (ev.key === 'Control' || ev.key === 'Command') {
+      setPressed(true);
+    }
+  });
+  useEventListener('keyup', ev => {
+    if (ev.key === 'Control' || ev.key === 'Command') {
+      setPressed(false);
+    }
+  });
+  return pressed;
+};
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -41,6 +59,29 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
   const { wallpaper } = useSelector((state: RootState) => state.app);
   const { isDark, toggleTheme } = useTheme();
+
+  const zoomKeyPressed = useMetaPressed();
+  const { run: handleWheel } = useThrottleFn(
+    (ev: WheelEvent): void => {
+      if (!zoomKeyPressed) {
+        return;
+      }
+      const fac = webFrame.getZoomFactor();
+      const isMinimize = ev.deltaY > 0;
+      const min = 0.3;
+      const max = 3;
+      if (isMinimize && fac <= min) {
+        return;
+      }
+      if (!isMinimize && fac >= max) {
+        return;
+      }
+      webFrame.setZoomFactor(isMinimize ? fac - 0.1 : fac + 0.1);
+    },
+    { wait: 0 },
+  );
+
+  useEventListener('wheel', handleWheel);
 
   return (
     <Box
