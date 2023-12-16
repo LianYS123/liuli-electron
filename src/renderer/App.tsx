@@ -1,17 +1,16 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SnackbarProvider } from 'notistack';
-import { Provider } from 'react-redux';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/home';
 import React from 'react';
 import AppThemeProvider from './providers/AppThemeProvider';
 import AlertDialogProvider from './providers/AlertDialogProvider';
-import store from './models';
 import { AppLayout } from './layout';
 import { routers } from './config';
 import { ImagePreview } from './pages/ImagePreview';
 import { Browser } from './components/Browser';
+import { WallpaperProvider } from './providers/WallpaperProvider';
 // import 'react-virtualized/styles.css'; // only needs to be imported once
 
 // Create a client
@@ -27,11 +26,11 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <Router>
-      <Provider store={store}>
-        <AppThemeProvider>
-          <QueryClientProvider client={queryClient}>
-            <SnackbarProvider maxSnack={3}>
-              <AlertDialogProvider>
+      <AppThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <SnackbarProvider maxSnack={3}>
+            <AlertDialogProvider>
+              <WallpaperProvider>
                 <AppLayout>
                   <Routes>
                     <Route path={routers.HOME} element={<Home />} />
@@ -39,12 +38,12 @@ export default function App() {
                     <Route path={'/'} element={<Home />} />
                   </Routes>
                 </AppLayout>
-                <Browser />
-              </AlertDialogProvider>
-            </SnackbarProvider>
-          </QueryClientProvider>
-        </AppThemeProvider>
-      </Provider>
+              </WallpaperProvider>
+              <Browser />
+            </AlertDialogProvider>
+          </SnackbarProvider>
+        </QueryClientProvider>
+      </AppThemeProvider>
     </Router>
   );
 }

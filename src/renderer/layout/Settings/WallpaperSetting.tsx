@@ -5,16 +5,15 @@ import React from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { WallpaperHistoryList } from '../History/WallpaperHistoryList';
 import { dialogAPI } from '@src/common/api/dialog';
-import { useDispatch } from 'react-redux';
-import { appSlice } from '@src/renderer/models/app';
 import { useTheme } from '@src/renderer/hooks/useTheme';
+import { WallpaperContext } from '@src/renderer/providers/WallpaperProvider';
 
 const pageSize = 5;
 
 export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
   enabled,
 }) => {
-  const dispatch = useDispatch();
+  const { setWallpaper } = React.useContext(WallpaperContext);
   const { toggleTheme } = useTheme();
   const { data, refetch, fetchNextPage, hasNextPage, isIdle, isLoading } =
     useInfiniteQuery(
@@ -36,7 +35,7 @@ export const WallpaperSetting: React.FC<{ enabled: boolean }> = ({
     );
 
   const handleSetWallpaper = async (src: string) => {
-    dispatch(appSlice.actions.setWallpaper(src));
+    setWallpaper(src);
     await historyAPI.addSetWallpaper({
       source: src,
     });

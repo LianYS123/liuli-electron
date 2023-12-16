@@ -6,20 +6,19 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, Stack } from '@mui/material';
 import { History } from '@src/common/interfaces/history.interface';
 import { formatTimeDetail } from '@src/renderer/utils/time';
-import { useDispatch } from 'react-redux';
-import { appSlice } from '@src/renderer/models/app';
 import { historyAPI } from '@src/common/api/history';
 import { Image } from 'antd';
 import { useSnackbar } from 'notistack';
+import { WallpaperContext } from '@src/renderer/providers/WallpaperProvider';
 
 interface Props {
   list: History[];
   refetch: () => void;
 }
 export function WallpaperHistoryList({ list, refetch }: Props) {
-  const dispatch = useDispatch();
+  const { setWallpaper } = React.useContext(WallpaperContext);
   const handleSetWallpaper = (src: string) => {
-    dispatch(appSlice.actions.setWallpaper(src));
+    setWallpaper(src);
   };
   const { enqueueSnackbar } = useSnackbar();
 

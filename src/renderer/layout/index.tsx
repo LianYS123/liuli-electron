@@ -20,8 +20,6 @@ import {
   Web,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../models';
 import { DataSync } from './DataSync';
 import { useTheme } from '../hooks/useTheme';
 import { History } from './History';
@@ -30,7 +28,7 @@ import { Settings } from './Settings';
 import { browserManager } from '../components/Browser/BrowserManager';
 import { useEventListener, useThrottleFn } from 'ahooks';
 import { webFrame } from 'electron';
-import { useKeyPress } from 'react-use';
+import { WallpaperContext } from '../providers/WallpaperProvider';
 
 const isWin = process.platform === 'win32';
 
@@ -57,7 +55,8 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({
   const [dataSyncDrawerVisible, setDataSyncDrawerVisible] = useState(false);
   const [historyDrawerVisible, setHistoryDrawerVisible] = useState(false);
   const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
-  const { wallpaper } = useSelector((state: RootState) => state.app);
+  const { wallpaper } = React.useContext(WallpaperContext);
+  console.log(wallpaper)
   const { isDark, toggleTheme } = useTheme();
 
   const zoomKeyPressed = useMetaPressed();

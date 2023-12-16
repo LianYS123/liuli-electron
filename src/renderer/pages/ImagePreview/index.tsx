@@ -6,11 +6,10 @@ import { ImageList, ImageListItem } from '@mui/material';
 import { useDebounceFn } from 'ahooks';
 import { useLocation } from 'react-router-dom';
 import { fileAPI } from '@src/common/api/file';
-import { useDispatch } from 'react-redux';
-import { appSlice } from '@src/renderer/models/app';
 import { Wallpaper } from '@mui/icons-material';
 import { historyAPI } from '@src/common/api/history';
 import styles from './index.module.css';
+import { WallpaperContext } from '@src/renderer/providers/WallpaperProvider';
 
 const ImageListPreview: React.FC<{
   visible: boolean;
@@ -22,11 +21,7 @@ const ImageListPreview: React.FC<{
   const remainImagesRef = useRef<string[]>();
   const [current, setCurrent] = useState(0);
 
-  const dispatch = useDispatch();
-
-  const handleSetWallpaper = (src: string) => {
-    dispatch(appSlice.actions.setWallpaper(src));
-  };
+  const { setWallpaper } = React.useContext(WallpaperContext);
 
   useEffect(() => {
     const images = previewImages.slice(0, 5);
@@ -65,7 +60,7 @@ const ImageListPreview: React.FC<{
                     <Icon
                       component={Wallpaper as any}
                       onClick={() => {
-                        handleSetWallpaper(`file://${images[current]}`);
+                        setWallpaper(`file://${images[current]}`);
                         historyAPI.addSetWallpaper({
                           articleId: Number(articleId),
                           source: `file://${images[current]}`,

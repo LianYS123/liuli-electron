@@ -1,21 +1,14 @@
-import { RootState } from '../models';
-import { appSlice } from '../models/app';
-import { useDispatch, useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { ThemeContext } from '../providers/AppThemeProvider';
 
 // 主题操作
 export const useTheme = () => {
-  const { theme } = useSelector((state: RootState) => state.app);
-  const dispatch = useDispatch();
-  const switchTo = (mode: string) => {
-    // eslint-disable-next-line no-console
-    console.log(`switch to ${mode}`);
-    dispatch(appSlice.actions.setTheme(mode));
-  };
+  const { theme, setTheme } = useContext(ThemeContext);
   const switchToLight = () => {
-    switchTo('light');
+    setTheme('light');
   };
   const switchToDark = () => {
-    switchTo('dark');
+    setTheme('dark');
   };
   // 切换主题
   const toggleTheme = () => {
@@ -26,5 +19,12 @@ export const useTheme = () => {
     }
   };
   const isDark = theme === 'dark';
-  return { theme, isDark, switchToDark, switchToLight, toggleTheme, switchTo };
+  return {
+    theme,
+    isDark,
+    switchToDark,
+    switchToLight,
+    toggleTheme,
+    switchTo: setTheme,
+  };
 };
