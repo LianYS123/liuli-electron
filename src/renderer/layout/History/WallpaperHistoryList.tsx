@@ -34,7 +34,7 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
             <Card key={item.id} sx={{ maxWidth: '100%' }}>
               <CardActionArea
                 onClick={() => {
-                  setPreviewSource(item.source);
+                  setPreviewSource(item.source!);
                 }}
               >
                 <CardMedia component="img" image={item.source} />
@@ -60,11 +60,13 @@ export function WallpaperHistoryList({ list, refetch }: Props) {
                 <Button
                   // startIcon={<Wallpaper />}
                   onClick={async () => {
-                    handleSetWallpaper(item.source);
-                    await historyAPI.addSetWallpaper({
-                      articleId: item.article.id,
-                      source: item.source,
-                    });
+                    handleSetWallpaper(item.source!);
+                    if (item.article) {
+                      await historyAPI.addSetWallpaper({
+                        articleId: item.article.id,
+                        source: item.source,
+                      });
+                    }
                     // refetch();
                   }}
                   size="small"

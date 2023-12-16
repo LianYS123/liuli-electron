@@ -1,5 +1,5 @@
-export class PageDto {
-  public pageNo: number;
+export interface PageDto {
+  pageNo: number;
 
-  public pageSize?: number;
+  pageSize?: number;
 }

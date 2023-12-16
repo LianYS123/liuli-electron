@@ -1,20 +1,20 @@
 import { PageDto } from './page.dto';
 
-export class GetFilesDto extends PageDto {
+export interface GetFilesDto extends PageDto {
   searchValue?: string;
 }
 
-export class UpdateFileDto {
+export interface UpdateFileDto {
   id: number;
 
   name: string;
 }
 
-export class RemoveFileDto {
+export interface RemoveFileDto {
   fileId: number;
   removeSource: boolean;
 }
 
-export class AddFileByPathDto {
+export interface AddFileByPathDto {
   fromPath: string;
 }

@@ -48,7 +48,7 @@ export function ArticleList({ list, refetch }: ArticleListProps) {
                     },
                   },
                 ]}
-                article={it.article}
+                article={it.article!}
                 {...itemProps}
               />
             </Grid>

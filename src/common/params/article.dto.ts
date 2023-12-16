@@ -1,6 +1,6 @@
 import { PageDto } from './page.dto';
 
-export class ArticleDto extends PageDto {
+export interface ArticleDto extends PageDto {
   searchValue?: string;
 
   tags?: string[];
@@ -12,7 +12,7 @@ export class ArticleDto extends PageDto {
   onlyPlayable?: boolean;
 }
 
-export class ConnectDto {
+export interface ConnectDto {
   fromPath?: string;
 
   fileId?: number;
@@ -20,6 +20,6 @@ export class ConnectDto {
   articleId: number;
 }
 
-export class ConnectFilesDto {
+export interface ConnectFilesDto {
   items: ConnectDto[];
 }

@@ -19,7 +19,7 @@ export function useSpinDelay(
   const opts = { ...defaultOptions, ...options };
 
   const [state, setState] = useState<State>('IDLE');
-  const timeout = useRef<NodeJS.Timeout>(null);
+  const timeout = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     if (loading && state === 'IDLE') {

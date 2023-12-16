@@ -14,14 +14,20 @@ export const defaultSearchConfig = {
 };
 
 export const SearchSetting: React.FC = () => {
-  const [{ limit, site }, _setState] = useLocalStorageState<SearchConfig>(
+  const [_state, _setState] = useLocalStorageState<SearchConfig>(
     SEARCH_SETTINGS_KEY,
     {
       defaultValue: defaultSearchConfig,
     },
   );
+  const { limit, site } = _state || {};
   const setState = (state: Partial<SearchConfig>) => {
-    _setState(s => ({ ...s, ...state }));
+    _setState(s => {
+      if (s) {
+        return { ...s, ...state };
+      }
+      return state as SearchConfig;
+    });
   };
   return (
     <Box

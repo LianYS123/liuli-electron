@@ -1,4 +1,4 @@
-export class CrawDto {
+export interface CrawDto {
   startPage: number;
 
   endPage: number;

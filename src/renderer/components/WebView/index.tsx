@@ -12,12 +12,12 @@ type WebViewProps = React.DetailedHTMLProps<
 //     src: string;
 // }
 
-export const WebView = React.forwardRef<WebviewTag, WebViewProps>(
+export const WebView = React.forwardRef<WebviewTag | null, WebViewProps>(
   ({ className, ...props }, ref) => {
-    const webviewRef = useRef<WebviewTag>(null);
-    useImperativeHandle(ref, () => webviewRef.current);
+    const webviewRef = useRef<WebviewTag | null>(null);
+    useImperativeHandle(ref, () => webviewRef.current as WebviewTag);
     const onReady = () => {
-      const iframe = webviewRef.current.shadowRoot.childNodes.item(
+      const iframe = webviewRef.current?.shadowRoot?.childNodes.item(
         1,
       ) as HTMLIFrameElement;
       iframe.style.height = '100%';

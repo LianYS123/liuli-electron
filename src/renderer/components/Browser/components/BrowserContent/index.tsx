@@ -9,7 +9,7 @@ export const BrowserContent = () => {
       {tabs.map(tab => {
         return (
           <ContentView
-            hidden={activeTab.key !== tab.key}
+            hidden={activeTab?.key !== tab.key}
             key={tab.key}
             tab={tab}
           />
